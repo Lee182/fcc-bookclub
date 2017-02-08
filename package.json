@@ -1,0 +1,38 @@
+{
+  "name": "fcc-bookclub",
+  "version": "1.0.0",
+  "description": "book trading backend app as part of https://www.freecodecamp.com/challenges/manage-a-book-trading-club",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js",
+    "copy-libs": "cp ./app/to-copy/* ./dist/",
+    "nstart": "nodemon server/index.js -w ./server",
+    "pug": "pug -P ./app/index.pug -o ./dist/",
+    "watch-pug": "pug -w ./app/index.pug -o ./dist/",
+    "css": "stylus ./app/*.styl -o ./dist/",
+    "watch-css": "stylus -w ./app/*.styl -o ./dist/",
+    "browserify": "browserify ./app/index.js -o ./dist/bundle.js",
+    "watch-browserify": "watchify ./app/index.js -o ./dist/bundle.js",
+    "build": "npm-run-all --parallel copy-libs pug css browserify",
+    "start-dev": "npm-run-all --parallel copy-libs watch-pug watch-css watch-browserify nstart"
+  },
+  "author": "Jonathan T L Lee",
+  "repository": "https://github.com/Lee182/fcc-bookclub.git",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "login-with-twitter": "^1.0.0",
+    "mongodb": "^2.2.12",
+    "uws": "^0.12.0"
+  },
+  "devDependencies": {
+    "browserify": "^13.1.1",
+    "npm-run-all": "^4.0.0",
+    "pug": "^2.0.0-beta6",
+    "stylus": "^0.54.5",
+    "watchify": "^3.7.0"
+  }
+}

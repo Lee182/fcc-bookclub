@@ -1,0 +1,72 @@
+header
+  background: url('bg.png')
+.header-line
+  width 100%
+  height 3rem
+  // background #6a09a580
+  background rgba(24, 0, 41, 0.93)
+  // color #0b3599
+  color #fff
+  box-shadow 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
+  align-items stretch
+  position relative
+  z-index 3
+.header-title
+  padding 1rem
+  i
+    padding-right .5rem
+  font-size 1.3rem
+.header-bars
+  padding 1rem
+  i.fa-bars
+    position relative
+    font-size 1.3rem
+    .count
+      position absolute
+      top -.5rem
+      right -.5rem
+      font-size .9rem
+      font-weight 600
+      color #fff
+      background-color #a22cea
+      height 1.2rem
+      width 1.2rem
+      border-radius 50%
+      overflow hidden
+      box-shadow 0px 3px 4px #00000080
+
+.header-rightpanel
+  height calc(100% - 3rem)
+  width 100%
+  max-width 250px
+  position fixed
+  top 3rem
+  right -250px
+  z-index 2
+  transition right .3s ease
+  background-image url(bg.png)
+  &.header_open
+    right 0
+  &--color
+    background-color rgba(43,14,62,0.6)
+    box-shadow 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
+    // box-shadow 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)
+    height 100%
+    width 100%
+.rightpanel-item
+  background #2a2a2a4d
+  border-top 3px solid #7b6a87
+  &:first-child
+    border-top 0
+  color white
+  transition color .2s ease
+  &:hover
+    color lighten(#0b3599, 50)
+  padding 1rem
+  display flex
+  justify-content flex-start
+  align-items center
+  .user_id-pic
+    height 3rem
+    width 3rem
+    border-radius 33%
