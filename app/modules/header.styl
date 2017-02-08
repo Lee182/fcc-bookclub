@@ -51,22 +51,34 @@ header
     background-color rgba(43,14,62,0.6)
     box-shadow 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
     // box-shadow 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)
+    padding .5rem
     height 100%
     width 100%
 .rightpanel-item
   background #2a2a2a4d
-  border-top 3px solid #7b6a87
+  margin-top .5rem
   &:first-child
-    border-top 0
-  color white
-  transition color .2s ease
-  &:hover
-    color lighten(#0b3599, 50)
+    margin-top 0
   padding 1rem
-  display flex
-  justify-content flex-start
-  align-items center
+  color white
+  &-content
+    display flex
+    justify-content flex-start
+    align-items center
+    flex-flow row wrap
+    transition color .2s ease
+    &:hover
+      color lighten(#0b3599, 50)
   .user_id-pic
     height 3rem
     width 3rem
     border-radius 33%
+
+.rightpanel-item-title
+  width 100%
+  padding-bottom .3rem
+  text-transform capitalize
+  border-bottom 1px solid #ffffff4d
+  margin-bottom .5rem
+  font-size 0.9rem
+  letter-spacing .2rem
