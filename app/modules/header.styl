@@ -1,10 +1,12 @@
+$main_color = rgb(110, 36, 90)
+
 header
   background: url('bg.png')
 .header-line
   width 100%
   height 3rem
   // background #6a09a580
-  background rgba(24, 0, 41, 0.93)
+  background $main_color
   // color #0b3599
   color #fff
   box-shadow 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
@@ -28,7 +30,7 @@ header
       font-size .9rem
       font-weight 600
       color #fff
-      background-color #a22cea
+      background-color lighten(hue($main_color, 60%), 10)// #a22cea
       height 1.2rem
       width 1.2rem
       border-radius 50%
@@ -57,7 +59,7 @@ header
     width 100%
     overflow scroll
 .rightpanel-item
-  background #2a2a2a4d
+  background $main_color
   margin-top .5rem
   &:first-child
     margin-top 0
