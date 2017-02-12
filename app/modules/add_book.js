@@ -1,56 +1,75 @@
 module.exports = function({data, methods, computed}) {
-  data.add_book__search_input = ''
-  data.add_book__search_input_pagenum = 1
+  data.add_book = {}
+  var d = data.add_book
+  methods.add_book = {}
+  d.search_req = {
+    query: '',
+    pagenum: 1
+  }
+  d.search_res = {
+    query: '',
+    pagenum: 1,
+    pages: 10,
+    books: [],
+    show: false
+  }
 
-  data.add_book__search_result = ''
-  data.add_book__search_result_pages = 10
-  data.add_book__search_result_pagenum = 0
-  data.add_book__books = []
-
-  methods.add_book__search = function(e) {
+  methods.add_book__search_books = function(search_req) {
+    console.log('search_req', search_req)
     let vm = this
-    if (e && e.keyCode === 13) {
-      vm.add_book__search_input_pagenum = 1
-    }
     w.getJSON({
-      url: '/book_search/'+vm.add_book__search_input + '/'+vm.add_book__search_input_pagenum,
+      url: '/book_search/'+search_req.query + '/'+search_req.pagenum,
       ms: 10000
     }).then(function(res){
       console.log(res)
-      if (res.books !== undefined) {
-        vm.add_book__books = res.books
-        vm.add_book__search_result = res.searched
-        vm.add_book__search_result_pagenum = res.pagenum
-        vm.add_book__search_result_pages = res.pages
-      }
+      d.search_res = res
+      d.search_res.show = true
     })
   }
 
-  methods.add_book__change_page = function(pg) {
-    console.log(pg)
+  methods.add_book__change_page = function(pagenum) {
+    console.log('change_page', pagenum)
     let vm = this
-    if (pg > vm.add_book__search_result_pages) {
-      pg = vm.add_book__search_result_pages
-    }
-    if (pg <= 0) {pg = 1}
-    vm.add_book__search_input_pagenum = pg
-    vm.add_book__search_result_pagenum = pg
-    data.add_book__books = []
-    vm.add_book__search()
+    vm.add_book__search_books({
+      query: d.search_req.query,
+      pagenum
+    })
   }
 
-  methods.pagination = function(pg) {
-    if (pg % 3 === 1) {
-      return [pg-1,    pg, pg+1, pg+2,    pg+3]
+  methods.pagination = function (active_page, pages_showing, last_pg) {
+    var mod = active_page % pages_showing
+    if (mod === 0) {mod = pages_showing}
+    mod = -mod
+    var arr = []
+    for (var i = 0; i < (pages_showing+2); i++) {
+      let o = {n: active_page+mod}
+      if (o.n < last_pg && o.n >= 1) {
+        arr.push( o )
+      }
+      mod++
     }
-    if (pg % 3 === 2) {
-      return [pg-2,    pg-1, pg, pg+1,    pg+2]
-    }
-    if (pg % 3 === 0) {
-      return [pg-3,    pg-2, pg-1, pg,    pg+1]
-    }
+    return arr.map(function(o, i){
+      if (i === 0 && o.n > 1) {
+        o.start = true
+      }
+      if (o.n === active_page) {
+        o.active = true
+      }
+      if (i+1 === arr.length && o.n < last_pg) {
+        o.end = true
+      }
+      return o
+    })
+
+    // returns an object like this
+    // pagination(5, 3, 20)
+    // [
+    //   {n:3, start: true},
+    //   {n:4},
+    //   {n:5, active: true},
+    //   {n:6},
+    //   {n:7}, end: true
+    // ]
   }
-
-
 
 }

@@ -46,8 +46,8 @@ app.get('/user_id', tw_session.tw_is_logged_in, function(req,res,next){
 
 var books = require('google-books-search')
 
-app.get('/book_search/:title/:pagenum', function(req,res){
-  if (typeof req.params.title !== 'string') {
+app.get('/book_search/:query/:pagenum', function(req,res){
+  if (typeof req.params.query !== 'string') {
     return res.status(400)
   }
   var pagenum = Number(req.params.pagenum) - 1
@@ -63,8 +63,7 @@ app.get('/book_search/:title/:pagenum', function(req,res){
     order: 'relevance',
     lang: 'en'
   }
-  console.log(pagenum)
-  books.search(req.params.title, options, function(err, books, apires) {
+  books.search(req.params.query, options, function(err, books, apires) {
     if (err) {
       return res.json({err})
     }
@@ -76,10 +75,10 @@ app.get('/book_search/:title/:pagenum', function(req,res){
     }
     return res.json({
       books,
-      searched: req.params.title,
+      query: req.params.query,
       pagenum: pagenum+1,
       pages: Math.ceil(apires.totalItems / limit),
-      apires })
+    })
   })
 })
 
