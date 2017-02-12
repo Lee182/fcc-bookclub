@@ -43,6 +43,47 @@ app.get('/user_id', tw_session.tw_is_logged_in, function(req,res,next){
 })
 
 
+
+var books = require('google-books-search')
+
+app.get('/book_search/:title/:pagenum', function(req,res){
+  if (typeof req.params.title !== 'string') {
+    return res.status(400)
+  }
+  var pagenum = Number(req.params.pagenum) - 1
+  if (isNaN(pagenum)) {pagenum = 0}
+  var limit = 20
+  var offset = limit * pagenum
+  var options = {
+    // key: "YOUR API KEY",
+    // field: 'title',
+    offset,
+    limit,
+    type: 'books',
+    order: 'relevance',
+    lang: 'en'
+  }
+  console.log(pagenum)
+  books.search(req.params.title, options, function(err, books, apires) {
+    if (err) {
+      return res.json({err})
+    }
+    if (apires === undefined) {
+      apires = {}
+    }
+    if (apires.totalItems === undefined) {
+      apires.totalItems =  offset+limit
+    }
+    return res.json({
+      books,
+      searched: req.params.title,
+      pagenum: pagenum+1,
+      pages: Math.ceil(apires.totalItems / limit),
+      apires })
+  })
+})
+
+
 server.listen(port, function(){
   console.log('server listening at http://localhost:'+port)
 })

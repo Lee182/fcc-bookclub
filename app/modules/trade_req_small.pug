@@ -1,0 +1,14 @@
+.rightpanel-item-title trade request
+.trade_req_item
+  .trade_req_field from
+  .trade_req_val @JonoLee1
+.trade_req_item
+  .trade_req_field wants
+  .trade_req_val
+    span {{ book.title }}
+    span= ' by '
+    span {{ book.authors[0] }}
+    span.gap
+    i.fa.fa-angle-down
+.trade_req_options
+  .trade_req_later: .box Read more...

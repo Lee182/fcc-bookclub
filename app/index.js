@@ -1,13 +1,15 @@
 // tools loading
 require('./lib/jonoShortcuts.js')
 w.wait = require('./lib/wait.js')
+w.getJSON = require('./lib/getJSON.js')
 w.postJSON = require('./lib/postJSON.js')
 w.loadImg = require('./lib/loadImage.js')
 
 // module loading
 w.modules = {
   datas: require('./modules/$data.js'),
-  header: require('./modules/header.js')
+  header: require('./modules/header.js'),
+  add_book: require('./modules/add_book.js')
 }
 
 vueobj = {

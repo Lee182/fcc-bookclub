@@ -25,8 +25,7 @@ module.exports = function({data, methods}) {
     vm.user_id = undefined
   }
 
-  methods.header_tog = function(a){
-    console.log(a)
+  methods.header_tog = function(){
     let vm = this
     if (currentWidth() > 600 && vm.header_open === true) {
       return
@@ -38,4 +37,5 @@ module.exports = function({data, methods}) {
 
   data.user_id = 'realDonaldTrump'
   data.header_count = 5
+  data.book = require('../../example_json/book.js')
 }

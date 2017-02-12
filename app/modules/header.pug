@@ -21,10 +21,10 @@ header
           span login with twitter
           .gap
           i.fa.fa-twitter
-      .rightpanel-item(
-        @click='logout'
-        v-if='user_id !== undefined')
+      .rightpanel-item(v-if='user_id !== undefined' @click='logout')
         .rightpanel-item-content
           span logout
           .gap
           i.fa.fa-sign-out
+      .rightpanel-item
+        include trade_req_small.pug

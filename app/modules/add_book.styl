@@ -1,0 +1,68 @@
+.add_book
+  padding 1rem
+  h2
+    padding-bottom 1rem
+  .booklist
+    display flex
+    flex-flow row wrap
+    align-items center
+    width 100%
+  .book
+    width 280px
+    background-color white
+    margin 1rem
+  .booktxt
+    padding 0 .5rem
+  .book-image
+    float left
+    padding-right .5rem
+  .book-title
+    font-size 1.5rem
+    padding-top .5rem
+    padding-bottom .3rem
+    hyphens auto
+    display block
+    text-decoration underline
+  .book-author
+    padding-bottom .3rem
+  .book-shortdescription
+    padding-top 1rem
+    line-height 1.2
+  .clear
+    display inline-block
+    clear both
+
+.search
+  display inline-flex
+  flex-flow row wrap
+  justify-content flex-start
+.search input
+  padding 0 .5rem
+  height 2rem
+  background white
+  border-radius .5rem 0 0 .5rem
+.serach-icon
+  width 2rem
+  height 2rem
+  background white
+  border-radius 0 .5rem .5rem 0
+
+.booklist-showing
+  padding .5rem
+
+
+
+.pgs
+  display inline-flex
+  flex-flow row wrap
+.pg
+  background white
+  height 2rem
+  width 2rem
+  &.active
+    text-decoration underline
+    background-color #eee
+  &:first-child
+    border-radius 50% 0 0 50%
+  &:last-child
+    border-radius 0 50% 50% 0
