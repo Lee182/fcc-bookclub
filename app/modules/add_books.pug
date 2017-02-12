@@ -7,12 +7,12 @@
     .serach-icon.flex-center
       i.fa.fa-search
 
-  p.booklist-showing
+  p.booklist-showing(v-show='add_book.search_res.show')
     | showing results for "{{ add_book.search_res.query }}"
     | at page {{ add_book.search_res.pagenum }}
     | of {{ add_book.search_res.pages }}
 
-  .booklist
+  .booklist(v-show='add_book.search_res.show')
     .book(v-for='book in add_book.search_res.books')
       .book-image
         img(:src='book.thumbnail')
@@ -23,7 +23,7 @@
       p.book-shortdescription.booktxt {{ book.subtitle }}
       .clear
 
-  .flex-center
+  .flex-center(v-show='add_book.search_res.show')
     .pgs
       .pg.flex-center(
         v-for='page in pagination(add_book.search_res.pagenum, 3, add_book.search_res.pages)',
