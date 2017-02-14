@@ -1,5 +1,5 @@
 .add_book
-  h2 Add a book to my collection
+  h2 Add books you own to trade.
   .search
     input(
       placeholder='search by book title or isbn', v-model='add_book.search_req.query',
@@ -14,14 +14,7 @@
 
   .booklist(v-show='add_book.search_res.show')
     .book(v-for='book in add_book.search_res.books')
-      .book-image
-        img(:src='book.thumbnail')
-      h3.booktxt
-        a(:href='book.link' target='_blank').book-title {{book.title}}
-      p.book-author.booktxt(v-if='book.authors') by {{ book.authors.join(', ') }}
-      p.book-published.booktxt {{ book.publishedDate }}
-      p.book-shortdescription.booktxt {{ book.subtitle }}
-      .clear
+      include _book_item.pug
 
   .flex-center(v-show='add_book.search_res.show')
     .pgs

@@ -1,0 +1,15 @@
+img.book-image(:src='book.thumbnail')
+h3.booktxt
+  a(:href='book.link' target='_blank').book-title {{book.title}}
+p.book-author.booktxt(v-if='book.authors') by {{ book.authors.join(', ') }}
+p.book-published.booktxt {{ book.publishedDate }}
+p.book-shortdescription.booktxt {{ book.subtitle }}
+.btn-row
+  .btn.btn-add_book(
+    v-if='!user_books__is_in_array(book.id)',
+    @click='user_books__add(book.id)'
+  ) add book
+  .btn.btn-remove_book(
+    v-if='user_books__is_in_array(book.id)'
+    @click='user_books__remove(book.id)'
+    ) remove book

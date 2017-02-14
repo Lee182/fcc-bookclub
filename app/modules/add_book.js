@@ -17,9 +17,11 @@ module.exports = function({data, methods, computed}) {
   methods.add_book__search_books = function(search_req) {
     console.log('search_req', search_req)
     let vm = this
-    w.getJSON({
+    w.req({
+      method: 'get',
       url: '/book_search/'+search_req.query + '/'+search_req.pagenum,
-      ms: 10000
+      timeout: 10000,
+      json: true
     }).then(function(res){
       console.log(res)
       d.search_res = res
