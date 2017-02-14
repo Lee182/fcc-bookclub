@@ -43,45 +43,37 @@ app.get('/user_id', tw_session.tw_is_logged_in, function(req,res,next){
 })
 
 
-
-var books = require('google-books-search')
-
+var bookapi = require('./bookapi.js')
 app.get('/book_search/:query/:pagenum', function(req,res){
   if (typeof req.params.query !== 'string') {
     return res.status(400)
   }
   var pagenum = Number(req.params.pagenum) - 1
-  if (isNaN(pagenum)) {pagenum = 0}
-  var limit = 20
-  var offset = limit * pagenum
-  var options = {
-    // key: "YOUR API KEY",
-    // field: 'title',
-    offset,
-    limit,
-    type: 'books',
-    order: 'relevance',
-    lang: 'en'
-  }
-  books.search(req.params.query, options, function(err, books, apires) {
-    if (err) {
-      return res.json({err})
-    }
-    if (apires === undefined) {
-      apires = {}
-    }
-    if (apires.totalItems === undefined) {
-      apires.totalItems =  offset+limit
-    }
-    return res.json({
-      books,
-      query: req.params.query,
-      pagenum: pagenum+1,
-      pages: Math.ceil(apires.totalItems / limit),
-    })
+  bookapi.search(req.params.query, pagenum).then(function(data){
+    res.json(data)
+  }).catch(function(err){
+    console.log('express book_search', err)
+    res.status(400)
   })
 })
 
+app.get('/user_books/:user_id', function(req,res,next){
+  dao.user_books({user_id: req.params.user_id}).then(function(result){
+    res.json(result)
+  })
+})
+
+app.post('/user_books__add', function(req,res,next){
+  dao.user_books__add(req.body).then(function(result){
+    res.json(result)
+  })
+})
+
+app.post('/user_books__remove', function(req,res,next){
+  dao.user_books__remove(req.body).then(function(result){
+    res.json(result)
+  })
+})
 
 server.listen(port, function(){
   console.log('server listening at http://localhost:'+port)
