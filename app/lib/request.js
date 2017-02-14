@@ -36,10 +36,10 @@ module.exports = function({
     req.addEventListener('error', function(e) {
       reject(e)
     })
-    req.open('get', url, true)
+    req.open(method, url, true)
     req.withCredentials = Boolean(cookies)
     if (json === true) {
-      req.setRequestHeader('Accept', 'application/json')
+      req.setRequestHeader('Content-Type', 'application/json')
     }
 
     if (isNaN(timeout) === false) {
@@ -49,12 +49,10 @@ module.exports = function({
       },timeout)
     }
     if (data === undefined || data === null) {
-      req.send()
-      return
+      return req.send()
     }
-    var data2 = (typeof data === 'object') ? JSON.stringify(data) : data.toString()
-
-    req.send(data2)
+    var d = (typeof data === 'string')? data : JSON.stringify(data)
+    req.send(d)
   })
   p.req = req
   p.cancel = req.abort

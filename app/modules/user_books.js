@@ -16,7 +16,7 @@ module.exports = function({data, methods}) {
     let vm = this
     if (vm.user_id === undefined) {return}
     w.req({
-      method: 'post'
+      method: 'post',
       url: '/user_books__add',
       data: {book_id, user_id: vm.user_id},
       cookies: true,
@@ -31,6 +31,7 @@ module.exports = function({data, methods}) {
     let vm = this
     if (vm.user_id === undefined) {return}
     w.req({
+      method: 'post',
       url: '/user_books__remove',
       data: {book_id, user_id: vm.user_id},
       cookies: true,
