@@ -26,20 +26,20 @@ o.connect = function() {
     o.db = null
   })
 }
-o.user_books = function({user_id}) {
-  return o.db.collection('booktrade__user_books')
+o.my_books = function({user_id}) {
+  return o.db.collection('booktrade__my_books')
     .find({'users.user_id': user_id})
     .toArray()
 }
 
-o.user_books__add = function({book_id, user_id}) {
+o.my_books__add = function({book_id, user_id}) {
   return new Promise(function(resolve, reject){
     bookapi.nodeapi.lookup(book_id, function(err, book) {
       if (err || book === undefined) {
-        console.log('db.js user_books__add err:', err)
+        console.log('db.js my_books__add err:', err)
         return reject('book_id not found')
       }
-      return o.db.collection('booktrade__user_books').findOneAndUpdate(
+      return o.db.collection('booktrade__my_books').findOneAndUpdate(
         {_id: book_id, 'users.user_id': {$ne: user_id} },
         {$set: {book, updated: new Date()},
         $push:{
@@ -50,15 +50,15 @@ o.user_books__add = function({book_id, user_id}) {
         return resolve(result.value)
       })
       .catch(function(err){
-        console.log('db.js user_books__add err:', err)
+        console.log('db.js my_books__add err:', err)
         return reject(err)
       })
     })
   })
 }
 
-o.user_books__remove = function({book_id, user_id}) {
-  return o.db.collection('booktrade__user_books').findOneAndUpdate(
+o.my_books__remove = function({book_id, user_id}) {
+  return o.db.collection('booktrade__my_books').findOneAndUpdate(
     {_id: book_id},
     {$pull: {users: {user_id: user_id}} },
     {returnOriginal: false}
@@ -66,23 +66,42 @@ o.user_books__remove = function({book_id, user_id}) {
     return Promise.resolve(result.value)
   })
   .catch(function(err){
-    console.log('db.js user_books__remove err:', err)
+    console.log('db.js my_books__remove err:', err)
     return Promise.reject(err)
   })
 }
 
-o.user_books__garbage_collection = function() {
-  o.db.collection('booktrade__user_books').remove({
+o.my_books__garbage_collection = function() {
+  o.db.collection('booktrade__my_books').remove({
     users: {$size: 0}
   })
 }
 
-o.user_bookreqs__add = function({book_id, user_id}){
-  o.db.collection('user_bookreqs')
+o.my_trade__add = function({book_id, user_id}) {
+  return o.db.collection('booktrade__my_books')
+    .findOneAndUpdate(
+      {_id: book_id, 'users.user_id': user_id},
+      {$set:{
+        'users.$.trade': {
+          creation_date: new Date(),
+          accepted: false
+        }
+      }},
+      {returnOriginal: false, upsert: false}
+    )
+}
+
+o.my_trade__remove = function({book_id, user_id}) {
+  return o.db.collection('booktrade__my_books')
+    .findOneAndUpdate(
+      {_id: book_id, 'users.user_id': user_id},
+      {$unset: {'users.$.trade':'' } },
+      {returnOriginal: false, upsert: false}
+    )
 }
 
 
-var a = ['user_books__add', 'user_books__remove', 'user_books__garbage_collection']
+var a = ['my_books__add', 'my_books__remove', 'my_books__garbage_collection']
 
 a.forEach(function(name){
   o[name] = ensureConnected(o[name])

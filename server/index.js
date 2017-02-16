@@ -57,21 +57,34 @@ app.get('/book_search/:query/:pagenum', function(req,res){
   })
 })
 
-app.get('/user_books/:user_id', function(req,res,next){
-  dao.user_books({user_id: req.params.user_id}).then(function(result){
+app.get('/my_books/:user_id', function(req,res,next){
+  dao.my_books({user_id: req.params.user_id}).then(function(result){
     res.json(result)
   })
 })
 
-app.post('/user_books__add', function(req,res,next){
-  dao.user_books__add(req.body).then(function(result){
+app.post('/my_books__add', function(req,res,next){
+  dao.my_books__add(req.body).then(function(result){
     res.json(result)
   })
 })
 
-app.post('/user_books__remove', function(req,res,next){
-  dao.user_books__remove(req.body).then(function(result){
+app.post('/my_books__remove', function(req,res,next){
+  dao.my_books__remove(req.body).then(function(result){
     res.json(result)
+  })
+})
+
+app.post('/my_trade__add', function(req,res,next){
+  dao.my_trade__add(req.body).then(function(result){
+    res.json(result)
+  })
+})
+app.post('/my_trade__remove', function(req,res,next){
+  dao.my_trade__remove(req.body).then(function(result){
+    res.json(result)
+  }).catch(function(err){
+    res.json({err})
   })
 })
 

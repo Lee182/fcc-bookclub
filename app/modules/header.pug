@@ -14,17 +14,17 @@ header
         .rightpanel-item-content
           img.user_id-pic(
             v-bind:src=`'https://twitter.com/'+user_id+'/profile_image'`)
-          .gap
+          .gap-horizontal
           span.user_id-txt @{{ user_id }}
       .rightpanel-item(v-if='user_id === undefined' @click='login')
         .rightpanel-item-content
           span login with twitter
-          .gap
+          .gap-horizontal
           i.fa.fa-twitter
       .rightpanel-item(v-if='user_id !== undefined' @click='logout')
         .rightpanel-item-content
           span logout
-          .gap
+          .gap-horizontal
           i.fa.fa-sign-out
       .rightpanel-item
         include trade_req_small.pug

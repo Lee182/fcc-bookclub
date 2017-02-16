@@ -14,9 +14,14 @@ module.exports = function({data, methods, computed}) {
     show: false
   }
 
-  methods.add_book__search_books = function(search_req) {
+  methods.add_book__search = function(search_req) {
     console.log('search_req', search_req)
     let vm = this
+    if (search_req.query === '') {
+      d.search_res.books = []
+      d.search_res.show = false
+      return
+    }
     w.req({
       method: 'get',
       url: '/book_search/'+search_req.query + '/'+search_req.pagenum,
@@ -32,7 +37,7 @@ module.exports = function({data, methods, computed}) {
   methods.add_book__change_page = function(pagenum) {
     console.log('change_page', pagenum)
     let vm = this
-    vm.add_book__search_books({
+    vm.add_book__search({
       query: d.search_req.query,
       pagenum
     })

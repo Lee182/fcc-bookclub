@@ -8,7 +8,8 @@ w.loadImg = require('./lib/loadImage.js')
 w.modules = {
   datas: require('./modules/$data.js'),
   header: require('./modules/header.js'),
-  user_books: require('./modules/user_books.js'),
+  my_books: require('./modules/my_books.js'),
+  my_trade: require('./modules/my_trade.js'),
   add_book: require('./modules/add_book.js')
 }
 
@@ -25,11 +26,11 @@ vueobj = {
   created: function(){
     let vm = this
     req({
-      url: '/user_books/'+vm.user_id,
+      url: '/my_books/'+vm.user_id,
       cookies: true,
       json: true
     }).then(function(res){
-      vm.user_books = res
+      vm.my_books = res
     })
   },
   beforeMount: function(){},

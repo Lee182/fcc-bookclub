@@ -1,10 +1,13 @@
+include _book_item.pug
+
 .add_book
-  h2 Add books you own to trade.
+  h2 Add books you own to your bookshelf
   .search
     input(
       placeholder='search by book title or isbn', v-model='add_book.search_req.query',
-      v-on:keyup.enter='add_book__search_books(add_book.search_req)')
-    .serach-icon.flex-center
+      v-on:keyup.enter='add_book__search(add_book.search_req)')
+    .serach-icon.flex-center(
+      @click='add_book__search(add_book.search_req)')
       i.fa.fa-search
 
   p.booklist-showing(v-show='add_book.search_res.show')
@@ -13,8 +16,16 @@
     | of {{ add_book.search_res.pages }}
 
   .booklist(v-show='add_book.search_res.show')
-    .book(v-for='book in add_book.search_res.books')
-      include _book_item.pug
+    +book('book in add_book.search_res.books')
+      .btn-row
+        .btn.btn-add_book(
+          v-if='!my_books__is_in_array(book.id)',
+          @click='my_books__add(book.id)'
+        ) add to bookshelf
+        .btn.btn-remove_book(
+          v-if='my_books__is_in_array(book.id)'
+          @click='my_books__remove(book.id)'
+          ) remove from bookshelf
 
   .flex-center(v-show='add_book.search_res.show')
     .pgs
