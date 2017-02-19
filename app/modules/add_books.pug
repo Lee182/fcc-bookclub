@@ -10,12 +10,12 @@ include _book_item.pug
       @click='add_book__search(add_book.search_req)')
       i.fa.fa-search
 
-  p.booklist-showing(v-show='add_book.search_res.show')
+  p.bookshelf-showing(v-show='add_book.search_res.show')
     | showing results for "{{ add_book.search_res.query }}"
     | at page {{ add_book.search_res.pagenum }}
     | of {{ add_book.search_res.pages }}
 
-  .booklist(v-show='add_book.search_res.show')
+  .bookshelf(v-show='add_book.search_res.show')
     +book('book in add_book.search_res.books')
       .btn-row
         .btn.btn-add_book(
