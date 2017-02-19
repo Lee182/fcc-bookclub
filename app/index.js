@@ -6,11 +6,10 @@ w.loadImg = require('./lib/loadImage.js')
 
 // module loading
 w.modules = {
-  datas: require('./modules/$data.js'),
   header: require('./modules/header.js'),
+  add_book: require('./modules/add_book.js'),
   my_books: require('./modules/my_books.js'),
   my_trade: require('./modules/my_trade.js'),
-  add_book: require('./modules/add_book.js')
 }
 
 vueobj = {
