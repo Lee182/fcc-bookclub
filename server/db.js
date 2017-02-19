@@ -27,6 +27,7 @@ o.connect = function() {
   })
 }
 
+
 o.bookshelf = function({user_id}) {
   return o.db.collection('bookshelf')
     .find({'users.user_id': user_id})
@@ -73,7 +74,7 @@ o.bookshelf__garbage_collection = function() {
   })
 }
 
-o.my_trade__add = function({book_id, user_id}) {
+o.trade__list = function({book_id, user_id}) {
   return o.db.collection('bookshelf')
     .findOneAndUpdate(
       {_id: book_id, 'users.user_id': user_id},
@@ -87,7 +88,7 @@ o.my_trade__add = function({book_id, user_id}) {
     )
 }
 
-o.my_trade__remove = function({book_id, user_id}) {
+o.trade__unlist = function({book_id, user_id}) {
   return o.db.collection('bookshelf')
     .findOneAndUpdate(
       {_id: book_id, 'users.user_id': user_id},
@@ -100,7 +101,7 @@ const five_mins = 5 * 60 * 1000
 setInterval(o.bookshelf__garbage_collection, five_mins)
 
 
-var a = ['bookshelf__add', 'bookshelf__remove', 'bookshelf__garbage_collection']
+var a = ['bookshelf__add', 'bookshelf__remove', 'bookshelf__garbage_collection', 'trade__list', 'trade__unlist']
 
 a.forEach(function(name){
   o[name] = ensureConnected(o[name])

@@ -9,8 +9,8 @@ h2 My Trade
     i.fa.fa-filter
 
 .bookshelf
-  +book('book in bookshelf__view(my_trade(), my_trade__filter_term)')
+  +book('book in bookshelf__view(books_for_trade(), my_trade__filter_term)')
     .btn-row
       .btn.btn-remove_book(
-        @click='my_trade__remove(book.id)'
+        @click='trade__unlist(book.id)'
         ) remove from trade

@@ -1,12 +1,12 @@
 module.exports = function({data, methods, computed, watch}) {
   data.my_trade__filter_term = ''
 
-  methods.my_trade__add = function(book_id) {
+  methods.trade__list = function(book_id) {
     let vm = this
     if (vm.user_id === undefined) {return}
     w.req({
       method: 'post',
-      url: '/my_trade__add',
+      url: '/trade__list',
       data: {book_id, user_id: vm.user_id},
       cookies: true,
       json: true
@@ -15,12 +15,12 @@ module.exports = function({data, methods, computed, watch}) {
     })
   }
 
-  methods.my_trade__remove = function(book_id) {
+  methods.trade__unlist = function(book_id) {
     let vm = this
     if (vm.user_id === undefined) {return}
     w.req({
       method: 'post',
-      url: '/my_trade__remove',
+      url: '/trade__unlist',
       data: {book_id, user_id: vm.user_id},
       cookies: true,
       json: true
@@ -29,7 +29,7 @@ module.exports = function({data, methods, computed, watch}) {
     })
   }
 
-  methods.my_trade__is_tradeable = function(book_id) {
+  methods.is_tradeable = function(book_id) {
     let vm = this
     var i = vm.bookshelf__findId(book_id)
     if (i === -1) {return false}
@@ -40,10 +40,10 @@ module.exports = function({data, methods, computed, watch}) {
     return vm.bookshelf[i].users[i2].trade !== undefined
   }
 
-  methods.my_trade = function() {
+  methods.books_for_trade = function() {
     let vm = this
     return vm.bookshelf.filter(function(b){
-      return vm.my_trade__is_tradeable(b.book.id)
+      return vm.is_tradeable(b.book.id)
     })
   }
 }

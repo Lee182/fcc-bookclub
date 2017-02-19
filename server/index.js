@@ -74,13 +74,13 @@ app.post('/bookshelf__remove', function(req,res,next){
   })
 })
 
-app.post('/my_trade__add', function(req,res,next){
-  dao.my_trade__add(req.body).then(function(result){
+app.post('/trade__list', function(req,res,next){
+  dao.trade__list(req.body).then(function(result){
     res.json(result)
   })
 })
-app.post('/my_trade__remove', function(req,res,next){
-  dao.my_trade__remove(req.body).then(function(result){
+app.post('/trade__unlist', function(req,res,next){
+  dao.trade__unlist(req.body).then(function(result){
     res.json(result)
   }).catch(function(err){
     res.json({err})
