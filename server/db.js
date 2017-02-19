@@ -26,6 +26,7 @@ o.connect = function() {
     o.db = null
   })
 }
+
 o.my_books = function({user_id}) {
   return o.db.collection('booktrade__my_books')
     .find({'users.user_id': user_id})
@@ -33,27 +34,22 @@ o.my_books = function({user_id}) {
 }
 
 o.my_books__add = function({book_id, user_id}) {
-  return new Promise(function(resolve, reject){
-    bookapi.nodeapi.lookup(book_id, function(err, book) {
-      if (err || book === undefined) {
-        console.log('db.js my_books__add err:', err)
-        return reject('book_id not found')
-      }
-      return o.db.collection('booktrade__my_books').findOneAndUpdate(
-        {_id: book_id, 'users.user_id': {$ne: user_id} },
-        {$set: {book, updated: new Date()},
-        $push:{
-          users: {user_id, creation_date: new Date()}
-        }},
-        { returnOriginal: false, upsert: true })
-      .then(function(result){
-        return resolve(result.value)
-      })
-      .catch(function(err){
-        console.log('db.js my_books__add err:', err)
-        return reject(err)
-      })
-    })
+  bookapi.findId(book_id)
+  .then(function(book){
+    return o.db.collection('booktrade__my_books').findOneAndUpdate(
+      {_id: book_id, 'users.user_id': {$ne: user_id} },
+      {$set: {book, updated: new Date()},
+      $push:{
+        users: {user_id, creation_date: new Date()}
+      }},
+      { returnOriginal: false, upsert: true })
+  })
+  .then(function(result){
+    return Promise.resolve(result.value)
+  })
+  .catch(function(err){
+    console.log('db.js my_books__add err:', err)
+    return reject(err)
   })
 }
 
@@ -84,7 +80,7 @@ o.my_trade__add = function({book_id, user_id}) {
       {$set:{
         'users.$.trade': {
           creation_date: new Date(),
-          accepted: false
+          fullfilled: false
         }
       }},
       {returnOriginal: false, upsert: false}

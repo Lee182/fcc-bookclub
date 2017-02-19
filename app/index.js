@@ -10,6 +10,7 @@ w.modules = {
   add_book: require('./modules/add_book.js'),
   my_books: require('./modules/my_books.js'),
   my_trade: require('./modules/my_trade.js'),
+  my_trade_reqs: require('./modules/my_trade_reqs.js')
 }
 
 vueobj = {
@@ -41,6 +42,7 @@ vueobj = {
 }
 
 Object.keys(modules).forEach(function(name){
+  if (typeof modules[name] !== 'function') {return}
   modules[name](vueobj)
 })
 

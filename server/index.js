@@ -49,7 +49,7 @@ app.get('/book_search/:query/:pagenum', function(req,res){
     return res.status(400)
   }
   var pagenum = Number(req.params.pagenum) - 1
-  bookapi.search(req.params.query, pagenum).then(function(data){
+  bookapi.find(req.params.query, pagenum).then(function(data){
     res.json(data)
   }).catch(function(err){
     console.log('express book_search', err)

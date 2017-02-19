@@ -1,7 +1,7 @@
 var books = require('google-books-search')
 var o = {}
 
-o.search = function(query, pagenum){
+o.find = function(query, pagenum){
   if (isNaN(pagenum)) {pagenum = 0}
   var limit = 20
   var offset = limit * pagenum
@@ -29,6 +29,20 @@ o.search = function(query, pagenum){
       pagenum: pagenum+1,
       pages: Math.ceil(count / limit),
     })
+  })
+
+  })
+}
+
+o.findId = function(id) {
+  return new Promise(function(resolve, reject){
+
+  books.lookup(id, function(err, book) {
+    if (err || book === undefined) {
+      console.log('db.js my_books__add err:', err)
+      return reject({err_msg: 'book_id not found', err})
+    }
+    return resolve(book)
   })
 
   })
