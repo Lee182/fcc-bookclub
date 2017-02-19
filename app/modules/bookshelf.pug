@@ -1,0 +1,20 @@
+include _book_item.pug
+
+h2 My Bookshelf
+.search
+  input(
+    placeholder='filter', v-model='bookshelf__filter_term',
+  )
+  .serach-icon.flex-center
+    i.fa.fa-filter
+
+.bookshelf
+  +book(`book in bookshelf__view(bookshelf, bookshelf__filter_term)`)
+    .btn-row
+      .btn.btn-add_to_trade(
+        v-if='my_trade__is_tradeable(book.id) === false'
+        @click='my_trade__add(book.id)') add to trade
+      .btn.btn-remove_book(
+        v-if='bookshelf__is_in_array(book.id)'
+        @click='bookshelf__remove(book.id)'
+        ) remove from bookshelf

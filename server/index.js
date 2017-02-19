@@ -20,7 +20,6 @@ app.use('/',
 var k = require('./keys.js')
 var dao = require('./db.js')({
   mongourl: k.mongourl,
-  coll_name: 'bookclub'
 })
 
 dao.connect()
@@ -57,20 +56,20 @@ app.get('/book_search/:query/:pagenum', function(req,res){
   })
 })
 
-app.get('/my_books/:user_id', function(req,res,next){
-  dao.my_books({user_id: req.params.user_id}).then(function(result){
+app.get('/bookshelf/:user_id', function(req,res,next){
+  dao.bookshelf({user_id: req.params.user_id}).then(function(result){
     res.json(result)
   })
 })
 
-app.post('/my_books__add', function(req,res,next){
-  dao.my_books__add(req.body).then(function(result){
+app.post('/bookshelf__add', function(req,res,next){
+  dao.bookshelf__add(req.body).then(function(result){
     res.json(result)
   })
 })
 
-app.post('/my_books__remove', function(req,res,next){
-  dao.my_books__remove(req.body).then(function(result){
+app.post('/bookshelf__remove', function(req,res,next){
+  dao.bookshelf__remove(req.body).then(function(result){
     res.json(result)
   })
 })

@@ -19,12 +19,12 @@ include _book_item.pug
     +book('book in add_book.search_res.books')
       .btn-row
         .btn.btn-add_book(
-          v-if='!my_books__is_in_array(book.id)',
-          @click='my_books__add(book.id)'
+          v-if='!bookshelf__is_in_array(book.id)',
+          @click='bookshelf__add(book.id)'
         ) add to bookshelf
         .btn.btn-remove_book(
-          v-if='my_books__is_in_array(book.id)'
-          @click='my_books__remove(book.id)'
+          v-if='bookshelf__is_in_array(book.id)'
+          @click='bookshelf__remove(book.id)'
           ) remove from bookshelf
 
   .flex-center(v-show='add_book.search_res.show')

@@ -11,7 +11,7 @@ module.exports = function({data, methods, computed, watch}) {
       cookies: true,
       json: true
     }).then(function(res){
-      vm.my_books__update(res.value)
+      vm.bookshelf__update(res.value)
     })
   }
 
@@ -25,24 +25,24 @@ module.exports = function({data, methods, computed, watch}) {
       cookies: true,
       json: true
     }).then(function(res){
-      vm.my_books__update(res.value)
+      vm.bookshelf__update(res.value)
     })
   }
 
   methods.my_trade__is_tradeable = function(book_id) {
     let vm = this
-    var i = vm.my_books__findId(book_id)
+    var i = vm.bookshelf__findId(book_id)
     if (i === -1) {return false}
-    var i2 = vm.my_books[i].users.findIndex(function(o){
+    var i2 = vm.bookshelf[i].users.findIndex(function(o){
       return o.user_id === vm.user_id
     })
     if (i2 === -1) {return false}
-    return vm.my_books[i].users[i2].trade !== undefined
+    return vm.bookshelf[i].users[i2].trade !== undefined
   }
 
   methods.my_trade = function() {
     let vm = this
-    return vm.my_books.filter(function(b){
+    return vm.bookshelf.filter(function(b){
       return vm.my_trade__is_tradeable(b.book.id)
     })
   }

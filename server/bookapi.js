@@ -39,7 +39,7 @@ o.findId = function(id) {
 
   books.lookup(id, function(err, book) {
     if (err || book === undefined) {
-      console.log('db.js my_books__add err:', err)
+      console.log('db.js bookshelf__add err:', err)
       return reject({err_msg: 'book_id not found', err})
     }
     return resolve(book)

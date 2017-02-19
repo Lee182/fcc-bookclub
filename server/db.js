@@ -3,7 +3,7 @@ const Mongo = require('mongodb')
 let MongoClient = Mongo.MongoClient
 const bookapi = require('./bookapi.js')
 
-module.exports = function({mongourl, coll_name}) {
+module.exports = function({mongourl}) {
 
 
 let o = {
@@ -27,16 +27,16 @@ o.connect = function() {
   })
 }
 
-o.my_books = function({user_id}) {
-  return o.db.collection('booktrade__my_books')
+o.bookshelf = function({user_id}) {
+  return o.db.collection('bookshelf')
     .find({'users.user_id': user_id})
     .toArray()
 }
 
-o.my_books__add = function({book_id, user_id}) {
+o.bookshelf__add = function({book_id, user_id}) {
   bookapi.findId(book_id)
   .then(function(book){
-    return o.db.collection('booktrade__my_books').findOneAndUpdate(
+    return o.db.collection('bookshelf').findOneAndUpdate(
       {_id: book_id, 'users.user_id': {$ne: user_id} },
       {$set: {book, updated: new Date()},
       $push:{
@@ -48,13 +48,13 @@ o.my_books__add = function({book_id, user_id}) {
     return Promise.resolve(result.value)
   })
   .catch(function(err){
-    console.log('db.js my_books__add err:', err)
+    console.log('db.js bookshelf__add err:', err)
     return reject(err)
   })
 }
 
-o.my_books__remove = function({book_id, user_id}) {
-  return o.db.collection('booktrade__my_books').findOneAndUpdate(
+o.bookshelf__remove = function({book_id, user_id}) {
+  return o.db.collection('bookshelf').findOneAndUpdate(
     {_id: book_id},
     {$pull: {users: {user_id: user_id}} },
     {returnOriginal: false}
@@ -62,19 +62,19 @@ o.my_books__remove = function({book_id, user_id}) {
     return Promise.resolve(result.value)
   })
   .catch(function(err){
-    console.log('db.js my_books__remove err:', err)
+    console.log('db.js bookshelf__remove err:', err)
     return Promise.reject(err)
   })
 }
 
-o.my_books__garbage_collection = function() {
-  o.db.collection('booktrade__my_books').remove({
+o.bookshelf__garbage_collection = function() {
+  o.db.collection('bookshelf').remove({
     users: {$size: 0}
   })
 }
 
 o.my_trade__add = function({book_id, user_id}) {
-  return o.db.collection('booktrade__my_books')
+  return o.db.collection('bookshelf')
     .findOneAndUpdate(
       {_id: book_id, 'users.user_id': user_id},
       {$set:{
@@ -88,7 +88,7 @@ o.my_trade__add = function({book_id, user_id}) {
 }
 
 o.my_trade__remove = function({book_id, user_id}) {
-  return o.db.collection('booktrade__my_books')
+  return o.db.collection('bookshelf')
     .findOneAndUpdate(
       {_id: book_id, 'users.user_id': user_id},
       {$unset: {'users.$.trade':'' } },
@@ -96,8 +96,11 @@ o.my_trade__remove = function({book_id, user_id}) {
     )
 }
 
+const five_mins = 5 * 60 * 1000
+setInterval(o.bookshelf__garbage_collection, five_mins)
 
-var a = ['my_books__add', 'my_books__remove', 'my_books__garbage_collection']
+
+var a = ['bookshelf__add', 'bookshelf__remove', 'bookshelf__garbage_collection']
 
 a.forEach(function(name){
   o[name] = ensureConnected(o[name])

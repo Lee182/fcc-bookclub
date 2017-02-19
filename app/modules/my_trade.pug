@@ -1,16 +1,16 @@
 include _book_item.pug
-.my_books
-  h2 My Trade
-  .search
-    input(
-      placeholder='filter', v-model='my_trade__filter_term',
-    )
-    .serach-icon.flex-center
-      i.fa.fa-filter
 
-  .bookshelf
-    +book('book in bookshelf__view(my_trade(), my_trade__filter_term)')
-      .btn-row
-        .btn.btn-remove_book(
-          @click='my_trade__remove(book.id)'
-          ) remove from trade
+h2 My Trade
+.search
+  input(
+    placeholder='filter', v-model='my_trade__filter_term',
+  )
+  .serach-icon.flex-center
+    i.fa.fa-filter
+
+.bookshelf
+  +book('book in bookshelf__view(my_trade(), my_trade__filter_term)')
+    .btn-row
+      .btn.btn-remove_book(
+        @click='my_trade__remove(book.id)'
+        ) remove from trade

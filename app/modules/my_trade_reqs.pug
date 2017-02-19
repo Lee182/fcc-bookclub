@@ -1,17 +1,16 @@
 include _book_item.pug
-.my_books
-  h2 My Trade Requests
-  .search
-    input(
-      placeholder='filter', v-model='my_trade__filter_term',
-    )
-    .serach-icon.flex-center
-      i.fa.fa-filter
+h2 My Trade Requests
+.search
+  input(
+    placeholder='filter', v-model='my_trade__filter_term',
+  )
+  .serach-icon.flex-center
+    i.fa.fa-filter
 
-  .bookshelf
-    +book('book in bookshelf__view(my_trade(), my_trade__filter_term)')
-      br
-      p user: @margretSmith
-      p accepted:
-      p true || false || undefined
-      p accepted_read: true || false || undefined
+.bookshelf
+  +book('book in bookshelf__view(my_trade(), my_trade__filter_term)')
+    br
+    p user: @margretSmith
+    p accepted:
+    p true || false || undefined
+    p accepted_read: true || false || undefined
