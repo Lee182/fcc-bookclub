@@ -8,8 +8,8 @@ include _book_item.pug
     .serach-icon.flex-center
       i.fa.fa-filter
 
-  .booklist
-    +book('book in my_trade__view()')
+  .bookshelf
+    +book('book in bookshelf__view(my_trade(), my_trade__filter_term)')
       .btn-row
         .btn.btn-remove_book(
           @click='my_trade__remove(book.id)'

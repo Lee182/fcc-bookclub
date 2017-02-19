@@ -2,17 +2,23 @@ module.exports = function({data, methods, computed}) {
   data.my_books = []
   data.my_books__filter_term = ''
 
-  methods.my_books__getlist = function() {
-    // some net then
-    var book = {_id: 123, title: 'hello'}
-    data.my_books.push({book: book})
-  }
   methods.my_books__findId = function(book_id) {
     let vm = this
     return vm.my_books.findIndex(function(b){
       return b.book.id === book_id
     })
   }
+
+  methods.my_books__update = function(b){
+    var i = vm.my_books__findId(b.book.id)
+    if (i === -1) {
+      vm.my_books.push(b)
+    }
+    if (i !== -1) {
+      Vue.set(vm.my_books, i, b)
+    }
+  }
+
   methods.my_books__add = function(book_id) {
     let vm = this
     if (vm.user_id === undefined) {return}
@@ -23,11 +29,10 @@ module.exports = function({data, methods, computed}) {
       cookies: true,
       json: true
     }).then(function(res){
-      console.log(res)
-      if (res.err !== undefined) {return}
-      vm.my_books.push(res)
+      vm.my_books__update(res)
     })
   }
+
   methods.my_books__remove = function(book_id) {
     let vm = this
     if (vm.user_id === undefined) {return}
@@ -52,23 +57,27 @@ module.exports = function({data, methods, computed}) {
     return vm.my_books__findId(book_id) !== -1
   }
 
-  computed.my_books__view = function() {
+  methods.bookshelf__view = function(books, search_term) {
     let vm = this
-    var term = vm.my_books__filter_term.trim()
-    var reg = term.split('').join('.*')
+    var search_term = search_term.toLowerCase().trim()
+    var search_reg = search_term.split('').join('.*')
 
-    return vm.my_books.map(function(b){
+    return books.map(function(b){
       return b.book
     }).filter(function(book){
-      if (term === '') {return true}
-      return ['title', 'subtitle', 'authors'].reduce(function(bool, field){
+      if (search_term.length === 0) {return true}
+
+      const search_result = ['title', 'subtitle', 'authors'].reduce(function(bool, field){
         if (bool === true) {return true}
         if (book[field] === undefined) {return false}
         if (field === 'authors') {
-          return book.authors.join(', ').toLowerCase().match(reg) !== null
+          return book.authors.join(', ').toLowerCase().match(search_reg) !== null
         }
-        return book[field].toLowerCase().match(reg) !== null
+        return book[field].toLowerCase().match(search_reg) !== null
       }, false)
+
+      return search_result
     })
   }
+
 }
