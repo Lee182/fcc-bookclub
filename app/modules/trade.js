@@ -29,6 +29,16 @@ module.exports = function({data, methods, computed, watch}) {
     })
   }
 
+  methods.trade__req = function(book_id, user_id) {
+    // sent POST trade__req
+  }
+
+  methods.trade__req_remove = function(book_id, user_id){
+    // send POST trade__req
+    // update obj
+  }
+
+
   methods.is_tradeable = function(book_id) {
     let vm = this
     var i = vm.bookshelf__findId(book_id)
