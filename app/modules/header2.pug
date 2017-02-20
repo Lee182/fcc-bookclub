@@ -1,0 +1,15 @@
+.header
+  .header-titlerow.flex-row
+    .flex-center: h1.header-title #booktrade
+    .flex-gap
+    .header-icon.header-bell.flex-center
+      //- notifications
+      i.fa.fa-bell-o
+    .header-icon.header-bars.flex-center(@click='header_tog')
+      i.fa.fa-ellipsis-v
+  .nav.flex-center
+    .nav-active
+    li.nav-item about
+    li.nav-item search
+    li.nav-item bookshelf
+    li.nav-item trades
