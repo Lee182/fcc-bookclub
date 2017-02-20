@@ -35,7 +35,7 @@ o.bookshelf = function({user_id}) {
 }
 
 o.bookshelf__add = function({book_id, user_id}) {
-  bookapi.findId(book_id)
+  return bookapi.findId(book_id)
   .then(function(book){
     return o.db.collection('bookshelf').findOneAndUpdate(
       {_id: book_id, 'users.user_id': {$ne: user_id} },
@@ -81,7 +81,8 @@ o.trade__list = function({book_id, user_id}) {
       {$set:{
         'users.$.trade': {
           creation_date: new Date(),
-          fullfilled: false
+          fullfilled: false,
+          requests: []
         }
       }},
       {returnOriginal: false, upsert: false}
@@ -97,12 +98,71 @@ o.trade__unlist = function({book_id, user_id}) {
     )
 }
 
+
+o.tradeshelf = function({user_id}) {
+  return o.db.collection('bookshelf')
+  .find({
+    'users.user_id': user_id,
+    'users.trade': {$exists: 1}
+  })
+  .toArray()
+}
+
+o.books_for_trade = function() {
+  return o.db.collection('bookshelf').find({
+    'users.trade.fullfilled': false
+  })
+}
+
+o.trade__request = function({book_id, book_owner, user_id}) {
+  return o.db.collection('bookshelf').findOneAndUpdate(
+    {
+      _id: book_id,
+      users: {$elemMatch: {
+        user_id: book_owner,
+        'trade.fullfilled': false,
+        'trade.requests.user_id': {$ne: user_id}
+      }},
+    }, // query ensures only 1 request for book from owner
+    {$push: {
+      'users.$.trade.requests': {
+        user_id: user_id,
+        creation_date: new Date()
+      }
+    }},
+    {returnOriginal: false, upsert: false}
+  ).then(function(writeResult){
+    return Promise.resolve(writeResult)
+  })
+}
+
+o.trade__request_remove = function({book_id, book_owner, user_id}){
+  return o.db.collection('bookshelf')
+    .findOneAndUpdate({
+      _id: book_id,
+      users: {$elemMatch: {
+        user_id: book_owner,
+        'trade.fullfilled': false,
+        'trade.requests.user_id': user_id}
+      }
+    }, // query ensures only 1 request for book from owner
+    {$pull: {
+      'users.$.trade.requests': {
+        user_id: user_id,
+      }
+    }},
+    {returnOriginal: false, upsert: false})
+    .then(function(writeResult){
+      console.log('/trade__request_remove', writeResult)
+      return Promise.resolve(writeResult)
+    })
+}
+
 const five_mins = 5 * 60 * 1000
 setInterval(o.bookshelf__garbage_collection, five_mins)
 
 
-var a = ['bookshelf__add', 'bookshelf__remove', 'bookshelf__garbage_collection', 'trade__list', 'trade__unlist']
-
+var a = ['bookshelf__add', 'bookshelf__remove', 'bookshelf__garbage_collection', 'trade__list', 'trade__unlist', 'trade__request','trade__request_remove']
 a.forEach(function(name){
   o[name] = ensureConnected(o[name])
 })

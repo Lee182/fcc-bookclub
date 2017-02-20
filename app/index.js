@@ -7,7 +7,7 @@ w.loadImg = require('./lib/loadImage.js')
 // module loading
 w.modules = {
   header: require('./modules/header.js'),
-  add_book: require('./modules/add_book.js'),
+  book_search: require('./modules/book_search.js'),
   bookshelf: require('./modules/bookshelf.js'),
   trade: require('./modules/trade.js')
 }

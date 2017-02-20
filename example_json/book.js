@@ -49,7 +49,8 @@ function copyJSON(obj){
   book_for_trade = copyJSON(book_with_owner)
   book_for_trade.users[0].trade = {
     creation_date: '2017-02-15T18:35:32.460Z',
-    fullfilled: false
+    fullfilled: false,
+    requests: []
   }
 
 // book for trade with trade req

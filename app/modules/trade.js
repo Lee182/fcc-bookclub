@@ -29,11 +29,36 @@ module.exports = function({data, methods, computed, watch}) {
     })
   }
 
-  methods.trade__req = function(book_id, user_id) {
-    // user_id is the book_id owner
-    // sent POST trade__req
-    // update my requests sent
+
+  data.books_for_trade = []
+
+  methods.trade__request = function(book_id, book_owner, user_id) {
+    if (user_id === undefined) {return}
+    console.log(book_id, book_owner, user_id)
+    w.req({
+      method: 'post',
+      url: '/trade__request',
+      data: {book_id, book_owner, user_id},
+      cookies: true,
+      json: true
+    }).then(function(res){
+      console.log('trade__request',res)
+    })
   }
+
+  methods.trade__get_reqs_sent = function() {
+    let vm = this
+    // vm.user_id
+  }
+
+  methods.trade__update = function(book_id, user_id) {
+
+  }
+  methods.trade__long_poll = function() {
+
+  }
+
+
 
   methods.trade__req_remove = function(book_id, user_id){
     // user_id is the book_id owner
@@ -53,7 +78,7 @@ module.exports = function({data, methods, computed, watch}) {
     return vm.bookshelf[i].users[i2].trade !== undefined
   }
 
-  methods.books_for_trade = function() {
+  methods.tradeshelf = function() {
     let vm = this
     return vm.bookshelf.filter(function(b){
       return vm.is_tradeable(b.book.id)

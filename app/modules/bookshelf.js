@@ -9,16 +9,6 @@ module.exports = function({data, methods, computed}) {
     })
   }
 
-  methods.bookshelf__update = function(b){
-    var i = vm.bookshelf__findId(b.book.id)
-    if (i === -1) {
-      vm.bookshelf.push(b)
-    }
-    if (i !== -1) {
-      Vue.set(vm.bookshelf, i, b)
-    }
-  }
-
   methods.bookshelf__add = function(book_id) {
     let vm = this
     if (vm.user_id === undefined) {return}
@@ -50,6 +40,16 @@ module.exports = function({data, methods, computed}) {
       }
     })
 
+  }
+
+  methods.bookshelf__update = function(b){
+    var i = vm.bookshelf__findId(b.book.id)
+    if (i === -1) {
+      vm.bookshelf.push(b)
+    }
+    if (i !== -1) {
+      Vue.set(vm.bookshelf, i, b)
+    }
   }
 
   methods.bookshelf__is_in_array = function(book_id) {

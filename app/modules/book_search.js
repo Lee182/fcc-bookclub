@@ -1,43 +1,44 @@
 module.exports = function({data, methods, computed}) {
-  data.add_book = {}
-  var d = data.add_book
-  methods.add_book = {}
-  d.search_req = {
+  data.bs1 = {} // book search 1
+  data.bs1.req = {
     query: '',
     pagenum: 1
   }
-  d.search_res = {
+  data.bs1.res = {
     query: '',
     pagenum: 1,
     pages: 10,
     books: [],
     show: false
   }
+  data.bs1.req_atm = false
 
-  methods.add_book__search = function(search_req) {
+  methods.book_search = function(bs1) {
     let vm = this
-    if (search_req.query === '') {
-      d.search_res.books = []
-      d.search_res.show = false
+    if (bs1.req.query.trim() === '') {
+      bs1.res = false
+      bs1.books = []
       return
     }
-    w.req({
+    bs1.req_atm = bs1.req
+    var promise = w.req({
       method: 'get',
-      url: '/book_search/'+search_req.query + '/'+search_req.pagenum,
+      url: '/book_search/'+bs1.req.query + '/'+bs1.req.pagenum,
       timeout: 10000,
       json: true
     }).then(function(res){
-      d.search_res = res
-      d.search_res.show = true
+      bs1.req_atm = false
+      bs1.res = res
+      bs1.res.show = true
     })
+    return promise
   }
 
-  methods.add_book__change_page = function(pagenum) {
+  methods.book_search__change_page = function(bs1, pagenum) {
+    // changes the page number then searches
+    bs1.req.pagenum = pagenum
     let vm = this
-    vm.add_book__search({
-      query: d.search_req.query,
-      pagenum
-    })
+    vm.book_search(bs1)
   }
 
   methods.pagination = function (active_page, pages_showing, last_pg) {

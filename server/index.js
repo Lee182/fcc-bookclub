@@ -56,36 +56,32 @@ app.get('/book_search/:query/:pagenum', function(req,res){
   })
 })
 
+function passToBookDB(method) {
+  return function(req, res, next) {
+    console.log(method)
+    dao[method](req.body)
+    .then(function(result){
+      res.json(result)
+    })
+    .catch(function(err){
+      res.json({err, err_req: req.body})
+    })
+  }
+}
+
 app.get('/bookshelf/:user_id', function(req,res,next){
   dao.bookshelf({user_id: req.params.user_id}).then(function(result){
     res.json(result)
   })
 })
 
-app.post('/bookshelf__add', function(req,res,next){
-  dao.bookshelf__add(req.body).then(function(result){
-    res.json(result)
-  })
-})
+app.post('/bookshelf__add', passToBookDB('bookshelf__add'))
+app.post('/bookshelf__remove', passToBookDB('bookshelf__remove'))
+app.post('/trade__list', passToBookDB('trade__list'))
+app.post('/trade__unlist', passToBookDB('trade__unlist'))
+app.post('/trade__request', passToBookDB('trade__request'))
+app.post('/trade__request_remove', passToBookDB('trade__request'))
 
-app.post('/bookshelf__remove', function(req,res,next){
-  dao.bookshelf__remove(req.body).then(function(result){
-    res.json(result)
-  })
-})
-
-app.post('/trade__list', function(req,res,next){
-  dao.trade__list(req.body).then(function(result){
-    res.json(result)
-  })
-})
-app.post('/trade__unlist', function(req,res,next){
-  dao.trade__unlist(req.body).then(function(result){
-    res.json(result)
-  }).catch(function(err){
-    res.json({err})
-  })
-})
 
 server.listen(port, function(){
   console.log('server listening at http://localhost:'+port)
