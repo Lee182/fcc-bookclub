@@ -1,6 +1,6 @@
 module.exports = function({data, methods, computed}) {
   data.bookshelf = []
-  data.bookshelf__filter_term = ''
+  data.bookshelf__search_term = ''
 
   methods.bookshelf__findId = function(book_id) {
     let vm = this

@@ -1,0 +1,16 @@
+include _book_item.pug
+h2 My Trade Requests Recieved
+.search
+  input(
+    placeholder='filter', v-model='my_trade__search_term',
+  )
+  .serach-icon.flex-center
+    i.fa.fa-filter
+
+.bookshelf
+  +book('book in bookshelf__view(bookshelf.filter(is_tradeable), my_trade__search_term)')
+    br
+    p user: @margretSmith
+    p accepted:
+    p true || false || undefined
+    p accepted_read: true || false || undefined

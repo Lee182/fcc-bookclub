@@ -9,8 +9,7 @@ w.modules = {
   header: require('./modules/header.js'),
   add_book: require('./modules/add_book.js'),
   bookshelf: require('./modules/bookshelf.js'),
-  my_trade: require('./modules/trade.js'),
-  my_trade_reqs: require('./modules/my_trade_reqs.js')
+  trade: require('./modules/trade.js')
 }
 
 vueobj = {

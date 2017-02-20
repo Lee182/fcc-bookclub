@@ -1,5 +1,5 @@
 module.exports = function({data, methods, computed, watch}) {
-  data.my_trade__filter_term = ''
+  data.my_trade__search_term = ''
 
   methods.trade__list = function(book_id) {
     let vm = this
@@ -30,10 +30,13 @@ module.exports = function({data, methods, computed, watch}) {
   }
 
   methods.trade__req = function(book_id, user_id) {
+    // user_id is the book_id owner
     // sent POST trade__req
+    // update my requests sent
   }
 
   methods.trade__req_remove = function(book_id, user_id){
+    // user_id is the book_id owner
     // send POST trade__req
     // update obj
   }

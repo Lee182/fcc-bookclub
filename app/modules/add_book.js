@@ -15,7 +15,6 @@ module.exports = function({data, methods, computed}) {
   }
 
   methods.add_book__search = function(search_req) {
-    console.log('search_req', search_req)
     let vm = this
     if (search_req.query === '') {
       d.search_res.books = []
@@ -28,14 +27,12 @@ module.exports = function({data, methods, computed}) {
       timeout: 10000,
       json: true
     }).then(function(res){
-      console.log(res)
       d.search_res = res
       d.search_res.show = true
     })
   }
 
   methods.add_book__change_page = function(pagenum) {
-    console.log('change_page', pagenum)
     let vm = this
     vm.add_book__search({
       query: d.search_req.query,

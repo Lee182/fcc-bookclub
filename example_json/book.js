@@ -1,4 +1,4 @@
-let eamples = []
+let examples = []
 module.exports = examples
 
 function copyJSON(obj){
@@ -56,7 +56,7 @@ function copyJSON(obj){
   book_with_trade_req = copyJSON(book_for_trade)
   book_with_trade_req.users[0].trade.reqs = [
     {
-      user_id: 'katieSmith' // person requesting book from owner
+      user_id: 'katieSmith', // person requesting book from owner
       creation_date: '2017-02-15T18:35:32.460Z' // when
     }
   ]

@@ -1,14 +1,14 @@
 include _book_item.pug
-h2 My Trade Requests
+h2 My Trade Requests Sent
 .search
   input(
-    placeholder='filter', v-model='my_trade__filter_term',
+    placeholder='filter', v-model='my_trade__search_term',
   )
   .serach-icon.flex-center
     i.fa.fa-filter
 
 .bookshelf
-  +book('book in bookshelf__view(bookshelf.filter(is_tradeable), my_trade__filter_term)')
+  +book('book in bookshelf__view(bookshelf.filter(is_tradeable), my_trade__search_term)')
     br
     p user: @margretSmith
     p accepted:
