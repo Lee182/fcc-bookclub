@@ -1,15 +1,23 @@
 .header
   .header-titlerow.flex-row
-    .flex-center: h1.header-title #booktrade
+    .header-title.flex-center: h1 #booktrade
     .flex-gap
-    .header-icon.header-bell.flex-center
+    .nav(:class='{show: header.navInFirstRow === true}')
+      .nav-active(:style='{width: header.nav_active.width, left: header.nav_active.left}')
+      li.nav-item(
+        v-for='(item,i) in header.nav',
+        :class='{active: item.active === true}',
+        @click='header_navclick(i)'): .flex-center {{ item.text }}
+
+    .flex-gap
+    .header-icon.header-bell: .flex-center
       //- notifications
       i.fa.fa-bell-o
-    .header-icon.header-bars.flex-center(@click='header_tog')
+    .header-icon.header-bars: .flex-center
       i.fa.fa-ellipsis-v
-  .nav.flex-center
-    .nav-active
-    li.nav-item about
-    li.nav-item search
-    li.nav-item bookshelf
-    li.nav-item trades
+  .nav.nav-bottom(:class='{show: header.navInFirstRow === false}')
+    .nav-active(:style='{width: header.nav_active.width, left: header.nav_active.left}')
+    li.nav-item(
+      v-for='(item,i) in header.nav',
+      :class='{active: item.active}',
+      @click='header_navclick(i)'): .flex-center {{ item.text }}
