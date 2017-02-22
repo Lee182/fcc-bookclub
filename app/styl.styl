@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Alegreya+Sans')
 @require './lib/jonoreset.styl'
 
-$font1 = 'PT Serif'
+$font1 = 'Alegreya Sans', sans-serif
+
+
 
 .flex-row
   display flex
@@ -29,8 +32,6 @@ body
   background-color rgba(48, 11, 71, .3)
   height calc(100vh - 3rem)
   width 100%
-  @media screen and (min-width: 600px)
-    width calc(100% - 250px)
 
 .gap-horizontal
   padding 0 .5rem
@@ -38,9 +39,6 @@ body
   padding  .5rem 0
 
 @require 'modules/header.styl'
-@require 'modules/trade_req_sidebar.styl'
-
-
 
 
 // global styles
@@ -52,6 +50,7 @@ body
   h2
     padding-bottom 1rem
     font-size 1.7rem
+    text-align center
   h3
     padding-top .5rem
     padding-bottom 1rem
@@ -128,7 +127,6 @@ body
 
 .bookshelf-showing
   padding .5rem
-
 
 
 .pgs
