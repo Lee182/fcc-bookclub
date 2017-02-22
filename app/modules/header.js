@@ -30,7 +30,6 @@ module.exports = function({data, methods}) {
     width.nav = navitems.reduce(sumWidths, 0)
     width.topline = topline.reduce(sumWidths, 0)
   }
-
   methods.header_placeNav = function() {
     let vm = this
     vm.header_getWidths()
@@ -40,7 +39,8 @@ module.exports = function({data, methods}) {
     vm.header_placeNav()
   })
 
-  methods.header_navclick = function(i){
+
+  methods.header__navclick = function(i){
     let vm = this
     if (vm.header.nav[i].active === true) {return}
 
@@ -51,9 +51,9 @@ module.exports = function({data, methods}) {
     vm.header.nav[i].active = true
     vm.$forceUpdate()
 
-    vm.header_nav_active(i)
+    vm.header__nav_moveunderline(i)
   }
-  methods.header_nav_active = function(i) {
+  methods.header__nav_moveunderline = function(i) {
     let vm = this
     var nav = d.qs('.nav.show').getBoundingClientRect()
     var els = d.qsa('.nav.show > .nav-item').toArray()
@@ -61,10 +61,24 @@ module.exports = function({data, methods}) {
     vm.header.nav_active.width = item.width + 'px'
     vm.header.nav_active.left = (item.x - nav.x) + 'px'
   }
-  setTimeout(function(){
-    vm.header_placeNav()
-    vm.header_nav_active(0)
-  }, 500)
+
+  data.header.menu = [
+    {text: 'refresh'},
+    {text: 'settings'},
+    {text: 'logout'},
+  ]
+  data.header.menu_open = false
+  methods.header__elipsis_tog = function(){
+    let vm = this
+    vm.header.menu_open = !vm.header.menu_open
+  }
+  methods.ellipsis_clickaway = function(e){
+    let vm = this
+    const clickOutSideMenu = e.target.matches('.ellipsis-fullscreen.show')
+    if (clickOutSideMenu === true) {
+      vm.header.menu_open = false
+    }
+  }
 
   methods.login = function(){
     let vm = this
@@ -75,7 +89,10 @@ module.exports = function({data, methods}) {
     let vm = this
     vm.user_id = undefined
   }
-
+  setTimeout(function(){
+    vm.header_placeNav()
+    vm.header__nav_moveunderline(0)
+  }, 500)
 
   data.user_id = 'realDonaldTrump'
 }
