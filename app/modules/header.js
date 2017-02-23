@@ -53,11 +53,12 @@ module.exports = function({data, methods}) {
   }
   methods.header__nav_moveunderline = function(i) {
     let vm = this
-    var nav = d.qs('.nav.show').getBoundingClientRect()
+    var nav = d.qs('.nav.show')
+    var navb = nav.getBoundingClientRect()
     var els = d.qsa('.nav.show > .nav-item').toArray()
     var item = els[i].getBoundingClientRect()
     vm.header.nav_active.width = item.width + 'px'
-    vm.header.nav_active.left = (item.left - nav.left) + 'px'
+    vm.header.nav_active.left = (item.left - navb.left + nav.scrollLeft) + 'px'
   }
 
   data.header.menu = [
