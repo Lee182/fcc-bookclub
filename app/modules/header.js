@@ -7,7 +7,7 @@ module.exports = function({data, methods}) {
   var width = data.header.widths
   data.header.navInFirstRow = false
   data.header.nav = [
-    {text: 'about', active: true},
+    {text: 'about'},
     {text: 'search'},
     {text: 'bookshelf'},
     {text: 'trades'}
@@ -35,9 +35,6 @@ module.exports = function({data, methods}) {
     vm.header_getWidths()
     vm.header.navInFirstRow = (width.screen - width.topline) > width.nav
   }
-  w.on('resize', function(){
-    vm.header_placeNav()
-  })
 
 
   methods.header__navclick = function(i){
@@ -52,6 +49,7 @@ module.exports = function({data, methods}) {
     vm.$forceUpdate()
 
     vm.header__nav_moveunderline(i)
+    // change the stage content
   }
   methods.header__nav_moveunderline = function(i) {
     let vm = this
@@ -59,7 +57,7 @@ module.exports = function({data, methods}) {
     var els = d.qsa('.nav.show > .nav-item').toArray()
     var item = els[i].getBoundingClientRect()
     vm.header.nav_active.width = item.width + 'px'
-    vm.header.nav_active.left = (item.x - nav.x) + 'px'
+    vm.header.nav_active.left = (item.left - nav.left) + 'px'
   }
 
   data.header.menu = [
@@ -89,10 +87,14 @@ module.exports = function({data, methods}) {
     let vm = this
     vm.user_id = undefined
   }
-  setTimeout(function(){
-    vm.header_placeNav()
-    vm.header__nav_moveunderline(0)
-  }, 500)
 
+  methods.header__oncreate = function(){
+    let vm = this
+    vm.header_placeNav()
+    vm.header__navclick(0)
+    w.on('resize', function(){
+      vm.header_placeNav()
+    })
+  }
   data.user_id = 'realDonaldTrump'
 }

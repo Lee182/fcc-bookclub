@@ -1,10 +1,12 @@
-$main_color = #6e3124// rgb(110, 36, 90)
+$main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
 .header
-  background-color $main_color
+  background-image url(http://ebookfriendly.com/wp-content/uploads/2013/11/Library-a-book-wallpaper-540x405.jpg)
   color #fff
   box-shadow 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
   &-titlerow
     align-items stretch
+    background-color $main_color
+
   &-title
     padding 1rem
   h1
@@ -54,6 +56,8 @@ $main_color = #6e3124// rgb(110, 36, 90)
       background-color #bdb2b24d
 .nav-bottom .nav-item
   padding .5rem 1rem 1rem 1rem
+  background-color $main_color
+
 
 
 .ellipsis-tog.active

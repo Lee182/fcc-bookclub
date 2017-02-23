@@ -2,6 +2,17 @@ module.exports = function({data, methods, computed}) {
   data.bookshelf = []
   data.bookshelf__search_term = ''
 
+  methods.bookshelf__get = function() {
+    let vm = this
+    return req({
+      url: '/bookshelf/'+vm.user_id,
+      cookies: true,
+      json: true
+    }).then(function(res){
+      vm.bookshelf = res
+    })
+  }
+
   methods.bookshelf__findId = function(book_id) {
     let vm = this
     return vm.bookshelf.findIndex(function(b){

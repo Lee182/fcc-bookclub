@@ -24,16 +24,13 @@ vueobj = {
   beforeCreate: function(){},
   created: function(){
     let vm = this
-    req({
-      url: '/bookshelf/'+vm.user_id,
-      cookies: true,
-      json: true
-    }).then(function(res){
-      vm.bookshelf = res
-    })
+    vm.bookshelf__get()
   },
   beforeMount: function(){},
-  mounted: function(){},
+  mounted: function(){
+    let vm = this
+    vm.header__oncreate()
+  },
   beforeUpdate: function(){},
   updated: function(){},
   beforeDestroy: function(){},
