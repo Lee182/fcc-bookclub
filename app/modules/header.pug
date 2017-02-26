@@ -1,33 +1,24 @@
+include android_tabs.pug
 header.header
   .header-titlerow.flex-row
     .header-title.flex-center: h1 #booktrade
     .flex-gap
-    .nav(:class='{show: header.navInFirstRow === true}')
-      .nav-active(:style='{width: header.nav_active.width, left: header.nav_active.left}')
-      li.nav-item(
-        v-for='(item,i) in header.nav',
-        :class='{active: item.active === true}',
-        @click='header__navclick(i)'): .flex-center {{ item.text }}
     .flex-gap
     .header-icon.header-bell.flex-center: .circle.flex-center
       //- notifications
       i.fa.fa-bell-o
     .header-icon.ellipsis-tog.flex-center(
-      :class='{active: header.menu_open}'
-      @click='header__elipsis_tog()'
+      :class='{active: header.menu.open}'
+      @click='header__elipsis_tog(header.menu)'
       ): .circle.flex-center
       i.fa.fa-ellipsis-v
-  nav.nav.nav-bottom(:class='{show: header.navInFirstRow === false}')
-    .nav-active(:style='{width: header.nav_active.width, left: header.nav_active.left}')
-    li.nav-item(
-      v-for='(item,i) in header.nav',
-      :class='{active: item.active}',
-      @click='header__navclick(i)'): .flex-center {{ item.text }}
+  //- .nav-bottom(v-show='header.navInFirstRow === true')
+  //-   +android_tabs('nav')
 
 .ellipsis-fullscreen(
-  :class='{show: header.menu_open}'
-  @mousedown='ellipsis_clickaway'
-  @touchstart='ellipsis_clickaway'
+  :class='{show: header.menu.open, darkroom: header.menu.open}'
+  @mousedown='ellipsis_clickaway($event, header.menu)'
+  @touchstart='ellipsis_clickaway($event, header.menu)'
   )
   nav.ellipsis-menu
-    li(v-for='item in header.menu' aria-hidden='true') {{ item.text }}
+    li(v-for='item in header.menu.items' aria-hidden='true') {{ item.text }}

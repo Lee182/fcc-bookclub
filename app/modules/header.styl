@@ -30,9 +30,7 @@ $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
     background-color #bdb2b24d
 
 .nav
-  display none
-  &.show
-    display flex
+  display flex
   position relative
   flex-flow row nowrap
   align-items stretch
@@ -65,7 +63,8 @@ $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
 .ellipsis-tog.active
   z-index 4
 .ellipsis-fullscreen
-  background rgba(0,0,0,.5)
+  &.darkroom
+    background-color rgba(0,0,0,.5)
   height 100vh
   width 100vw
   position fixed
@@ -73,14 +72,13 @@ $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
   left 0
   z-index 3
   display none
-  flex-flow row wrap
-  align-items flex-start
-  justify-content flex-end
-  padding 3rem 1rem 0 0
   &.show
-    display flex
+    display block
 
 .ellipsis-menu
+  position absolute
+  top 3rem
+  right 1rem
   background #fafafa
   color black
   border-radius .25rem

@@ -1,0 +1,7 @@
+mixin android_tabs(nav)
+  nav.nav
+    .nav-active(:style=nav+`.underline_style`)
+    li.nav-item.flex-center(
+      v-for='(item,i) in '+nav+'.items',
+      :class='{active: item.active === true}',
+      @click='nav_item_onclick($event, '+nav+',i)') {{ item.text }}

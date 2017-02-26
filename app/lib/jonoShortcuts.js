@@ -38,3 +38,18 @@ Node.prototype.prependChild = function(el) {
   var parentNode = this
   parentNode.insertBefore(el, parentNode.firstChild)
 }
+
+
+
+Element.prototype.qsP = function(query) {
+  // qsP: querySelectorParent
+  var el = this
+  var do_break = false
+  while (do_break === false) {
+    parent = el.parentElement
+    do_break = parent === null || parent.matches(query)
+    // parentElement of html is null
+  }
+  if (parent === null) {return undefined}
+  return parent
+}
