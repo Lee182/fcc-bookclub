@@ -10,13 +10,24 @@ $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
 
   &-title
     padding 1rem
+  &-button-text
+    text-transform uppercase
+    font-size .85rem
+    font-weight 500
+    padding 1rem .5rem
+    transition background-color .4s ease
+    &:hover
+      background-color #bdb2b24d
   h1
     font-size 1.3rem
   &-icon
     padding 0 .25rem
     i
       font-size 1.3rem
-
+  &-avatar
+    border-radius 50%
+    height 32px
+    width 32px
 .circle
   width 2rem
   height 2rem
@@ -24,10 +35,17 @@ $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
   transition background-color .4s ease
   &:hover
     background-color #bdb2b24d
+  &.circle-avatar
+    width 2.25rem
+    height 2.25rem
+    background-color alpha(#fff, 50%)
+
 
 .header-icon.active
   .circle
     background-color #bdb2b24d
+    &-avatar
+      background-color alpha(#fff, 75%)
 
 .nav
   display flex

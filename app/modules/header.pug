@@ -4,14 +4,20 @@ header.header
     .header-title.flex-center: h1 #booktrade
     .flex-gap
     .flex-gap
-    .header-icon.header-bell.flex-center: .circle.flex-center
+    .header-icon.header-bell.flex-center(
+      v-if='user_id !== undefined'
+      ): .circle.flex-center
       //- notifications
       i.fa.fa-bell-o
     .header-icon.ellipsis-tog.flex-center(
       :class='{active: header.menu.open}'
       @click='header__elipsis_tog(header.menu)'
-      ): .circle.flex-center
-      i.fa.fa-ellipsis-v
+      v-if='user_id !== undefined'
+      ): .circle.circle-avatar.flex-center
+        img.header-avatar(:src=`'https://twitter.com/'+user_id+'/profile_image'`)
+    .header-button-text.flex-center(
+      v-if='user_id === undefined'
+      ) login
   //- .nav-bottom(v-show='header.navInFirstRow === true')
   //-   +android_tabs('nav')
 
@@ -21,4 +27,6 @@ header.header
   @touchstart='ellipsis_clickaway($event, header.menu)'
   )
   nav.ellipsis-menu
-    li(v-for='item in header.menu.items' aria-hidden='true') {{ item.text }}
+    li refresh
+    li settings
+    li logout
