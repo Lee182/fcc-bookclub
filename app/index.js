@@ -28,10 +28,7 @@ vueobj = {
     vm.bookshelf__get()
   },
   beforeMount: function(){},
-  mounted: function(){
-    let vm = this
-    vm.header__oncreate()
-  },
+  mounted: function(){},
   beforeUpdate: function(){},
   updated: function(){},
   beforeDestroy: function(){},
