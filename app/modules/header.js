@@ -28,14 +28,7 @@ module.exports = function({data, methods}) {
   }
 
 
-  data.header.menu = {
-    items: [
-      {text: 'refresh'},
-      {text: 'settings'},
-      {text: 'logout'}
-    ],
-    open: false
-  }
+  data.header.menu = {open: false}
   methods.header__elipsis_tog = function(menu){
     menu.open = !menu.open
   }
