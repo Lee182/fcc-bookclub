@@ -83,6 +83,10 @@ app.post('/trade__request', passToBookDB('trade__request'))
 app.post('/trade__request_remove', passToBookDB('trade__request'))
 
 
+app.get('*', function(req,res,next){
+  res.sendFile(path.resolve(__dirname + '/../dist/index.html') )
+})
+
 server.listen(port, function(){
   console.log('server listening at http://localhost:'+port)
 })

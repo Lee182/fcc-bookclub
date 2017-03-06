@@ -1,6 +1,6 @@
 include android_tabs.pug
 header.header
-  .header-titlerow.flex-row
+  .header-titlerow.flex-row(v-show=`header.show === '/'`)
     .header-title.flex-center: h1 #booktrade
     .flex-gap
     .flex-gap
@@ -21,6 +21,13 @@ header.header
   //- .nav-bottom(v-show='header.navInFirstRow === true')
   //-   +android_tabs('nav')
 
+  .header-titlerow.flex-row(v-show=`header.show === '/my-bookshelf'`)
+    span.bit-horizontal
+    .header-icon.flex-center
+      i.fa.fa-chevron-left(style='font-size: 1rem')
+    .header-title.flex-center: h2 My Bookshelf
+
+
 .ellipsis-fullscreen(
   :class='{show: header.menu.open, darkroom: header.menu.open}'
   @mousedown='ellipsis_clickaway($event, header.menu)'
@@ -29,13 +36,13 @@ header.header
   nav.ellipsis-menu
     li
       i.fa.fa-refresh
-      span.gap-horizontal
+      span.bit-horizontal
       | refresh
     li
       i.fa.fa-cog
-      span.gap-horizontal
+      span.bit-horizontal
       | settings
     li
       i.fa.fa-sign-out
-      span.gap-horizontal
+      span.bit-horizontal
       | logout

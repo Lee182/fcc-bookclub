@@ -11,6 +11,7 @@ w.modules = {
   book_search: require('./modules/book_search.js'),
   bookshelf: require('./modules/bookshelf.js'),
   trade: require('./modules/trade.js'),
+  router: require('./modules/router.js')
 }
 
 vueobj = {
@@ -25,6 +26,7 @@ vueobj = {
   beforeCreate: function(){},
   created: function(){
     let vm = this
+    vm.route(location.pathname)
     vm.bookshelf__get()
   },
   beforeMount: function(){},
