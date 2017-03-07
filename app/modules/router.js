@@ -1,11 +1,13 @@
 module.exports = function({data, methods}){
   data.router = {}
-  data.router.path
-  history.replaceState({path: location.pathname}, '#booktrade', location.pathname)
+  data.router.path = location.pathname
 
-  methods.route__init_listener = function(){
+
+  methods.router__init = function(){
     let vm = this
     w.on('popstate', vm.route__listener)
+    history.replaceState({path: location.pathname}, '#booktrade', location.pathname)
+    vm.route__set_path(location.pathname)
   }
 
   methods.route__set_path = function(path){

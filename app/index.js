@@ -3,6 +3,7 @@ require('./lib/jonoShortcuts.js')
 w.wait = require('./lib/wait.js')
 w.req = require('./lib/request.js')
 w.loadImg = require('./lib/loadImage.js')
+w.querystring = require('querystring')
 
 // module loading
 w.modules = {
@@ -26,15 +27,19 @@ vueobj = {
   beforeCreate: function(){},
   created: function(){
     let vm = this
-    vm.route__set_path(location.pathname)
-    vm.route__init_listener()
+    var qs = querystring.parse(new URL(location.href).search.substr(1))
+    if (qs.user_id) {
+      vm.user_id = qs.user_id
+    }
+
+    vm.router__init()
     vm.bookshelf__get()
     req({url:'/user_id', json: true}).then(function(res){
       console.log(res)
-
-      if (res.user_id) {
-        vm.user_id = res.user_id
-      }
+      //
+      // if (res.user_id) {
+      //   vm.user_id = res.user_id
+      // }
     })
   },
   beforeMount: function(){},
