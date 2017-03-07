@@ -25,19 +25,26 @@ var dao = require('./db.js')({
 dao.connect()
 
 
-var tw_session = require('./twitter-session')({
-  dao, port, coll_name: 'bookclub_sessions'})
+var tw = require('./twitter-session')({
+  dao,
+  port,
+  coll_name: 'bookclub_sessions',
+  consumerKey: k.twitter.consumerKey,
+  consumerSecret: k.twitter.consumerSecret,
+  callbackUrl: 'http://localhost:3000/tw.login-cb'
+})
 
-app.get('/twitter', tw_session.twlogin)
-app.get('/twitter-callback', tw_session.twlogin_cb, function(req,res,next){
-  console.log('/twitter-callback', req.cookies, req.twuser)
+app.get('/tw.login', tw.login)
+app.get('/tw.login_cb', tw.login_cb, function(req,res,next){
   if (req.twuser === undefined) {
-    clearCooks(res)
     return res.redirect('/')
   }
+  console.log("heheh")
   res.redirect(`/?user_id=${req.twuser}`)
 })
-app.get('/user_id', tw_session.tw_is_logged_in, function(req,res,next){
+app.get('/twitter-logout', tw.logout)
+
+app.get('/user_id', tw.is_logged_in, function(req,res,next){
   res.json({user_id:req.twuser})
 })
 

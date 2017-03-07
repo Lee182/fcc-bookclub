@@ -29,6 +29,13 @@ vueobj = {
     vm.route__set_path(location.pathname)
     vm.route__init_listener()
     vm.bookshelf__get()
+    req({url:'/user_id', json: true}).then(function(res){
+      console.log(res)
+
+      if (res.user_id) {
+        vm.user_id = res.user_id
+      }
+    })
   },
   beforeMount: function(){},
   mounted: function(){},

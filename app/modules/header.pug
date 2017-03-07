@@ -1,4 +1,3 @@
-include android_tabs.pug
 header.header
   .header-titlerow.flex-row(v-show=`header.show === '/'`)
     .header-title.flex-center: h1 #booktrade
@@ -22,9 +21,8 @@ header.header
           :src=`'https://twitter.com/'+user_id+'/profile_image'`)
     .header-button-text.flex-center(
       v-if='user_id === undefined'
-      ) login
-  //- .nav-bottom(v-show='header.navInFirstRow === true')
-  //-   +android_tabs('nav')
+      )
+      a(href='/tw.login') login
 
   .header-titlerow.flex-row(v-show=`header.show === '/my-bookshelf'`)
     span.bit-horizontal
