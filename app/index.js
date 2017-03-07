@@ -26,7 +26,8 @@ vueobj = {
   beforeCreate: function(){},
   created: function(){
     let vm = this
-    vm.route(location.pathname)
+    vm.route__set_path(location.pathname)
+    vm.route__init_listener()
     vm.bookshelf__get()
   },
   beforeMount: function(){},
