@@ -3,14 +3,15 @@ header.header
     .header-title.flex-center: h1 #booktrade
     .flex-gap
     .header-icon.header-bell.flex-center(
-      v-if='user_id !== undefined'
+      v-if='user__got_login && user_id !== undefined'
       ): .circle.flex-center
       //- notifications
       i.fa.fa-bell-o
+
     .header-icon.ellipsis-tog.flex-center(
       :class='{active: header.menu.open}'
       @click='header__elipsis_tog(header.menu)'
-      v-if='user_id !== undefined'
+      v-if='user__got_login && user_id !== undefined'
       ).flex-center
         .header-avatar.flex-center(
           v-if='false'
@@ -19,8 +20,9 @@ header.header
         img.header-avatar(
           v-if='user_id',
           :src=`'https://twitter.com/'+user_id+'/profile_image'`)
+
     .header-button-text.flex-center(
-      v-if='user_id === undefined'
+      v-if='user__got_login && user_id === undefined'
       )
       a(href='/tw.login') login
 

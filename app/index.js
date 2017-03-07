@@ -12,6 +12,7 @@ w.modules = {
   book_search: require('./modules/book_search.js'),
   bookshelf: require('./modules/bookshelf.js'),
   trade: require('./modules/trade.js'),
+  user: require('./modules/user.js'),
   router: require('./modules/router.js')
 }
 
@@ -33,14 +34,8 @@ vueobj = {
     }
 
     vm.router__init()
+    vm.user__init()
     vm.bookshelf__get()
-    req({url:'/user_id', json: true}).then(function(res){
-      console.log(res)
-      //
-      // if (res.user_id) {
-      //   vm.user_id = res.user_id
-      // }
-    })
   },
   beforeMount: function(){},
   mounted: function(){},
