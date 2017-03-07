@@ -49,7 +49,9 @@ nav.ellipsis-menu(
     i.fa.fa-cog
     span.bit-horizontal
     | settings
-  li
+  li(
+    @click='user__logout_btn()'
+    )
     i.fa.fa-sign-out
     span.bit-horizontal
     | logout

@@ -42,7 +42,7 @@ app.get('/tw.login_cb', tw.login_cb, function(req,res,next){
   console.log("heheh")
   res.redirect(`/?user_id=${req.twuser}`)
 })
-app.get('/twitter-logout', tw.logout)
+app.post('/tw.logout', tw.logout)
 
 app.get('/user_id', tw.is_logged_in, function(req,res,next){
   res.json({user_id:req.twuser})
