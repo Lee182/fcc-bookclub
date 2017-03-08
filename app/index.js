@@ -5,6 +5,11 @@ w.req = require('./lib/request.js')
 w.loadImg = require('./lib/loadImage.js')
 w.querystring = require('querystring')
 
+
+Vue.config.ignoredElements = [
+  'leaflet-map', 'another-web-component'
+]
+
 // module loading
 w.modules = {
   header: require('./modules/header.js'),
@@ -13,7 +18,8 @@ w.modules = {
   bookshelf: require('./modules/bookshelf.js'),
   trade: require('./modules/trade.js'),
   user: require('./modules/user.js'),
-  router: require('./modules/router.js')
+  router: require('./modules/router.js'),
+  account: require('./modules/account.js')
 }
 
 vueobj = {
@@ -38,7 +44,10 @@ vueobj = {
     vm.bookshelf__get()
   },
   beforeMount: function(){},
-  mounted: function(){},
+  mounted: function(){
+    let vm = this
+    vm.user_map_init()
+  },
   beforeUpdate: function(){},
   updated: function(){},
   beforeDestroy: function(){},
