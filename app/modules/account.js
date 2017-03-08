@@ -26,7 +26,7 @@ module.exports = function({methods, data}){
     map = L.map(d.qs('.profile-map'))
 
     var icon = L.icon({
-      iconUrl: 'http://www.clker.com/cliparts/H/L/G/C/a/D/pin.svg',
+      iconUrl: 'http://localhost:3000/pin.svg',
       iconSize: [58, 48],
       iconAnchor: [18, 42],
       popupAnchor: [0, -28]
@@ -39,8 +39,6 @@ module.exports = function({methods, data}){
     }).addTo(map)
 
     marker = L.marker(data.user_map.loci.coords, {icon}).addTo(map)
-      .bindPopup(data.user_map.loci.name)
-      // .openPopup()
 
     vm.user_map_update()
   }
@@ -48,6 +46,8 @@ module.exports = function({methods, data}){
   methods.user_map_update = function() {
     map.setView(data.user_map.loci.coords, 12)
     marker.setLatLng(data.user_map.loci.coords).update()
+    marker.bindPopup(data.user_map.loci.name)
+    // .openPopup()
   }
 
   methods.map_search = function({place}) {
