@@ -1,12 +1,13 @@
-h2 My Account:
+.gap-vertical
+.gap-vertical
 .flex-center
-  img.profile-image(
+  img.account-headshot(
     :src=`'https://twitter.com/'+user_id+'/profile_image?size=original'`)
 .flex-center
   h2(v-if='user_id !== undefined') @{{user_id}}
 
 h2 My Location:
-.flex-center.map-loci
+.flex-center.padv1
   .pl.flex-row(v-if='user_map.show_search === false')
     .pl-place.ellipsis {{user_map.loci.name}}
     .pl-edit.flex-row(@click='user_map__edit_click()')
@@ -21,4 +22,4 @@ h2 My Location:
     .flex-center.searchbox-clear(@click='user_map__clear()'): i.fa.fa-close
 
 .flex-center
-  leaflet-map.profile-map
+  .account-map.leaflet-map

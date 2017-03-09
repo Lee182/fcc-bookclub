@@ -28,9 +28,34 @@ header.header
 
   .header-titlerow.flex-row(v-show=`header.show === '/my-bookshelf'`)
     span.bit-horizontal
-    .header-icon.flex-center(@click=`route__path('/')`)
+    .header-icon.flex-center(@click=`route__go('/', true)`)
       i.fa.fa-chevron-left(style='font-size: 1rem')
     .header-title.flex-center: h2 My Bookshelf
+
+  .header-titlerow.flex-row(v-show=`header.show === '/my-account'`)
+    span.bit-horizontal
+    .header-icon.flex-center(@click=`route__go('/', true)`)
+      i.fa.fa-chevron-left(style='font-size: 1rem')
+    .header-title.flex-center: h2 My Account
+    .flex-gap
+    .header-icon.header-bell.flex-center(
+      v-if='user__got_login && user_id !== undefined'
+      ): .circle.flex-center
+      //- notifications
+      i.fa.fa-bell-o
+
+    .header-icon.ellipsis-tog.flex-center(
+      :class='{active: header.menu.open}'
+      @click='header__elipsis_tog(header.menu)'
+      v-if='user__got_login && user_id !== undefined'
+      ).flex-center
+        .header-avatar.flex-center(
+          v-if='false'
+          )
+          i.fake-avatar.fa.fa-user-circle-o
+        img.header-avatar(
+          v-if='user_id',
+          :src=`'https://twitter.com/'+user_id+'/profile_image'`)
 
 
 .ellipsis-fullscreen(
@@ -45,10 +70,10 @@ nav.ellipsis-menu(
     i.fa.fa-refresh
     span.bit-horizontal
     | refresh
-  li
+  li(@click='user__settings_click()')
     i.fa.fa-cog
     span.bit-horizontal
-    | settings
+    | my account
   li(
     @click='user__logout_btn()'
     )

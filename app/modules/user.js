@@ -14,12 +14,6 @@ module.exports = function({data, methods}) {
     })
   }
 
-  methods.user__logout_btn = function() {
-    let vm = this
-    vm.header.menu.open = false
-    vm.user__logout()
-  }
-
   methods.user__logout = function() {
     let vm = this
     return req({
@@ -29,6 +23,7 @@ module.exports = function({data, methods}) {
     }).then(function(res){
       if (res.logout === true) {
         vm.user_id = undefined
+        vm.route__go('/', true)
       }
     })
   }
@@ -36,5 +31,16 @@ module.exports = function({data, methods}) {
   methods.user__init = function(){
     let vm = this
     vm.user__get_login()
+  }
+
+  methods.user__settings_click = function(){
+    let vm = this
+    vm.header.menu.open = false
+    vm.route__go('/my-account', true)
+  }
+  methods.user__logout_btn = function() {
+    let vm = this
+    vm.header.menu.open = false
+    vm.user__logout()
   }
 }

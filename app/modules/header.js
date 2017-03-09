@@ -1,8 +1,6 @@
 module.exports = function({data, methods}) {
-
   data.header = {menu: {open: false}}
-  data.header.paths = ['/', '/my-bookshelf']
-  data.header.show = '/'
+  data.header.show = undefined // '/'
 
   methods.header__elipsis_tog = function(menu){
     menu.open = !menu.open

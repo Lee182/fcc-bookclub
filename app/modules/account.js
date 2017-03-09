@@ -20,10 +20,11 @@ module.exports = function({methods, data}){
       "country_code": "gb"
     }
   }
+  data.user_map.input = data.user_map.loci.name
 
   methods.user_map_init = function() {
     let vm = this
-    map = L.map(d.qs('.profile-map'))
+    map = L.map(d.qs('.account-map'))
 
     var icon = L.icon({
       iconUrl: 'http://localhost:3000/pin.svg',
@@ -82,7 +83,7 @@ module.exports = function({methods, data}){
       if (res[0] === undefined) {return}
       vm.user_map.show_search = false
       vm.user_map.loci.name = res[0].display_name
-      vm.user_map.loci.address = res.address
+      vm.user_map.loci.address = res[0].address
       vm.user_map.loci.coords.lat = res[0].lat
       vm.user_map.loci.coords.lon = res[0].lon
 
