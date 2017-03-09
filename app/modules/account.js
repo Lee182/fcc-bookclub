@@ -1,6 +1,7 @@
 module.exports = function({methods, data}){
   w.map = undefined
   w.marker = undefined
+  w.layer = undefined
 
   data.user_map = {}
   data.user_map.show_search = false
@@ -23,8 +24,15 @@ module.exports = function({methods, data}){
   data.user_map.input = data.user_map.loci.name
 
   methods.user_map_init = function() {
+    if (map && typeof map.remove === 'function') {
+      map.remove()
+    }
     let vm = this
-    map = L.map(d.qs('.account-map'))
+    var el = d.qs('.account-map')
+    el.textContent = ''
+    el.className = 'account-map'
+
+    map = L.map(el)
 
     var icon = L.icon({
       iconUrl: 'http://localhost:3000/pin.svg',
@@ -33,21 +41,27 @@ module.exports = function({methods, data}){
       popupAnchor: [0, -28]
     })
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/lee182/cj002grxo00kq2spfvxdk64p6/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVlMTgyIiwiYSI6ImNqMDAyZmJ6MDAwNXkycXQwNDM2MTZhankifQ.tWdE2srazZzTryC4DPTQfw', {
+    layer = L.tileLayer('https://api.mapbox.com/styles/v1/lee182/cj002grxo00kq2spfvxdk64p6/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVlMTgyIiwiYSI6ImNqMDAyZmJ6MDAwNXkycXQwNDM2MTZhankifQ.tWdE2srazZzTryC4DPTQfw', {
         attribution: '',
         maxZoom: 15,
         minZoom: 3
-    }).addTo(map)
+    })
+    layer.addTo(map)
 
-    marker = L.marker(data.user_map.loci.coords, {icon}).addTo(map)
-
-    vm.user_map_update()
+    marker = L.marker(vm.user_map.loci.coords, {icon}).addTo(map)
+    vm.user_map_update(vm.user_map.loci)
   }
 
-  methods.user_map_update = function() {
-    map.setView(data.user_map.loci.coords, 12)
-    marker.setLatLng(data.user_map.loci.coords).update()
-    marker.bindPopup(data.user_map.loci.name)
+  methods.user_map_update = function(loci) {
+    map.setView([
+      loci.coords.lat,
+      loci.coords.lon
+    ], 12)
+    marker.setLatLng([
+      loci.coords.lat,
+      loci.coords.lon
+    ]).update()
+    marker.bindPopup(loci.name)
     // .openPopup()
   }
 
@@ -57,7 +71,9 @@ module.exports = function({methods, data}){
       format=jsonv2
       &q=${place}
       &addressdetails=1
-    `.split('\n').map(String.trim).join('')
+    `.split('\n').map(function(str){
+      return str.trim()
+    }).join('')
     return req({
       method: 'get',
       url,
@@ -84,10 +100,9 @@ module.exports = function({methods, data}){
       vm.user_map.show_search = false
       vm.user_map.loci.name = res[0].display_name
       vm.user_map.loci.address = res[0].address
-      vm.user_map.loci.coords.lat = res[0].lat
-      vm.user_map.loci.coords.lon = res[0].lon
-
-      vm.user_map_update()
+      vm.user_map.loci.coords.lat = Number(res[0].lat)
+      vm.user_map.loci.coords.lon = Number(res[0].lon)
+      vm.user_map_update(vm.user_map.loci)
     })
   }
 }
