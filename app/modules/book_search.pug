@@ -28,7 +28,7 @@ include _book_item.pug
           ) remove from bookshelf
 
   .flex-center(v-show='bs1.res.show')
-    .pgs
+    .pgs.md1
       .pg.flex-center(
         v-for='page in pagination(bs1.res.pagenum, 3, bs1.res.pages)',
         :class=`{active: page.active}`,

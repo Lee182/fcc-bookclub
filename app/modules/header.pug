@@ -1,4 +1,4 @@
-header.header
+header.header.md1
   .header-titlerow.flex-row(v-show=`header.show === '/'`)
     .header-title.flex-center: h1 #booktrade
     .flex-gap
@@ -63,7 +63,7 @@ header.header
   @mousedown='ellipsis_clickaway($event, header.menu)'
   @touchstart='ellipsis_clickaway($event, header.menu)'
   )
-nav.ellipsis-menu(
+nav.ellipsis-menu.md2(
    :class='{show: header.menu.open}'
   )
   li

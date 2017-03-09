@@ -11,13 +11,13 @@ module.exports = function({methods, data}){
       lon: -1.2159578
     },
     address: {
-      "road": "Washington Drive",
-      "suburb": "Mansfield Woodhouse",
-      "town": "Nottinghamshire",
-      "state_district": "East Midlands",
-      "state": "England",
-      "country": "United Kingdom",
-      "country_code": "gb"
+      road: "Washington Drive",
+      suburb: "Mansfield Woodhouse",
+      town: "Nottinghamshire",
+      state_district: "East Midlands",
+      state: "England",
+      country: "United Kingdom",
+      country_code: "gb"
     }
   }
   data.user_map.input = data.user_map.loci.name
