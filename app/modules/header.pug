@@ -34,7 +34,7 @@ header.header.md1
 
   .header-titlerow.flex-row(v-show=`header.show === '/my-account'`)
     span.bit-horizontal
-    .header-icon.flex-center(@click=`route__go('/', true)`)
+    .header-icon.flex-center(@click=`route__back()`)
       i.fa.fa-chevron-left(style='font-size: 1rem')
     .header-title.flex-center: h2 My Account
     .flex-gap

@@ -56,6 +56,10 @@ module.exports = function({data, methods}){
     })
   }
 
+  methods.route__back = function() {
+    history.go(-1)
+  }
+
   methods.route__listener = function(popstate){
     console.log('route_listener', popstate.state)
     if (popstate === null) {return}
