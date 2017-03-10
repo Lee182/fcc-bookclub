@@ -61,7 +61,6 @@ app.get('/user_id', tw.is_logged_in, function(req,res,next){
 })
 
 app.post('/user_loci__change', tw.is_logged_in, function(req,res,next){
-  console.log('hero to save me now')
   dao.user__change_loci({
     user_id: req.twuser,
     loci: req.body.loci

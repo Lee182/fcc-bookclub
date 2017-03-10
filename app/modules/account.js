@@ -119,7 +119,7 @@ module.exports = function({methods, data}){
         data: {loci:vm.user_loci, user_id: vm.user_id},
         json: true
       }).then(function(res){
-        vm.user = result
+        vm.user = res
         console.log('user_loci__change', res)
       })
     })
