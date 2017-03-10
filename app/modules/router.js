@@ -23,27 +23,37 @@ module.exports = function({data, methods}){
       // redirect to /
       path = vm.router.paths[0]
     }
-    if (vm.user_id === undefined && path.loginRequired === true){
-      // redirect to /
-      path = vm.router.paths[0]
+    if (path.loginRequired === true) {
+      return vm.user_id__get().then(function(user_id){
+        if (user_id === undefined) {
+          return vm.router.paths[0]
+        }
+        return path
+      })
     }
-    return path
+    return Promise.resolve(path)
   }
 
   methods.route__set_path = function(path){
     let vm = this
+    if (path === '/my-account'){
+      wait(1000).then(function(){
+        vm.user_map_init()
+      })
+    }
     vm.header.show = path
     vm.router.path = path
   }
 
   methods.route__go = function(path, addToHistory) {
     let vm = this
-    path = vm.router_direct_path(path).path
-    console.log('route__go', path)
-    vm.route__set_path(path)
-    if (addToHistory === true) {
-      history.pushState({path}, '#booktrade', path)
-    }
+    vm.router_direct_path(path).then(function(item){
+      console.log('route__go', item.path, addToHistory)
+      vm.route__set_path(item.path)
+      if (addToHistory === true) {
+        history.pushState({path}, '#booktrade', path)
+      }
+    })
   }
 
   methods.route__listener = function(popstate){

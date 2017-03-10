@@ -2,11 +2,15 @@ module.exports = function({data, methods}) {
   data.user_id = undefined
   data.user__got_login = false
 
-  methods.user__get_login = function() {
+  methods.user_id__get = function() {
     let vm = this
-    req({url:'/user_id', json: true}).then(function(res){
+    if (vm.user_id !== undefined) {
+      return Promise.resolve(vm.user_id)
+    }
+    return req({url:'/user_id', json: true}).then(function(res){
       vm.user_id = res.user_id
       vm.user__got_login = true
+      return res.user_id
     }).catch(function(err){
       // TODO fix request error libary
       // console.log(err)
@@ -30,7 +34,7 @@ module.exports = function({data, methods}) {
 
   methods.user__init = function(){
     let vm = this
-    vm.user__get_login()
+    vm.user_id__get()
   }
 
   methods.user__settings_click = function(){

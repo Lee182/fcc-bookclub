@@ -37,8 +37,8 @@ vueobj = {
     var qs = querystring.parse(new URL(location.href).search.substr(1))
     if (qs.user_id) {
       vm.user_id = qs.user_id
+      vm.user__got_login = true
     }
-
     vm.router__init()
     vm.user__init()
     vm.bookshelf__get()
