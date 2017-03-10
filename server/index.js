@@ -35,16 +35,29 @@ app.get('/tw.login_cb', tw.login_cb, function(req,res,next){
   if (req.twuser === undefined) {
     return res.redirect('/')
   }
-  res.redirect(`/?user_id=${req.twuser}`)
-  console.log(req.ip)
-  // TODO add user if not in DB
-  // also addd user loctaion with ip2loci
+  dao.user__findOne({user_id: req.twuser})
+    .then(function(user){
+      if (user === undefined) {
+        return dao.user__add({user_id: req.twuser})
+      }
+    })
+    .then(function(user){
+      if (user.loci === undefined) {
+        return dao.user__add_loci_fromip({user_id: user._id, ip: req.ip})
+      }
+      return user
+    })
+    .then(function(user){
+      console.log(user)
+      res.redirect(`/?user_id=${req.twuser}`)
+    })
 })
 app.post('/tw.logout', tw.logout)
 
 app.get('/user_id', tw.is_logged_in, function(req,res,next){
-  console.log('/user_id, req.twuser: ', req.twuser)
-  res.json({user_id:req.twuser})
+  dao.user__findOne({user_id: req.twuser}).then(function(user){
+    return res.json(user)
+  })
 })
 
 

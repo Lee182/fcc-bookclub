@@ -11,7 +11,7 @@ module.exports = function ip2map(ip) {
     //console.log(data)
     if (err) {return reject(err)}
     var loc = data.loc.split(',')
-    var map = {
+    var loci = {
       name: data.city + ', ' + data.region + ', ' + data.country,
       coords: {
         lat: Number(loc[0]),
@@ -23,7 +23,7 @@ module.exports = function ip2map(ip) {
         country_code: data.country.toLowerCase()
       }
     }
-    resolve(map)
+    resolve(loci)
   })
 
   })
