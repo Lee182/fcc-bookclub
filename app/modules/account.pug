@@ -10,7 +10,7 @@
     h2.account-myloc My Location:
     .flex-center.padHalf
       .pl.flex-row(v-if='user_map.show_search === false')
-        .pl-place.ellipsis {{user_map.loci.name}}
+        .pl-place {{user_map.loci.name}}
         .pl-edit.flex-row(@click='user_map__edit_click()')
           .flex-center.pl-edit-icon: i.fa.fa-pencil
           .pl-edit-text edit
