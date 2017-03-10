@@ -13,7 +13,7 @@ const tw = new logtwit({
 _tw_tokens = {}
 function login(req,res,next){
   tw.login(function(err, tokenSecret, url){
-    console.log('tw.login', err, tokenSecret, url)
+    // console.log('tw.login', err, tokenSecret, url)
     if (err) {
       return res.redirect('/')
     }
@@ -36,7 +36,7 @@ function login_cb(req, res, next){
   },
   oauth_token_secret,
   function(err, user){
-    console.log('tw.callback', err, user)
+    // console.log('tw.callback', err, user)
 
     if (err) {return}
     delete _tw_tokens[oauth_token]
@@ -57,18 +57,18 @@ function login_cb(req, res, next){
         next()
       })
       .catch(function(err){
-        console.log(err.message)
+        // console.log(err.message)
         return next()
       })
   })
 }
 
 function logout(req, res, next){
-  console.log('tw.logout',req.cookies)
+  // console.log('tw.logout',req.cookies)
   dao.db.collection(coll_name).remove({
     _id: req.cookies.twitter
   }).then(function(a){
-    console.log(a.result.n, 'removed session')
+    // console.log(a.result.n, 'removed session')
   })
   res.clearCookie('twitter', { path: '/' })
   res.json({logout: true})
@@ -90,7 +90,7 @@ function is_logged_in(req, res, next){
     }
     next()
   }).catch(function(err){
-    console.log('tw error:')
+    // console.log('tw error:')
     next()
   })
 }
