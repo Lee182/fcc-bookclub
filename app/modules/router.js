@@ -38,7 +38,7 @@ module.exports = function({data, methods}){
     let vm = this
     if (path === '/my-account'){
       wait(1000).then(function(){
-        vm.user_map_init()
+        vm.user_loci__map_refresh(true)
       })
     }
     vm.header.show = path

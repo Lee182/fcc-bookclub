@@ -46,7 +46,6 @@ vueobj = {
   beforeMount: function(){},
   mounted: function(){
     let vm = this
-    vm.user_map_init()
   },
   beforeUpdate: function(){},
   updated: function(){},

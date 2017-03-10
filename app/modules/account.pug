@@ -9,17 +9,17 @@
   .account-box.md0
     h2.account-myloc My Location:
     .flex-center.padHalf
-      .pl.flex-row(v-if='user_map.show_search === false')
-        .pl-place {{user_map.loci.name}}
-        .pl-edit.flex-row(@click='user_map__edit_click()')
+      .pl.flex-row(v-if='user_loci.ui.search === false')
+        .pl-place {{user_loci.name}}
+        .pl-edit.flex-row(@click='user_loci__ui_edit()')
           .flex-center.pl-edit-icon: i.fa.fa-pencil
           .pl-edit-text edit
-      .searchbox.flex-row(v-if='user_map.show_search === true')
+      .searchbox.flex-row(v-if='user_loci.ui.search === true')
         .flex-center.searchbox-search: i.fa.fa-search
         input(
-          v-model='user_map.input'
-          @blur='user__change_location($event)', @keyup.enter='user__change_location($event)')
-        .flex-center.searchbox-clear(@click='user_map__clear()'): i.fa.fa-close
+          v-model='user_loci.ui.input'
+          @blur='user_loci__change_ui($event)', @keyup.enter='user_loci__change_ui($event)')
+        .flex-center.searchbox-clear(@click='user_loci__ui_clear()'): i.fa.fa-close
 
     .flex-center
       .account-map.leaflet-map

@@ -3,9 +3,7 @@ module.exports = function({methods, data}){
   w.marker = undefined
   w.layer = undefined
 
-  data.user_map = {}
-  data.user_map.show_search = false
-  data.user_map.loci = {
+  data.user_loci = {
     name: 'Mansfield, GB',
     coords: {
       lat: 53.135051,
@@ -21,9 +19,12 @@ module.exports = function({methods, data}){
       country_code: "gb"
     }
   }
-  data.user_map.input = data.user_map.loci.name
+  data.user_loci.ui = {
+    search: false,
+    input: data.user_loci.name
+  }
 
-  methods.user_map_init = function() {
+  methods.user_loci__map_render = function() {
     if (map && typeof map.remove === 'function') {
       map.remove()
     }
@@ -48,24 +49,28 @@ module.exports = function({methods, data}){
     })
     layer.addTo(map)
 
-    marker = L.marker(vm.user_map.loci.coords, {icon}).addTo(map)
-    vm.user_map_update(vm.user_map.loci)
+    marker = L.marker(vm.user_loci.coords, {icon}).addTo(map)
+    vm.user_loci__map_refresh()
   }
 
-  methods.user_map_update = function(loci) {
+  methods.user_loci__map_refresh = function(redraw) {
+    let vm = this
+    if (typeof map !== 'object' || redraw === true){
+      return vm.user_loci__map_render()
+    }
     map.setView([
-      loci.coords.lat,
-      loci.coords.lon
+      vm.user_loci.coords.lat,
+      vm.user_loci.coords.lon
     ], 12)
     marker.setLatLng([
-      loci.coords.lat,
-      loci.coords.lon
+      vm.user_loci.coords.lat,
+      vm.user_loci.coords.lon
     ]).update()
-    marker.bindPopup(loci.name)
+    marker.bindPopup(vm.user_loci.name)
     // .openPopup()
   }
 
-  methods.map_search = function({place}) {
+  methods.map_search = function(place) {
     // http://wiki.openstreetmap.org/wiki/Nominatim
     let url = `http://nominatim.openstreetmap.org/search?
       format=jsonv2
@@ -81,28 +86,33 @@ module.exports = function({methods, data}){
     })
   }
 
-  methods.user_map__edit_click = function(){
+  methods.user_loci__ui_edit = function(){
     let vm = this
-    vm.user_map.show_search = true
-    vm.user_map.input = vm.user_map.loci.name
+    vm.user_loci.ui.search = true
+    vm.user_loci.ui.input = vm.user_loci.name
   }
 
-  methods.user_map__clear = function(){
+  methods.user_loci__ui_clear = function(){
     let vm = this
-    vm.user_map.input = ''
+    vm.user_loci.ui.input = ''
   }
 
-  methods.user__change_location = function(e) {
+  methods.user_loci__change_ui = function(e){
     let vm = this
-    vm.map_search({place: e.target.value}).then(function(res){
-      console.log('map_search', res)
+    return vm.user_loci__change(e.target.value)
+  }
+
+  methods.user_loci__change = function(place) {
+    let vm = this
+    vm.map_search(place).then(function(res){
       if (res[0] === undefined) {return}
-      vm.user_map.show_search = false
-      vm.user_map.loci.name = res[0].display_name
-      vm.user_map.loci.address = res[0].address
-      vm.user_map.loci.coords.lat = Number(res[0].lat)
-      vm.user_map.loci.coords.lon = Number(res[0].lon)
-      vm.user_map_update(vm.user_map.loci)
+      vm.user_loci.ui.search = false
+      vm.user_loci.name = res[0].display_name
+      vm.user_loci.address = res[0].address
+      vm.user_loci.coords.lat = Number(res[0].lat)
+      vm.user_loci.coords.lon = Number(res[0].lon)
+      vm.user_loci__map_refresh()
+      console.log(vm.user_loci)
     })
   }
 }

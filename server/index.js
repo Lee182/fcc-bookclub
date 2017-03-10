@@ -9,10 +9,6 @@ var bodyParser = require('body-parser')
 
 app.use( require('cookie-parser')() )
 app.use( bodyParser.json() )
-// app.use(function(req,res,next){
-//   console.log(req.path, req.cookies)
-//   next()
-// })
 app.use('/',
   express.static(path.resolve(__dirname + '/../dist')))
 
@@ -68,7 +64,7 @@ app.get('/book_search/:query/:pagenum', function(req,res){
 
 function passToBookDB(method) {
   return function(req, res, next) {
-    console.log(method)
+    console.log('dao.bookshelf',method)
     dao[method](req.body)
     .then(function(result){
       res.json(result)
