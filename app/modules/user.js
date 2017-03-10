@@ -8,7 +8,10 @@ module.exports = function({data, methods}) {
       return Promise.resolve(vm.user_id)
     }
     return req({url:'/user_id', json: true}).then(function(res){
+      console.log('res', res)
       vm.user_id = res.user_id
+      vm.user_loci = res.loci
+      vm.user_loci__map_refresh(true)
       vm.user__got_login = true
       return res.user_id
     }).catch(function(err){

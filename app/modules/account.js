@@ -19,7 +19,7 @@ module.exports = function({methods, data}){
       country_code: "gb"
     }
   }
-  data.user_loci.ui = {
+  data.user_loci_ui = {
     search: false,
     input: data.user_loci.name
   }
@@ -88,13 +88,13 @@ module.exports = function({methods, data}){
 
   methods.user_loci__ui_edit = function(){
     let vm = this
-    vm.user_loci.ui.search = true
-    vm.user_loci.ui.input = vm.user_loci.name
+    vm.user_loci_ui.search = true
+    vm.user_loci_ui.input = vm.user_loci.name
   }
 
   methods.user_loci__ui_clear = function(){
     let vm = this
-    vm.user_loci.ui.input = ''
+    vm.user_loci_ui.input = ''
   }
 
   methods.user_loci__change_ui = function(e){
@@ -106,13 +106,22 @@ module.exports = function({methods, data}){
     let vm = this
     vm.map_search(place).then(function(res){
       if (res[0] === undefined) {return}
-      vm.user_loci.ui.search = false
+      vm.user_loci_ui.search = false
       vm.user_loci.name = res[0].display_name
       vm.user_loci.address = res[0].address
       vm.user_loci.coords.lat = Number(res[0].lat)
       vm.user_loci.coords.lon = Number(res[0].lon)
+
       vm.user_loci__map_refresh()
-      console.log(vm.user_loci)
+      return req({
+        method: 'POST',
+        url: '/user_loci__change',
+        data: {loci:vm.user_loci, user_id: vm.user_id},
+        json: true
+      }).then(function(res){
+        vm.user = result
+        console.log('user_loci__change', res)
+      })
     })
   }
 }

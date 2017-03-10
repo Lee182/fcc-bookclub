@@ -12,5 +12,4 @@ module.exports = function({data, methods}) {
     }
   }
 
-  data.user_id = undefined
 }
