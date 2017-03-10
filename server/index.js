@@ -40,6 +40,9 @@ app.get('/tw.login_cb', tw.login_cb, function(req,res,next){
     return res.redirect('/')
   }
   res.redirect(`/?user_id=${req.twuser}`)
+  console.log(req.ip)
+  // TODO add user if not in DB
+  // also addd user loctaion with ip2loci
 })
 app.post('/tw.logout', tw.logout)
 
