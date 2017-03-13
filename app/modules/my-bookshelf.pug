@@ -1,0 +1,23 @@
+include bookshelf_horizontal.pug
+
+.padv1
+.flex-center.padHalf
+  .searchbox.flex-row
+    .flex-center.searchbox-search: i.fa.fa-filter
+    input(
+      placeholder='quick filter books',
+      v-model='bookshelf__search_term',
+      @blur='',
+      @keyup.enter=''
+    )
+    .flex-center.searchbox-clear(@click=''): i.fa.fa-close
+
+.android_addbtn.flex-row(@click=`route__go('/my-bookshelf/add', true)`)
+  .android_addbtn-text.md1 add book
+  .circle.flex-center.md1: i +
+
++bookshelf({
+  showTitle: false,
+  bookshelf: 'bookshelf__view(bookshelf, bookshelf__search_term)', 
+  layout: 'vertical'
+})

@@ -40,6 +40,7 @@ app.get('/tw.login_cb', tw.login_cb, function(req,res,next){
       if (user === undefined) {
         return dao.user__add({user_id: req.twuser})
       }
+      return user
     })
     .then(function(user){
       if (user.loci === undefined) {

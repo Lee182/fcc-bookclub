@@ -1,7 +1,15 @@
 #app(v-cloak)
   include modules/header.pug
   .content
-    .stage(v-show=`router.path === '/my-account'`): include modules/account.pug
+    .stage(v-show=`router.path === '/'`)
+      include modules/home.pug
+    .stage(v-show=`router.path === '/my-account'`)
+      include modules/account.pug
+    .stage(v-show=`router.path === '/my-bookshelf'`)
+      include modules/my-bookshelf.pug
+    
+    .stage(v-show=`router.path === '/my-bookshelf/add'`)
+      include modules/book_search.pug
     //- .stage: include modules/about.pug
     //- .stage: include modules/book_search.pug
     //- .stage: include modules/bookshelf.pug

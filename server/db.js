@@ -74,6 +74,7 @@ o.user__change_loci = function({user_id, loci}) {
 o.bookshelf = function({user_id}) {
   return o.db.collection(booksdb_name)
     .find({'users.user_id': user_id})
+    .sort({'users.creation_date': -1})
     .toArray()
 }
 

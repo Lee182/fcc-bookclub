@@ -1,6 +1,8 @@
+include bookshelf_horizontal.pug
+
 .account-layout.flex-row
-  .account-box.md0.padHalf
-    .flex-cente0
+  .account-box.md0
+    .flex-center
       img.account-headshot(
         :src=`'https://twitter.com/'+user_id+'/profile_image?size=original'`)
     .flex-center
@@ -23,3 +25,12 @@
 
     .flex-center
       .account-map.leaflet-map
+
+  +bookshelf({
+    title: 'My Bookshelf',
+    path: '/my-bookshelf',
+    bookshelf: 'bookshelf',
+    layout: 'horizontal'
+  })
+    .android_addbtn.flex-row(@click=`route__go('/my-bookshelf/add', true)`)
+      .circle.flex-center.md0: i +

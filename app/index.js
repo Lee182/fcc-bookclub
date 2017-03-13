@@ -3,8 +3,6 @@ require('./lib/jonoShortcuts.js')
 w.wait = require('./lib/wait.js')
 w.req = require('./lib/request.js')
 w.loadImg = require('./lib/loadImage.js')
-w.querystring = require('querystring')
-
 
 Vue.config.ignoredElements = [
   'leaflet-map', 'another-web-component'
@@ -34,14 +32,11 @@ vueobj = {
   beforeCreate: function(){},
   created: function(){
     let vm = this
-    var qs = querystring.parse(new URL(location.href).search.substr(1))
-    if (qs.user_id) {
-      vm.user_id = qs.user_id
-      vm.user__got_login = true
-    }
     vm.router__init()
-    vm.user__init()
-    vm.bookshelf__get()
+    vm.user__init().then(function(){
+      vm.bookshelf__get(vm.user_id)
+    })
+
   },
   beforeMount: function(){},
   mounted: function(){

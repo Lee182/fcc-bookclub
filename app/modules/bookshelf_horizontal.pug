@@ -1,0 +1,26 @@
+mixin bookshelf({title, path, bookshelf, layout, showTitle, bookblock})
+  .bookshelf-box(v-if=bookshelf+'.length > 0')
+    if showTitle !== false
+      if path
+        .android_h2.flex-row(@click=`route__go('`+path+`', true)`)
+          h2.bookshelf-title=title
+          .byte-horizontal
+          .circle.arrow-circle.flex-center: i.fa.fa-chevron-right
+      else
+        .android_h2.flex-row
+          h2.bookshelf-title=title
+          .byte-horizontal
+          .circle.arrow-circle.flex-center: i.fa.fa-chevron-right
+    .bookshelf(class='bookshelf-'+layout)
+      .book.md0(v-for='book in '+bookshelf)
+        .book-ellipsis.flex-center.md0
+          i.fa.fa-ellipsis-v
+        .book-fortrade(v-if='is_tradeable(book._id)')
+          i.fa.fa-exchange
+        img.book-thumb(:src='book.book.thumbnail')
+        h3.book-title.ellipsis {{ book.book.title }}
+        h4.book-author.ellipsis {{ bookshelf_authors(book) }}
+        if bookblock === true
+          block
+    if block && bookblock !== true
+      block

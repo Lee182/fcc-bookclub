@@ -1,17 +1,16 @@
 module.exports = function({data, methods}){
   data.router = {}
-  data.router.path = location.pathname
+  data.router.path = '/'
   data.router.paths = [
     { path: '/' },
+    { path: '/my-account', loginRequired: true},
     { path: '/my-bookshelf', loginRequired: true},
-    { path: '/my-account', loginRequired: true}
+    { path: '/my-bookshelf/add', loginRequired: true},
   ]
-
   methods.router__init = function(){
     let vm = this
     w.on('popstate', vm.route__listener)
-    history.replaceState({path: location.pathname}, '#booktrade', location.pathname)
-    vm.route__go(location.pathname)
+    vm.route__go(location.pathname, false, true)
   }
 
   methods.router_direct_path = function(pathname) {
@@ -45,24 +44,40 @@ module.exports = function({data, methods}){
     vm.router.path = path
   }
 
-  methods.route__go = function(path, addToHistory) {
+  methods.route__go = function(path, addToHistory, replaceState) {
     let vm = this
-    vm.router_direct_path(path).then(function(item){
-      console.log('route__go', item.path, addToHistory)
+    console.log('route__go req:', path, addToHistory, replaceState)
+    return vm.router_direct_path(path).then(function(item){
+      console.log('route__go', item.path, addToHistory, replaceState)
+      if (item.path === vm.router.path) {
+        console.log('same path')
+        return vm.route__set_path(item.path)
+      }
       vm.route__set_path(item.path)
+      if (replaceState === true){
+        return history.replaceState({path}, '#booktrade', path)
+      }
       if (addToHistory === true) {
-        history.pushState({path}, '#booktrade', path)
+        return history.pushState({path}, '#booktrade', path)
       }
     })
   }
 
   methods.route__back = function() {
+    var a = history.state.path
     history.go(-1)
+    wait(400).then(function(){
+      var b = history.state.path
+      if (a === b) {
+        console.log('last path')
+        vm.route__go('/', true, false)
+      }
+    })
   }
 
   methods.route__listener = function(popstate){
-    console.log('route_listener', popstate.state)
-    if (popstate === null) {return}
+    if (popstate.state === null) {return}
+    console.log('route_listener', history.state)
     this.route__go(popstate.state.path)
   }
 

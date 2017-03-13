@@ -8,7 +8,7 @@ module.exports = function({data, methods}) {
       return Promise.resolve(vm.user_id)
     }
     return req({url:'/user_id', json: true}).then(function(res){
-      console.log('res', res)
+      console.log('user_id__get', res)
       vm.user_id = res.user_id
       vm.user_loci = res.loci
       vm.user_loci__map_refresh(true)
@@ -37,7 +37,7 @@ module.exports = function({data, methods}) {
 
   methods.user__init = function(){
     let vm = this
-    vm.user_id__get()
+    return vm.user_id__get()
   }
 
   methods.user__settings_click = function(){

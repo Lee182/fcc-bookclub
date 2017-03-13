@@ -3,25 +3,26 @@ module.exports = function({methods, data}){
   w.marker = undefined
   w.layer = undefined
 
-  data.user_loci = {
-    name: 'Mansfield, GB',
-    coords: {
-      lat: 53.135051,
-      lon: -1.2159578
-    },
-    address: {
-      road: "Washington Drive",
-      suburb: "Mansfield Woodhouse",
-      town: "Nottinghamshire",
-      state_district: "East Midlands",
-      state: "England",
-      country: "United Kingdom",
-      country_code: "gb"
-    }
-  }
+  // data.user_loci = {
+  //   name: 'Mansfield, GB',
+  //   coords: {
+  //     lat: 53.135051,
+  //     lon: -1.2159578
+  //   },
+  //   address: {
+  //     road: "Washington Drive",
+  //     suburb: "Mansfield Woodhouse",
+  //     town: "Nottinghamshire",
+  //     state_district: "East Midlands",
+  //     state: "England",
+  //     country: "United Kingdom",
+  //     country_code: "gb"
+  //   }
+  // }
+  data.user_loci = {}
   data.user_loci_ui = {
     search: false,
-    input: data.user_loci.name
+    input: ''
   }
 
   methods.user_loci__map_render = function() {
@@ -36,7 +37,7 @@ module.exports = function({methods, data}){
     map = L.map(el)
 
     var icon = L.icon({
-      iconUrl: 'http://localhost:3000/pin.svg',
+      iconUrl: 'http://'+location.host+'/pin.svg',
       iconSize: [58, 48],
       iconAnchor: [18, 42],
       popupAnchor: [0, -28]

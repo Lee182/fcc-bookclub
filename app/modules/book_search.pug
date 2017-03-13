@@ -1,39 +1,39 @@
-include _book_item.pug
+include bookshelf_horizontal.pug
 
-.book_search
-  h2 Add books you own to your bookshelf
-  .search
+.padv1
+.flex-center.padHalf
+  .searchbox.flex-row
+    .flex-center.searchbox-search(@click='book_search(bs1)'): i.fa.fa-search
     input(
-      placeholder='search by book title or isbn', v-model='bs1.req.query',
-      v-on:keyup.enter='book_search(bs1)')
-    .serach-icon.flex-center(
-      @click='book_search(bs1)')
-      i.fa.fa-search
+      placeholder='input book title or isbn',
+      v-model='bs1.req.query',
+      @blur='',
+      @keyup.enter='book_search(bs1)')
+    .flex-center.searchbox-clear(@click=`bs1.req.query = ''`): i.fa.fa-close
 
-  p.bookshelf-showing(v-show='bs1.res.show')
-    | showing results for "{{ bs1.res.query }}"
-    | at page {{ bs1.res.pagenum }}
-    | of {{ bs1.res.pages }}
+p.flex-center.bookshelf-showing(v-show='bs1.res.show')
+  | showing results for "{{ bs1.res.query }}"
+  | at page {{ bs1.res.pagenum }}
+  | of {{ bs1.res.pages }}
+div(v-if='bs1.res.show')
+  +bookshelf({
+    bookshelf: `format_books(bs1.res.books)`, 
+    layout: 'horizontal', 
+    showTitle: false,
+    bookblock: true
+  })
+    .btn.btn-book_search(
+      v-if='!bookshelf__is_in_array(book._id)',
+      @click='bookshelf__add(book._id)'
+      ) add book
 
-  .bookshelf(v-show='bs1.res.show')
-    +book('book in bs1.res.books')
-      .btn-row
-        .btn.btn-book_search(
-          v-if='!bookshelf__is_in_array(book.id)',
-          @click='bookshelf__add(book.id)'
-        ) add to bookshelf
-        .btn.btn-remove_book(
-          v-if='bookshelf__is_in_array(book.id)'
-          @click='bookshelf__remove(book.id)'
-          ) remove from bookshelf
-
-  .flex-center(v-show='bs1.res.show')
-    .pgs.md1
-      .pg.flex-center(
-        v-for='page in pagination(bs1.res.pagenum, 3, bs1.res.pages)',
-        :class=`{active: page.active}`,
-        @click='book_search__change_page(bs1, page.n)'
-      )
-        div(v-if='page.start') <
-        div(v-if='page.end') >
-        div(v-if=`!page.start && !page.end`) {{ page.n }}
+.flex-center(v-show='bs1.res.show')
+  .pgs.md1
+    .pg.flex-center(
+      v-for='page in pagination(bs1.res.pagenum, 3, bs1.res.pages)',
+      :class=`{active: page.active}`,
+      @click='book_search__change_page(bs1, page.n)'
+    )
+      div(v-if='page.start') <
+      div(v-if='page.end') >
+      div(v-if=`!page.start && !page.end`) {{ page.n }}

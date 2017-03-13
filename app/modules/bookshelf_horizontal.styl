@@ -1,0 +1,62 @@
+.bookshelf-box
+  width 100%
+  max-width 600px
+  margin 1rem auto
+  position relative
+.android_h2
+  padding 1rem
+  h2
+    align-self center
+
+.bookshelf
+  display flex
+  &-horizontal
+    flex-flow row nowrap
+  &-vertical
+    flex-flow row wrap
+    justify-content center
+  overflow-x scroll
+  padding-bottom 1rem
+  .book-thumb
+    width 105px
+  .book
+    background white
+    flex-shrink 0
+    width 105px
+    max-height 215px
+    align-self flex-end
+    margin .5rem
+    overflow scroll
+    position relative
+  .book-fortrade
+    top 0
+    left 0
+    position absolute
+    background #005f00
+    border-radius 50%
+    color white
+    padding .25rem
+  .book-ellipsis
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2rem;
+    height: 2rem;
+    background: #fffc;
+    color: #000;
+    border-radius: 50% 0 50% 50%;
+  .book-title
+    font-family futura
+  .book-title
+  .book-author
+    padding .2rem
+
+
+.button-more
+  text-transform uppercase
+  font-weight 600
+  font-size .95rem
+  color brown
+
+.arrow-circle
+  background rgba(189,178,178,0.302)
