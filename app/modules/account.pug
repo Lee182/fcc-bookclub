@@ -32,5 +32,5 @@ include bookshelf_horizontal.pug
     bookshelf: 'bookshelf',
     layout: 'horizontal'
   })
-    .android_addbtn.flex-row(@click=`route__go('/my-bookshelf/add', true)`)
+    .android_addbtn.flex-row(@click=`route__go('/my-bookshelf/add', 'pushState')`)
       .circle.flex-center.md0: i +

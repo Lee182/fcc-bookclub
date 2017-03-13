@@ -2,7 +2,7 @@ mixin bookshelf({title, path, bookshelf, layout, showTitle, bookblock})
   .bookshelf-box(v-if=bookshelf+'.length > 0')
     if showTitle !== false
       if path
-        .android_h2.flex-row(@click=`route__go('`+path+`', true)`)
+        .android_h2.flex-row(@click=`route__go('`+path+`', 'pushState')`)
           h2.bookshelf-title=title
           .byte-horizontal
           .circle.arrow-circle.flex-center: i.fa.fa-chevron-right
@@ -17,7 +17,9 @@ mixin bookshelf({title, path, bookshelf, layout, showTitle, bookblock})
           i.fa.fa-ellipsis-v
         .book-fortrade(v-if='is_tradeable(book._id)')
           i.fa.fa-exchange
-        img.book-thumb(:src='book.book.thumbnail')
+        img.book-thumb(
+          :src='book.book.thumbnail',
+          @click=`route__go('/books/'+book._id, 'pushState')`)
         h3.book-title.ellipsis {{ book.book.title }}
         h4.book-author.ellipsis {{ bookshelf_authors(book) }}
         if bookblock === true
