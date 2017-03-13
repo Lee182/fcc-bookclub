@@ -33,7 +33,7 @@ vueobj = {
   created: function(){
     let vm = this
     vm.router__init()
-    vm.user__init().then(function(){
+    vm.user_id__get().then(function(){
       vm.bookshelf__get(vm.user_id)
     })
 

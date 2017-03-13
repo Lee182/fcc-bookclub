@@ -30,20 +30,16 @@ module.exports = function({data, methods}) {
     }).then(function(res){
       if (res.logout === true) {
         vm.user_id = undefined
-        vm.route__go('/', true)
+        vm.route__go('/', 'pushState')
       }
     })
   }
 
-  methods.user__init = function(){
-    let vm = this
-    return vm.user_id__get()
-  }
 
   methods.user__settings_click = function(){
     let vm = this
     vm.header.menu.open = false
-    vm.route__go('/my-account', true)
+    vm.route__go('/my-account', 'pushState')
   }
   methods.user__logout_btn = function() {
     let vm = this
