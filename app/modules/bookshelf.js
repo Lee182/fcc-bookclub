@@ -56,7 +56,7 @@ module.exports = function({data, methods, computed}) {
   methods.bookshelf__update = function(b){
     var i = vm.bookshelf__findId(b.book.id)
     if (i === -1) {
-      vm.bookshelf.push(b)
+      vm.bookshelf.unshift(b)
     }
     if (i !== -1) {
       Vue.set(vm.bookshelf, i, b)

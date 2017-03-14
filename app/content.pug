@@ -6,10 +6,16 @@
     .stage(v-show=`router.path === '/my-account'`)
       include modules/account.pug
     .stage(v-show=`router.path === '/my-bookshelf'`)
-      include modules/my-bookshelf.pug
-    
+      include modules/my_bookshelf.pug
     .stage(v-show=`router.path === '/my-bookshelf/add'`)
       include modules/book_search.pug
+    transition(
+      name='show',
+      @before-enter='sb__enter',
+      @before-leave='sb__leave'
+    ): .stage(v-show=`router.path === '/books/:book_id'`)
+        include modules/single_book.pug
+
     //- .stage: include modules/about.pug
     //- .stage: include modules/book_search.pug
     //- .stage: include modules/bookshelf.pug

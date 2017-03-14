@@ -202,12 +202,22 @@ o.trade__request_remove = function({book_id, book_owner, user_id}){
     })
 }
 
+o.book__get = function({book_id}){
+  return o.db.collection(booksdb_name).findOne({_id: book_id})
+  .then(function(res){
+    if (res === null) {
+      return undefined
+    }
+    return res
+  })
+}
+
 const five_mins = 5 * 60 * 1000
 setInterval(o.bookshelf__garbage_collection, five_mins)
 
 
 var a = ['bookshelf__add', 'bookshelf__remove', 'bookshelf__garbage_collection', 'trade__list', 'trade__unlist', 'trade__request','trade__request_remove',
-'user__findOne', 'user__add', 'user__add_loci_fromip', 'user__change_loci']
+'user__findOne', 'user__add', 'user__add_loci_fromip', 'user__change_loci', 'book__get']
 
 a.forEach(function(name){
   o[name] = ensureConnected(o[name])

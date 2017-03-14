@@ -83,7 +83,18 @@ app.get('/book_search/:query/:pagenum', function(req,res){
     res.status(400)
   })
 })
+app.get('/book_id/:book_id', function(req,res,next){
 
+  dao.book__get({book_id: req.params.book_id}).then(function(data){
+    if (data) {
+      return res.json(data)
+    }
+    bookapi.findId(req.params.book_id).then(function(data){
+      res.json(data)
+    })
+  })
+
+})
 function passToBookDB(method) {
   return function(req, res, next) {
     console.log('dao.bookshelf',method)

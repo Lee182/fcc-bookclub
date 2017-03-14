@@ -14,6 +14,7 @@ w.modules = {
   android_tabs: require('./modules/android_tabs.js'),
   book_search: require('./modules/book_search.js'),
   bookshelf: require('./modules/bookshelf.js'),
+  singe_book: require('./modules/single_book.js'),
   trade: require('./modules/trade.js'),
   user: require('./modules/user.js'),
   router: require('./modules/router.js'),

@@ -40,7 +40,6 @@ module.exports = function({data, methods}){
     return patternArr.reduce(function(obj, str, i){
       if (obj.match === false) {return obj}
       if (patternArr[i][0] === ':') {
-        console.log(obj)
         obj.params[ patternArr[i].substring(1) ] = pathArr[i]
       }
       else if (patternArr[i] !== pathArr[i]) {

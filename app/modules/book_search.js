@@ -75,14 +75,17 @@ module.exports = function({data, methods, computed}) {
     //   {n:7}, end: true
     // ]
   }
-
+  methods.format_book = function(book){
+    if (book._id !== undefined) {
+      return book
+    }
+    return {
+      book,
+      _id: book.id
+    }
+  }
   methods.format_books = function(books) {
-    return books.map(function(book){
-      return {
-        book,
-        _id: book.id
-      }
-    })
+    return books.map(vm.format_book)
   }
 
 }
