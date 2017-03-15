@@ -13,8 +13,11 @@ mixin bookshelf({title, path, bookshelf, layout, showTitle, bookblock})
           .circle.arrow-circle.flex-center: i.fa.fa-chevron-right
     .bookshelf(class='bookshelf-'+layout)
       .book.md0(v-for='book in '+bookshelf)
-        .book-fortrade(v-if='is_tradeable(book._id)')
-          i.fa.fa-exchange
+        .book-icons.flex-row
+          .book-icon.md0.book-icon-owner.flex-center(v-if='bookshelf__is_in_array(book._id)')
+            i.fa.fa-bookmark-o
+          .book-icon.md0.book-icon-trade.flex-center(v-if='is_tradeable(book._id)')
+            i.fa.fa-exchange 
         img.book-thumb(
           :src='book.book.thumbnail',
           @click=`route__go('/books/'+book._id, 'pushState')`)

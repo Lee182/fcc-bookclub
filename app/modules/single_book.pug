@@ -1,8 +1,11 @@
 .layout-single_book.md0(v-if='sb_loaded === true'  )
   .sb-book
     .sb-book-thumb
-      .book-fortrade(v-show='is_tradeable(sb.book.id)')
-        i.fa.fa-exchange
+      .book-icons.flex-row
+        .book-icon.md0.book-icon-owner.flex-center(v-if='bookshelf__is_in_array(sb.book.id)')
+          i.fa.fa-bookmark-o
+        .book-icon.md0.book-icon-trade.flex-center(v-if='is_tradeable(sb.book.id)')
+          i.fa.fa-exchange
       img(:src='sb.book.thumbnail')
     .sb-book-title {{ sb.book.title }}
     .sb-book-author(v-if='sb.book.authors') {{ bookshelf_authors(sb) }}
