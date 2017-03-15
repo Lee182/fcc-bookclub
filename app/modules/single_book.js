@@ -7,19 +7,13 @@ module.exports = function({methods, data, watch}) {
   data.sb_title = 'loading book...'
 
   methods.sb__load = function(book_id) {
-    let vm = this
-    let book = vm.sb__load_a(book_id) || vm.sb__load_b(book_id)
-    if (book !== undefined) {
-      return Promise.resolve(book)
-    }
-    return vm.sb__load_c(book_id)
   }
 
   methods.sb__load_a = function(book_id) {
     // check my bookshelf
-    var i = vm.bookshelf__findId('UuMRFJqmJ_sC')
+    var i = vm.bookshelf__findId(book_id)
     if (i !== -1) {
-      return vm.bookshelf[0]
+      return vm.bookshelf[i]
     }
     return undefined
   }
@@ -47,12 +41,22 @@ module.exports = function({methods, data, watch}) {
 
   methods.sb__init = function(book_id){
     let vm = this
-    vm.sb__load(book_id).then(function(book){
-      vm.sb = book
-      vm.sb_loaded = true
-      vm.sb_title = 'Book: "'+ vm.sb.book.title + '"'
+    let book = vm.sb__load_a(book_id) || vm.sb__load_b(book_id)
+    if (book !== undefined) {
+      return vm.sb__set(book)
+    }
+    vm.sb__load_c(book_id).then(function(book){
+      vm.sb__set(book)
     })
   }
+
+  methods.sb__set = function(book) {
+    let vm = this
+    vm.sb = book
+    vm.sb_loaded = true
+    vm.sb_title = 'Book: "'+ vm.sb.book.title + '"'
+  }
+
   methods.sb__clear = function(){
     let vm = this
     vm.sb_loaded = false
