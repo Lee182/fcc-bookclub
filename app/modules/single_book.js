@@ -26,9 +26,12 @@ module.exports = function({methods, data, watch}) {
   methods.sb__load_b = function(book_id) {
     // check search results
     let vm = this
-    return vm.bs1.res.books.find(function(b){
+    var book = vm.bs1.res.books.find(function(b){
       return b.id === book_id
     })
+    if (book){
+      return vm.format_book(book)
+    }
   }
   methods.sb__load_c = function(book_id) {
     // if not found make server request

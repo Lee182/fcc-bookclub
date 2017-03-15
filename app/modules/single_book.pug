@@ -24,9 +24,10 @@
       v-show='is_tradeable(sb.book.id) === true'
       @click='trade__unlist(sb.book.id)'
     ) unlist from trade
-    .padv1
     .sb-book-subtitle {{ sb.book.subtitle }}
     .sb-book-description(v-html='sb.book.description')
+    .sb-book-isbn(v-for='isbn in sb.book.industryIdentifiers')
+      | {{ isbn.type.toLowerCase() }}: {{ isbn.identifier }}
     //- p i own one: {{ bookshelf__is_in_array(sb.book.id) }}
     //- p is for trade: {{ is_tradeable(sb.book.id) }}
 
