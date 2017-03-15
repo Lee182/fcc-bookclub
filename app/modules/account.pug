@@ -1,0 +1,36 @@
+include bookshelf_horizontal.pug
+
+.account-layout.flex-row
+  .account-box.md0
+    .flex-center
+      img.account-headshot(
+        :src=`'https://twitter.com/'+user_id+'/profile_image?size=original'`)
+    .flex-center
+      h2.padv1(v-if='user_id !== undefined') @{{user_id}}
+
+  .account-box.md0
+    h2.account-myloc My Location:
+    .flex-center.padHalf
+      .pl.flex-row(v-if='user_loci_ui.search === false')
+        .pl-place {{user_loci.name}}
+        .pl-edit.flex-row(@click='user_loci__ui_edit()')
+          .flex-center.pl-edit-icon: i.fa.fa-pencil
+          .pl-edit-text edit
+      .searchbox.flex-row(v-if='user_loci_ui.search === true')
+        .flex-center.searchbox-search: i.fa.fa-search
+        input(
+          v-model='user_loci_ui.input'
+          @blur='user_loci__change_ui($event)', @keyup.enter='user_loci__change_ui($event)')
+        .flex-center.searchbox-clear(@click='user_loci__ui_clear()'): i.fa.fa-close
+
+    .flex-center
+      .account-map.leaflet-map
+
+  +bookshelf({
+    title: 'My Bookshelf',
+    path: '/my-bookshelf',
+    bookshelf: 'bookshelf',
+    layout: 'horizontal'
+  })
+    .android_addbtn.flex-row(@click=`route__go('/my-bookshelf/add', 'pushState')`)
+      .circle.flex-center.md0: i +

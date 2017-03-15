@@ -23,7 +23,7 @@ module.exports = function({
             var res = JSON.parse(req.response)
           } catch(e) {
             // unable to parse res
-            return reject(e)
+            return reject({e, req})
           }
           return resolve(res)
         }

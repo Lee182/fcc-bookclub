@@ -2,10 +2,10 @@ module.exports = function({data, methods, computed}) {
   data.bookshelf = []
   data.bookshelf__search_term = ''
 
-  methods.bookshelf__get = function() {
+  methods.bookshelf__get = function(user_id) {
     let vm = this
     return req({
-      url: '/bookshelf/'+vm.user_id,
+      url: '/bookshelf/'+user_id,
       cookies: true,
       json: true
     }).then(function(res){
@@ -56,7 +56,7 @@ module.exports = function({data, methods, computed}) {
   methods.bookshelf__update = function(b){
     var i = vm.bookshelf__findId(b.book.id)
     if (i === -1) {
-      vm.bookshelf.push(b)
+      vm.bookshelf.unshift(b)
     }
     if (i !== -1) {
       Vue.set(vm.bookshelf, i, b)
@@ -71,11 +71,11 @@ module.exports = function({data, methods, computed}) {
   methods.bookshelf__view = function(books, search_term) {
     let vm = this
     var search_term = search_term.toLowerCase().trim()
-    var search_reg = search_term.split('').join('.*')
+    var search_reg = search_term
+    // var search_reg = search_term.split('').join('.*')
 
-    return books.map(function(b){
-      return b.book
-    }).filter(function(book){
+    return books.filter(function(b){
+      var book = b.book
       if (search_term.length === 0) {return true}
 
       const search_result = ['title', 'subtitle', 'authors'].reduce(function(bool, field){
@@ -91,4 +91,11 @@ module.exports = function({data, methods, computed}) {
     })
   }
 
+
+  methods.bookshelf_authors = function(book){
+    if (book.book.authors === undefined) {
+      console.log(book)
+      return ''}
+    return book.book.authors.join(', ')
+  }
 }

@@ -1,9 +1,26 @@
 #app(v-cloak)
   include modules/header.pug
   .content
-    .stage: include modules/about.pug
-    .stage: include modules/book_search.pug
-    .stage: include modules/bookshelf.pug
-    .stage: include modules/trade.pug
-    .stage: include modules/trade_reqs_sent.pug
-    .stage: include modules/trade_reqs_recieved.pug
+    .stage(v-show=`router.path === '/'`)
+      include modules/home.pug
+    .stage(v-show=`router.path === '/my-account'`)
+      include modules/account.pug
+    .stage(v-show=`router.path === '/my-bookshelf'`)
+      include modules/my_bookshelf.pug
+    .stage(v-show=`router.path === '/my-bookshelf/add'`)
+      include modules/book_search.pug
+    transition(
+      name='show',
+      @before-enter='sb__enter',
+      @before-leave='sb__leave'
+    ): .stage(v-show=`router.path === '/books/:book_id'`)
+        include modules/single_book.pug
+
+    //- .stage: include modules/about.pug
+    //- .stage: include modules/book_search.pug
+    //- .stage: include modules/bookshelf.pug
+    //- .stage: include modules/trade.pug
+    //- .stage: include modules/trade_reqs_sent.pug
+    //- .stage: include modules/trade_reqs_recieved.pug
+    .stage(v-show=`router.path === '/loading...'`).flex-center
+      include modules/loaders.pug

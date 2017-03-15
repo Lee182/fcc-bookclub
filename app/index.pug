@@ -1,14 +1,16 @@
 doctype
 html(lang='en')
   head
+    title #booktrade
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet' href='/styl.css')
     link(rel='stylesheet' href='/font-awesome.min.css')
-    title #booktrade
+    link(rel='stylesheet' href='/leaflet.css')
+    script(src='/leaflet.js')
   body
-    script(src='/velocity1.2.1.js')
-    script(src='/velocity1.2.1.ui.js')
+    //- script(src='/velocity1.2.1.js')
+    //- script(src='/velocity1.2.1.ui.js')
     include content.pug
     script(src='/vue.js')
     script(src='/bundle.js')

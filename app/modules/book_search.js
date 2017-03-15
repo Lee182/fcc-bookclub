@@ -65,7 +65,6 @@ module.exports = function({data, methods, computed}) {
       }
       return o
     })
-
     // returns an object like this
     // pagination(5, 3, 20)
     // [
@@ -75,6 +74,18 @@ module.exports = function({data, methods, computed}) {
     //   {n:6},
     //   {n:7}, end: true
     // ]
+  }
+  methods.format_book = function(book){
+    if (book._id !== undefined) {
+      return book
+    }
+    return {
+      book,
+      _id: book.id
+    }
+  }
+  methods.format_books = function(books) {
+    return books.map(vm.format_book)
   }
 
 }

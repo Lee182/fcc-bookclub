@@ -1,22 +1,36 @@
 $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
 .header
+  min-height 3rem
   background-image url('/bookshelf.jpg')
   // http://ebookfriendly.com/wp-content/uploads/2013/11/Library-a-book-wallpaper-540x405.jpg)
   color #fff
-  box-shadow 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
   &-titlerow
+    min-height 3rem
     align-items stretch
     background-color $main_color
 
   &-title
-    padding 1rem
+    padding 0 1rem
+  &-button-text
+    text-transform uppercase
+    font-size .85rem
+    font-weight 500
+    padding 1rem .5rem
+    transition background-color .4s ease
+    &:hover
+      background-color #bdb2b24d
   h1
     font-size 1.3rem
   &-icon
     padding 0 .25rem
     i
       font-size 1.3rem
-
+  &-avatar
+    border-radius 50%
+    height 32px
+    width 32px
+    border 2px solid white
+    box-sizing content-box
 .circle
   width 2rem
   height 2rem
@@ -28,6 +42,11 @@ $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
 .header-icon.active
   .circle
     background-color #bdb2b24d
+
+i.fake-avatar
+  font-size 1.75rem
+  background #5c281c99
+  border-radius 50%
 
 .nav
   display flex
@@ -61,7 +80,7 @@ $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
 
 
 .ellipsis-tog.active
-  z-index 4
+  z-index 2001
 .ellipsis-fullscreen
   &.darkroom
     background-color rgba(0,0,0,.5)
@@ -70,19 +89,22 @@ $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
   position fixed
   top 0
   left 0
-  z-index 3
+  z-index 2000
   display none
   &.show
     display block
 
 .ellipsis-menu
-  position absolute
+  position fixed
   top 3rem
-  right 1rem
+  z-index 2001
+  display none
+  &.show
+    display block
+  right .75rem
   background #fafafa
   color black
   border-radius .25rem
-  box-shadow 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)
   li
     user-select none
     list-style none

@@ -1,0 +1,12 @@
+include bookshelf_horizontal.pug
+
++bookshelf({
+  title: 'Local Books',
+  bookshelf: 'bookshelf',
+  layout: 'horizontal'
+})
+
++bookshelf({
+  title: 'My Tradeshelf',
+  bookshelf: 'bookshelf__view(tradeshelf(), my_trade__search_term)'
+})

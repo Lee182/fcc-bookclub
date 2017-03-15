@@ -1,21 +1,20 @@
 // https://apps.twitter.com/app/new
 const logtwit = require('login-with-twitter')
-const k = require('./keys.js')
-module.exports = function({dao, port, coll_name}) {
+
+module.exports = function({dao, port, coll_name, consumerKey, consumerSecret, callbackUrl}) {
 
 
 const tw = new logtwit({
-  consumerKey: k.twitter.consumerKey,
-  consumerSecret: k.twitter.consumerSecret,
-  callbackUrl: 'http://localhost:'+port+'/twitter-callback'
+  consumerKey,
+  consumerSecret,
+  callbackUrl
 })
 
 _tw_tokens = {}
-function twlogin(req,res,next){
+function login(req,res,next){
   tw.login(function(err, tokenSecret, url){
-    console.log('twlogin', err, tokenSecret, url)
+    // console.log('tw.login', err, tokenSecret, url)
     if (err) {
-      console.log('twlogin', err)
       return res.redirect('/')
     }
     var oauth_token = url.split('oauth_token=')[1]
@@ -24,7 +23,7 @@ function twlogin(req,res,next){
   })
 }
 
-function twlogin_cb(req, res, next){
+function login_cb(req, res, next){
   var oauth_token = req.query.oauth_token
   var oauth_token_secret = _tw_tokens[oauth_token]
   if (oauth_token_secret === undefined) {
@@ -37,7 +36,7 @@ function twlogin_cb(req, res, next){
   },
   oauth_token_secret,
   function(err, user){
-    console.log('twcallback', err, user)
+    // console.log('tw.callback', err, user)
 
     if (err) {return}
     delete _tw_tokens[oauth_token]
@@ -58,24 +57,24 @@ function twlogin_cb(req, res, next){
         next()
       })
       .catch(function(err){
-        console.log(err.message)
+        // console.log(err.message)
         return next()
       })
   })
 }
 
-function twlogout(req, res, next){
-  console.log('tw logout',req.cookies)
+function logout(req, res, next){
+  // console.log('tw.logout',req.cookies)
   dao.db.collection(coll_name).remove({
     _id: req.cookies.twitter
   }).then(function(a){
-    console.log(a.result.n, 'removed session')
+    // console.log(a.result.n, 'removed session')
   })
   res.clearCookie('twitter', { path: '/' })
   res.json({logout: true})
 }
 
-function tw_is_logged_in(req, res, next){
+function is_logged_in(req, res, next){
   if (req.cookies === undefined || req.cookies.twitter === undefined) {
     return res.sendStatus(400)
   }
@@ -91,10 +90,11 @@ function tw_is_logged_in(req, res, next){
     }
     next()
   }).catch(function(err){
-    console.log('tw error:')
+    // console.log('tw error:')
     next()
   })
 }
+
 /* Usage
 app.get('/twitter', twlogin)
   // populates req.twerr
@@ -104,12 +104,12 @@ app.get('/twitter-callback', twlogin_cb)
 app.post('/twitter-logout')
   // clears the twitter cookie
 */
-  return {
-    twlogin,
-    twlogin_cb,
-    twlogout,
-    tw_is_logged_in
-  }
+return {
+  login,
+  login_cb,
+  logout,
+  is_logged_in
+}
 
 
 }

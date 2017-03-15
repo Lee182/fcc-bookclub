@@ -1,0 +1,35 @@
+.layout-single_book.md0(v-if='sb_loaded === true'  )
+  .sb-book
+    .sb-book-thumb
+      .book-fortrade(v-show='is_tradeable(sb.book.id)')
+        i.fa.fa-exchange
+      img(:src='sb.book.thumbnail')
+    .sb-book-title {{ sb.book.title }}
+    .sb-book-author(v-if='sb.book.authors') {{ bookshelf_authors(sb) }}
+    .sb-book-pageCount Page Count: {{ sb.book.pageCount }}
+    .padHalf
+    button.md0.fill-positive(
+      v-show='bookshelf__is_in_array(sb.book.id) === false'
+      @click='bookshelf__add(sb.book.id)'
+    ) add to bookshelf
+    button.md0(
+      v-show='bookshelf__is_in_array(sb.book.id) === true && is_tradeable(sb.book.id) === false'
+      @click='bookshelf__remove(sb.book.id)'
+    ) remove from bookshelf
+    button.md0.fill-positive(
+      v-show='bookshelf__is_in_array(sb.book.id) === true && is_tradeable(sb.book.id) === false'
+      @click='trade__list(sb.book.id)'
+    ) list for trade
+    button.md0(
+      v-show='is_tradeable(sb.book.id) === true'
+      @click='trade__unlist(sb.book.id)'
+    ) unlist from trade
+    .sb-book-subtitle {{ sb.book.subtitle }}
+    .sb-book-description(v-html='sb.book.description')
+    .sb-book-isbn(v-for='isbn in sb.book.industryIdentifiers')
+      | {{ isbn.type.toLowerCase() }}: {{ isbn.identifier }}
+    //- p i own one: {{ bookshelf__is_in_array(sb.book.id) }}
+    //- p is for trade: {{ is_tradeable(sb.book.id) }}
+
+.layout-fullscreen.flex-center(v-show='sb_loaded === false')
+  include loaders.pug

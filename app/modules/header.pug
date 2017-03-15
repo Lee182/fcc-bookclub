@@ -1,24 +1,29 @@
-include android_tabs.pug
-header.header
-  .header-titlerow.flex-row
-    .header-title.flex-center: h1 #booktrade
-    .flex-gap
-    .flex-gap
-    .header-icon.header-bell.flex-center: .circle.flex-center
-      //- notifications
-      i.fa.fa-bell-o
-    .header-icon.ellipsis-tog.flex-center(
-      :class='{active: header.menu.open}'
-      @click='header__elipsis_tog(header.menu)'
-      ): .circle.flex-center
-      i.fa.fa-ellipsis-v
-  //- .nav-bottom(v-show='header.navInFirstRow === true')
-  //-   +android_tabs('nav')
-
+include header_back.pug
+header.header.md1
+  +header_back('/', '#booktrade', true, true)
+  +header_back('/my-account', 'My Account', true)
+  +header_back('/my-bookshelf', 'My Bookshelf', true)
+  +header_back('/my-bookshelf/add', 'Add Book', false)
+  +header_back('/books/:book_id', `{{ sb_title }}`, true)
 .ellipsis-fullscreen(
   :class='{show: header.menu.open, darkroom: header.menu.open}'
   @mousedown='ellipsis_clickaway($event, header.menu)'
   @touchstart='ellipsis_clickaway($event, header.menu)'
   )
-  nav.ellipsis-menu
-    li(v-for='item in header.menu.items' aria-hidden='true') {{ item.text }}
+nav.ellipsis-menu.md2(
+   :class='{show: header.menu.open}'
+  )
+  li
+    i.fa.fa-refresh
+    span.bit-horizontal
+    | refresh
+  li(@click='user__settings_click()')
+    i.fa.fa-cog
+    span.bit-horizontal
+    | my account
+  li(
+    @click='user__logout_btn()'
+    )
+    i.fa.fa-sign-out
+    span.bit-horizontal
+    | logout

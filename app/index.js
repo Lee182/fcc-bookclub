@@ -4,13 +4,21 @@ w.wait = require('./lib/wait.js')
 w.req = require('./lib/request.js')
 w.loadImg = require('./lib/loadImage.js')
 
+Vue.config.ignoredElements = [
+  'leaflet-map', 'another-web-component'
+]
+
 // module loading
 w.modules = {
   header: require('./modules/header.js'),
   android_tabs: require('./modules/android_tabs.js'),
   book_search: require('./modules/book_search.js'),
   bookshelf: require('./modules/bookshelf.js'),
+  singe_book: require('./modules/single_book.js'),
   trade: require('./modules/trade.js'),
+  user: require('./modules/user.js'),
+  router: require('./modules/router.js'),
+  account: require('./modules/account.js')
 }
 
 vueobj = {
@@ -25,12 +33,15 @@ vueobj = {
   beforeCreate: function(){},
   created: function(){
     let vm = this
-    vm.bookshelf__get()
+    vm.router__init()
+    vm.user_id__get().then(function(){
+      vm.bookshelf__get(vm.user_id)
+    })
+
   },
   beforeMount: function(){},
   mounted: function(){
     let vm = this
-    vm.header__oncreate()
   },
   beforeUpdate: function(){},
   updated: function(){},

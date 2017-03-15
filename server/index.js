@@ -9,10 +9,6 @@ var bodyParser = require('body-parser')
 
 app.use( require('cookie-parser')() )
 app.use( bodyParser.json() )
-// app.use(function(req,res,next){
-//   console.log(req.path, req.cookies)
-//   next()
-// })
 app.use('/',
   express.static(path.resolve(__dirname + '/../dist')))
 
@@ -25,22 +21,54 @@ var dao = require('./db.js')({
 dao.connect()
 
 
-var tw_session = require('./twitter-session')({
-  dao, port, coll_name: 'bookclub_sessions'})
+var tw = require('./twitter-session')({
+  dao,
+  port,
+  coll_name: 'bookclub_sessions',
+  consumerKey: k.twitter.consumerKey,
+  consumerSecret: k.twitter.consumerSecret,
+  callbackUrl: 'http://localhost:3000/tw.login-cb'
+})
 
-app.get('/twitter', tw_session.twlogin)
-app.get('/twitter-callback', tw_session.twlogin_cb, function(req,res,next){
-  console.log('/twitter-callback', req.cookies, req.twuser)
+app.get('/tw.login', tw.login)
+app.get('/tw.login_cb', tw.login_cb, function(req,res,next){
   if (req.twuser === undefined) {
-    clearCooks(res)
     return res.redirect('/')
   }
-  res.redirect(`/?user_id=${req.twuser}`)
+  dao.user__findOne({user_id: req.twuser})
+    .then(function(user){
+      if (user === undefined) {
+        return dao.user__add({user_id: req.twuser})
+      }
+      return user
+    })
+    .then(function(user){
+      if (user.loci === undefined) {
+        return dao.user__add_loci_fromip({user_id: user._id, ip: req.ip})
+      }
+      return user
+    })
+    .then(function(user){
+      console.log(user)
+      res.redirect(`/?user_id=${req.twuser}`)
+    })
 })
-app.get('/user_id', tw_session.tw_is_logged_in, function(req,res,next){
-  res.json({user_id:req.twuser})
+app.post('/tw.logout', tw.logout)
+
+app.get('/user_id', tw.is_logged_in, function(req,res,next){
+  dao.user__findOne({user_id: req.twuser}).then(function(user){
+    return res.json(user)
+  })
 })
 
+app.post('/user_loci__change', tw.is_logged_in, function(req,res,next){
+  dao.user__change_loci({
+    user_id: req.twuser,
+    loci: req.body.loci
+  }).then(function(result){
+    res.json(result)
+  })
+})
 
 var bookapi = require('./bookapi.js')
 app.get('/book_search/:query/:pagenum', function(req,res){
@@ -55,10 +83,21 @@ app.get('/book_search/:query/:pagenum', function(req,res){
     res.status(400)
   })
 })
+app.get('/book_id/:book_id', function(req,res,next){
 
+  dao.book__get({book_id: req.params.book_id}).then(function(data){
+    if (data) {
+      return res.json(data)
+    }
+    bookapi.findId(req.params.book_id).then(function(data){
+      res.json(data)
+    })
+  })
+
+})
 function passToBookDB(method) {
   return function(req, res, next) {
-    console.log(method)
+    console.log('dao.bookshelf',method)
     dao[method](req.body)
     .then(function(result){
       res.json(result)
@@ -82,6 +121,10 @@ app.post('/trade__unlist', passToBookDB('trade__unlist'))
 app.post('/trade__request', passToBookDB('trade__request'))
 app.post('/trade__request_remove', passToBookDB('trade__request'))
 
+
+app.get('*', function(req,res,next){
+  res.sendFile(path.resolve(__dirname + '/../dist/index.html') )
+})
 
 server.listen(port, function(){
   console.log('server listening at http://localhost:'+port)
