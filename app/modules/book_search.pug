@@ -22,10 +22,6 @@ div(v-if='bs1.res.show')
     showTitle: false,
     bookblock: true
   })
-    .btn.btn-book_search(
-      v-if='!bookshelf__is_in_array(book._id)',
-      @click='bookshelf__add(book._id)'
-      ) add book
 
 .flex-center(v-show='bs1.res.show')
   .pgs.md1
