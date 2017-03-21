@@ -93,9 +93,7 @@ module.exports = function({data, methods, computed}) {
 
 
   methods.bookshelf_authors = function(book){
-    if (book.book.authors === undefined) {
-      console.log(book)
-      return ''}
+    if (book.book.authors === undefined) {return ''}
     return book.book.authors.join(', ')
   }
 }
