@@ -8,6 +8,8 @@ Vue.config.ignoredElements = [
   'leaflet-map', 'another-web-component'
 ]
 
+w.comms = require('./lib/comms.client.js')()
+
 // module loading
 w.modules = {
   header: require('./modules/header.js'),
