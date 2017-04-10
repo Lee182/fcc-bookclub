@@ -26,6 +26,31 @@ include bookshelf_horizontal.pug
     .flex-center
       .account-map.leaflet-map
 
+  .account-box.account-contact-box.md0
+    h2.account-myloc Contact Details:
+    h6.contcat-sub (Know you choose which contact details to send when accepting or sending a trade request)
+    .account-contact.account-contact-name
+      .key Name:
+      .val Jonathan T L Lee
+    .account-contact.account-contact-phone
+      .key Phone
+      .val +44 7895 877698
+    .account-contact.account-contact-tw
+      .key Twitter:
+      .val @JonoLee1
+    .account-contact.account-contact-email
+      .key Email:
+      // TODO send and verify email on nodejs
+      .val jono-lee@hotmail.co.uk
+    .account-contact.account-contact-fb
+      .key Facebook
+      button connect with fb
+      .val https://facebook.com/jleey96
+    .account-contact.account-contact-fb
+      .key Addition contact info:
+      .val ...
+      .sub limited to 400 characters
+      
   +bookshelf({
     title: 'My Bookshelf',
     path: '/my-bookshelf',
