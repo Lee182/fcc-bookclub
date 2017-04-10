@@ -48,6 +48,6 @@ o.findId = function(id) {
   })
 }
 
-o.nodeapi = books
+o._api = books
 
 module.exports = o

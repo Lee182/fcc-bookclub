@@ -1,8 +1,8 @@
 // data acess object
 const Mongo = require('mongodb')
 let MongoClient = Mongo.MongoClient
-const bookapi = require('./bookapi.js')
-const ip2loci = require('./ip2loci.js')
+const bookapi = require('./api/book.js')
+const ip2loci = require('./api/ip2loci.js')
 
 const booksdb_name = 'bookshelf'
 const usersdb_name = 'bookshelf_users'
@@ -216,6 +216,7 @@ const five_mins = 5 * 60 * 1000
 setInterval(o.bookshelf__garbage_collection, five_mins)
 
 
+// decorate functions
 var a = ['bookshelf__add', 'bookshelf__remove', 'bookshelf__garbage_collection', 'trade__list', 'trade__unlist', 'trade__request','trade__request_remove',
 'user__findOne', 'user__add', 'user__add_loci_fromip', 'user__change_loci', 'book__get']
 

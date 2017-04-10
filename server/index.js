@@ -1,131 +1,39 @@
-var express = require('express')
-var app = express()
-var http = require('http')
-var path = require('path')
-var server = http.Server(app)
-var port = process.env.PORT || 3000
-var bodyParser = require('body-parser')
+const express = require('express')
+const app = express()
+const http = require('http')
+const path = require('path')
+const server = http.Server(app)
+const port = process.argv[2] || 3000
 
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const cookie_parser = cookieParser()
+const express_user = require('./express/user.js')
+const express_book = require('./express/book.js')
 
-app.use( require('cookie-parser')() )
-app.use( bodyParser.json() )
-app.use('/',
-  express.static(path.resolve(__dirname + '/../dist')))
-
+const ws_handle = require('./ws/index.js')
 
 var k = require('./keys.js')
-var dao = require('./db.js')({
-  mongourl: k.mongourl,
-})
+var dao = require('./db.js')({ mongourl: k.mongourl })
 
-dao.connect()
+app.use( cookie_parser )
+app.use( bodyParser.json() )
+app.use('/',
+  express.static(path.resolve(__dirname + '/../dist')) )
 
+const tw = express_user({app, port, dao, k,
+  sessiondb_name: 'bookclub_sessions'})
+const bookapi = express_book({app, dao})
 
-var tw = require('./twitter-session')({
-  dao,
-  port,
-  coll_name: 'bookclub_sessions',
-  consumerKey: k.twitter.consumerKey,
-  consumerSecret: k.twitter.consumerSecret,
-  callbackUrl: 'http://localhost:3000/tw.login-cb'
-})
-
-app.get('/tw.login', tw.login)
-app.get('/tw.login_cb', tw.login_cb, function(req,res,next){
-  if (req.twuser === undefined) {
-    return res.redirect('/')
-  }
-  dao.user__findOne({user_id: req.twuser})
-    .then(function(user){
-      if (user === undefined) {
-        return dao.user__add({user_id: req.twuser})
-      }
-      return user
-    })
-    .then(function(user){
-      if (user.loci === undefined) {
-        return dao.user__add_loci_fromip({user_id: user._id, ip: req.ip})
-      }
-      return user
-    })
-    .then(function(user){
-      console.log(user)
-      res.redirect(`/?user_id=${req.twuser}`)
-    })
-})
-app.post('/tw.logout', tw.logout)
-
-app.get('/user_id', tw.is_logged_in, function(req,res,next){
-  dao.user__findOne({user_id: req.twuser}).then(function(user){
-    return res.json(user)
-  })
-})
-
-app.post('/user_loci__change', tw.is_logged_in, function(req,res,next){
-  dao.user__change_loci({
-    user_id: req.twuser,
-    loci: req.body.loci
-  }).then(function(result){
-    res.json(result)
-  })
-})
-
-var bookapi = require('./bookapi.js')
-app.get('/book_search/:query/:pagenum', function(req,res){
-  if (typeof req.params.query !== 'string') {
-    return res.status(400)
-  }
-  var pagenum = Number(req.params.pagenum) - 1
-  bookapi.find(req.params.query, pagenum).then(function(data){
-    res.json(data)
-  }).catch(function(err){
-    console.log('express book_search', err)
-    res.status(400)
-  })
-})
-app.get('/book_id/:book_id', function(req,res,next){
-
-  dao.book__get({book_id: req.params.book_id}).then(function(data){
-    if (data) {
-      return res.json(data)
-    }
-    bookapi.findId(req.params.book_id).then(function(data){
-      res.json(data)
-    })
-  })
-
-})
-function passToBookDB(method) {
-  return function(req, res, next) {
-    console.log('dao.bookshelf',method)
-    dao[method](req.body)
-    .then(function(result){
-      res.json(result)
-    })
-    .catch(function(err){
-      res.json({err, err_req: req.body})
-    })
-  }
-}
-
-app.get('/bookshelf/:user_id', function(req,res,next){
-  dao.bookshelf({user_id: req.params.user_id}).then(function(result){
-    res.json(result)
-  })
-})
-
-app.post('/bookshelf__add', passToBookDB('bookshelf__add'))
-app.post('/bookshelf__remove', passToBookDB('bookshelf__remove'))
-app.post('/trade__list', passToBookDB('trade__list'))
-app.post('/trade__unlist', passToBookDB('trade__unlist'))
-app.post('/trade__request', passToBookDB('trade__request'))
-app.post('/trade__request_remove', passToBookDB('trade__request'))
-
-
+const ws = ws_handle({app, server, cookie_parser, tw, dao})
 app.get('*', function(req,res,next){
+  // send / page for all over requests
+  // TODO 404 page
   res.sendFile(path.resolve(__dirname + '/../dist/index.html') )
 })
 
-server.listen(port, function(){
-  console.log('server listening at http://localhost:'+port)
+dao.connect().then(function(){
+  server.listen(port, function(){
+    console.log('server listening at http://192.168.1.12:'+port)
+  })
 })
