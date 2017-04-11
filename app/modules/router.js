@@ -10,7 +10,6 @@ module.exports = function({data, methods}){
       loginRequired: true,
       afterCreated: function(){
         let vm = this
-        console.log('/my-account user_loci__map_refresh')
         vm.user_loci__map_refresh(true)
       }
     },

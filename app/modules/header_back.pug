@@ -6,7 +6,7 @@ mixin header_back(path, title, showAccount, isTitle)
       .header-icon.flex-center(@click=`route__back()`)
         .circle.flex-center
           i.fa.fa-chevron-left(style='font-size: 1rem')
-    .header-title.flex-center: h2=title
+    .header-title.flex-center: h2.ellipsis=title
     if showAccount
       .flex-gap
       .header-icon.header-bell.flex-center(

@@ -10,9 +10,7 @@ header.header.md1
   @mousedown='ellipsis_clickaway($event, header.menu)'
   @touchstart='ellipsis_clickaway($event, header.menu)'
   )
-nav.ellipsis-menu.md2(
-   :class='{show: header.menu.open}'
-  )
+nav.ellipsis-menu.md2(:class='{show: header.menu.open}')
   li
     i.fa.fa-refresh
     span.bit-horizontal
@@ -21,9 +19,7 @@ nav.ellipsis-menu.md2(
     i.fa.fa-cog
     span.bit-horizontal
     | my account
-  li(
-    @click='user__logout_btn()'
-    )
+  li(@click='user__logout_btn()')
     i.fa.fa-sign-out
     span.bit-horizontal
     | logout
