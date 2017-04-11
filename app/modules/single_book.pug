@@ -34,5 +34,11 @@
     //- p i own one: {{ bookshelf__is_in_array(sb.book.id) }}
     //- p is for trade: {{ is_tradeable(sb.book.id) }}
 
+.layout-owners.md0
+  .flex-center.padv1(v-if='sb_owner_loaded === false')
+    include loaders.pug
+  div(v-if='sb_owner_loaded === true')
+    include owners.pug
+
 .layout-fullscreen.flex-center(v-show='sb_loaded === false')
   include loaders.pug

@@ -30,6 +30,13 @@ module.exports = function({app, dao}) {
     })
   })
 
+  app.get('/bookowners/:book_id', function(req, res, next){
+    dao.bookowners({book_id: req.params.book_id})
+    .then(function(result){
+      res.json(result)
+    })
+  })
+
   var endpoints = [
     'bookshelf__add',
     'bookshelf__remove',

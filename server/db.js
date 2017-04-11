@@ -212,6 +212,38 @@ o.book__get = function({book_id}){
   })
 }
 
+o.bookowners = function({book_id}) {
+  return o.db.collection('bookshelf')
+  .aggregate([
+    {$match: {_id: book_id} },
+    {$unwind: '$users'},
+    {$project: {
+      _id: {
+        user_id: '$users.user_id',
+        book_id: '$_id'
+      },
+      trade: '$users.trade'
+    } },
+    {$match: {trade: {$exists: 1}} },
+    {$lookup: {
+      from: 'bookshelf_users',
+      localField: '_id.user_id',
+      foreignField: '_id',
+      as: 'loci'
+    }},
+    {$unwind: '$loci'},
+    {$project: {
+      _id: 0,
+      user_id: '$_id.user_id',
+      book_id: '$_id.book_id',
+      trade: '$trade',
+      loci: '$loci.loci'
+    }}
+    // TODO $geoNear to sort results by distance
+    // {$group: {_id: null, count: {$sum: 1}}}
+  ]).toArray()
+}
+
 const five_mins = 5 * 60 * 1000
 setInterval(o.bookshelf__garbage_collection, five_mins)
 

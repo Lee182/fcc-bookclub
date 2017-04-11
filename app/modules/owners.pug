@@ -1,0 +1,48 @@
+h2 People with book for trade
+// TODO replace with real content
+table
+  thead
+    tr
+      th date listed
+      th username
+      th location
+      th trade status
+  tbody
+    tr(v-if='sb_owners.length === 0')
+      td(colspan='4') No-one listing book for trade
+    tr(v-for='owner in sb_owners',
+      :class='owner_class(owner)')
+      td.td-right {{ iso_date(owner.trade.creation_date) }}
+      td @{{ owner.user_id }}
+      td.td-loci {{ owner.loci.name }}
+      
+      td(v-if='user_id === owner.user_id') owner's me
+      td(v-else-if=`owner__trade_status(owner) === ''`)
+        button.button-tradereq.md0 send trade request
+      td(v-else-if=`owner__trade_status(owner) === 'AWAITING'`) AWAITING
+      td(v-else-if='owner__trade_status(owner) === "ACCEPTED"') ACCEPTED
+      td(v-else-if='owner__trade_status(owner) === "DECLINED"') DECLINED
+  //-
+    tr
+      td
+    tr
+      td.td-right 2017-02-28
+      td @Samprick
+      td Nottingham - United Kingdom
+      td
+        button.button-tradereq.md0 send trade request
+    tr.tr-awaiting
+      td.td-right 2017-02-28
+      td @Samprick
+      td Nottingham - United Kingdom
+      td AWAITING
+    tr.tr-accepted
+      td.td-right 2017-02-28
+      td @Samprick
+      td Nottingham - United Kingdom
+      td ACCEPTED
+    tr.tr-declined
+      td.td-right 2017-02-28
+      td @Samprick
+      td Nottingham - United Kingdom
+      td DECLINED
