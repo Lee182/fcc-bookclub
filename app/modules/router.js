@@ -13,9 +13,9 @@ module.exports = function({data, methods}){
         vm.user_loci__map_refresh(true)
       }
     },
-    { path: '/my-bookshelf', loginRequired: true},
-    { path: '/my-bookshelf/add', loginRequired: true},
-    { path: '/books/:book_id', dynamic: true}
+    { path: '/me_books', loginRequired: true},
+    { path: '/me_books/add', loginRequired: true},
+    { path: '/book/:book_id', dynamic: true}
   ]
 
   methods.router__init = function(){

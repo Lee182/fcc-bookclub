@@ -1,5 +1,5 @@
 mixin bookshelf({title, path, bookshelf, layout, showTitle, bookblock})
-  .bookshelf-box(v-if=bookshelf+'.length > 0')
+  .bookshelf-box
     if showTitle !== false
       if path
         .android_h2.flex-row(@click=`route__go('`+path+`', 'pushState')`)
@@ -11,7 +11,9 @@ mixin bookshelf({title, path, bookshelf, layout, showTitle, bookblock})
           h2.bookshelf-title=title
           .byte-horizontal
           .circle.arrow-circle.flex-center: i.fa.fa-chevron-right
-    .bookshelf(class='bookshelf-'+layout)
+    .bookshelf(class='bookshelf-'+layout, v-if=bookshelf+'.length === 0')
+      p.bookshelf-empty This bookshelf is currently empty
+    .bookshelf(class='bookshelf-'+layout, v-if=bookshelf+'.length > 0')
       .book.md0(v-for='book in '+bookshelf)
         .book-icons.flex-row
           .book-icon.md0.book-icon-owner.flex-center(v-if='bookshelf__is_in_array(book._id)')
@@ -20,7 +22,7 @@ mixin bookshelf({title, path, bookshelf, layout, showTitle, bookblock})
             i.fa.fa-exchange 
         img.book-thumb(
           :src='book.book.thumbnail',
-          @click=`route__go('/books/'+book._id, 'pushState')`)
+          @click=`route__go('/book/'+book._id, 'pushState')`)
         h3.book-title.ellipsis {{ book.book.title }}
         h4.book-author.ellipsis {{ bookshelf_authors(book) }}
         if bookblock === true

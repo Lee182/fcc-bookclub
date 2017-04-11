@@ -46,13 +46,25 @@ module.exports = function({data, methods, computed, watch}) {
     })
   }
 
+  methods.trade__respond = function(book_id, trade_response, user_id) {
+    if (trade_response !== 'accepted'
+    || trade_response !== 'declined') {return}
+    // let a = limit(trade_response, ['accepted', 'declined'])
+    // if (a.invalid) {return}
+    w.req({
+      method: 'post',
+      url: '/trade__response',
+      data: {book_id, user_id, trade_response}
+    })
+  }
+
   methods.trade__get_reqs_sent = function() {
     let vm = this
     // vm.user_id
   }
 
   methods.trade__update = function(book_id, user_id) {
-
+    // splicing
   }
   methods.trade__long_poll = function() {
 

@@ -1,12 +1,15 @@
 include bookshelf_horizontal.pug
 
 +bookshelf({
-  title: 'Local Books',
+  title: 'Me Books',
+  path: '/me_books',
   bookshelf: 'bookshelf',
   layout: 'horizontal'
 })
+  .android_addbtn.flex-row(@click=`route__go('/me_books/add', 'pushState')`)
+    .circle.flex-center.md0: i +
 
-+bookshelf({
-  title: 'My Tradeshelf',
-  bookshelf: 'bookshelf__view(tradeshelf(), my_trade__search_term)'
-})
+//- +bookshelf({
+//-   title: 'My Tradeshelf',
+//-   bookshelf: 'bookshelf__view(tradeshelf(), my_trade__search_term)'
+//- })

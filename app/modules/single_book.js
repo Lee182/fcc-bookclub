@@ -61,7 +61,7 @@ module.exports = function({methods, data, watch}) {
       return vm.sb__set(book)
     }
     vm.sb__load_c(book_id).then(function(book){
-      if (vm.router.path === '/books/:book_id'
+      if (vm.router.path === '/book/:book_id'
       && vm.router.params.book_id === book._id) {
         vm.sb__set(book)
       }
@@ -84,7 +84,7 @@ module.exports = function({methods, data, watch}) {
       json: true
     }).then(function(res){
       console.log(res)
-      if (vm.router.path === '/books/:book_id'
+      if (vm.router.path === '/book/:book_id'
       && vm.router.params.book_id === book_id) {
 
         vm.sb_owners = res

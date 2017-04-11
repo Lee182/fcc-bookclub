@@ -2,9 +2,9 @@ include header_back.pug
 header.header.md1
   +header_back('/', '#booktrade', true, true)
   +header_back('/my-account', 'My Account', true)
-  +header_back('/my-bookshelf', 'My Bookshelf', true)
-  +header_back('/my-bookshelf/add', 'Add Book', false)
-  +header_back('/books/:book_id', `{{ sb_title }}`, true)
+  +header_back('/me_books', 'Me Books', true)
+  +header_back('/me_books/add', 'Add a Book to Me Books', false)
+  +header_back('/book/:book_id', `{{ sb_title }}`, true)
 .ellipsis-fullscreen(
   :class='{show: header.menu.open, darkroom: header.menu.open}'
   @mousedown='ellipsis_clickaway($event, header.menu)'

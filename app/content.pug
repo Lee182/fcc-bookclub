@@ -5,15 +5,15 @@
       include modules/home.pug
     .stage(v-show=`router.path === '/my-account'`)
       include modules/account.pug
-    .stage(v-show=`router.path === '/my-bookshelf'`)
+    .stage(v-show=`router.path === '/me_books'`)
       include modules/my_bookshelf.pug
-    .stage(v-show=`router.path === '/my-bookshelf/add'`)
+    .stage(v-show=`router.path === '/me_books/add'`)
       include modules/book_search.pug
     transition(
       name='show',
       @before-enter='sb__enter',
       @before-leave='sb__leave'
-    ): .stage(v-show=`router.path === '/books/:book_id'`)
+    ): .stage(v-show=`router.path === '/book/:book_id'`)
         include modules/single_book.pug
     .stage(v-show=`router.path === '/loading...'`).flex-center
       include modules/loaders.pug

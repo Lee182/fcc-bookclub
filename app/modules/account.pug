@@ -52,10 +52,10 @@ include bookshelf_horizontal.pug
       .sub limited to 400 characters
       
   +bookshelf({
-    title: 'My Bookshelf',
-    path: '/my-bookshelf',
+    title: 'Me Books',
+    path: '/me_books',
     bookshelf: 'bookshelf',
     layout: 'horizontal'
   })
-    .android_addbtn.flex-row(@click=`route__go('/my-bookshelf/add', 'pushState')`)
+    .android_addbtn.flex-row(@click=`route__go('/me_books/add', 'pushState')`)
       .circle.flex-center.md0: i +

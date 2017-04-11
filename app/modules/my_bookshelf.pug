@@ -5,14 +5,14 @@ include bookshelf_horizontal.pug
   .searchbox.flex-row
     .flex-center.searchbox-search: i.fa.fa-filter
     input(
-      placeholder='quick filter books',
+      placeholder='filter me books',
       v-model='bookshelf__search_term',
       @blur='',
       @keyup.enter=''
     )
     .flex-center.searchbox-clear(@click=''): i.fa.fa-close
 
-.android_addbtn.flex-row(@click=`route__go('/my-bookshelf/add', 'pushState')`)
+.android_addbtn.flex-row(@click=`route__go('/me_books/add', 'pushState')`)
   .android_addbtn-text.md1 add book
   .circle.flex-center.md1: i +
 
