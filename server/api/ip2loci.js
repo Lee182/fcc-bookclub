@@ -2,7 +2,8 @@ const curl = require('curl')
 
 module.exports = function ip2map(ip) {
   var url = 'http://ipinfo.io/'+ip+'/json'
-  if (ip === '::1' || ip === '127.0.0.1' || ip === undefined) {
+  console.log('ip',ip)
+  if (ip === '::1' || ip === '127.0.0.1' || ip === undefined || ip.match(/^\:\:/) !== null) {
     url = 'http://ipinfo.io/json'
   }
   return new Promise(function(resolve, reject){
