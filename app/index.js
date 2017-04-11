@@ -9,6 +9,13 @@ Vue.config.ignoredElements = [
 ]
 
 w.comms = require('./lib/comms.client.js')()
+w.comms.on('close', function(){
+  w.wait(500).then(function(){
+    if (comms.ws.readyState === comms.ws.CLOSED) {
+      comms.reconnect()
+    }
+  })
+})
 
 // module loading
 w.modules = {
