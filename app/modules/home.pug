@@ -1,15 +1,42 @@
-include bookshelf_horizontal.pug
+include bookshelf_element.pug
+
+.layout-about
+  h2 About #booktrade
+  p the aim of this site is so you can trade books from with people in your local area.
+  p how it works is
+  ol
+    li sign up with twitter, 
+    li add your books, 
+    li list books for trade on market 
+    li send and accept requests
+    li then...
+  p send a private message over twitter with contact details like mobile number, meeting place and come to an arrangement on where/when/what to get the book.
+  p // note also when you no longer have your book, you should unlist it from the market
 
 +bookshelf({
-  title: 'Me Books',
-  path: '/me_books',
-  bookshelf: 'bookshelf',
+  title: 'Market',
+  path: '/market',
+  bookshelf: 'market',
   layout: 'horizontal'
 })
-  .android_addbtn.flex-row(@click=`route__go('/me_books/add', 'pushState')`)
-    .circle.flex-center.md0: i +
 
+.box600(v-if='is_user')
+  +bookshelf({
+    title: 'Me Books',
+    path: '/me_books',
+    bookshelf: 'bookshelf',
+    layout: 'horizontal'
+  })
+    include book__add_element.pug
 //- +bookshelf({
 //-   title: 'My Tradeshelf',
 //-   bookshelf: 'bookshelf__view(tradeshelf(), my_trade__search_term)'
 //- })
+
+.box600.md0(v-if='is_user' v-show='home__reqs_sent.length > 0')
+  .layout-owners
+    include tradereqs_sent.pug
+
+.box600.md0(v-if='is_user' v-show='home__reqs_recv.length > 0')
+  .layout-owners
+    include tradereqs_recv.pug

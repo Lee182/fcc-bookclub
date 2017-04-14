@@ -3,11 +3,11 @@ module.exports = function({data, methods, computed, watch}) {
 
   methods.trade__list = function(book_id) {
     let vm = this
-    if (vm.user_id === undefined) {return}
+    if (!vm.is_user) {return}
     w.req({
       method: 'post',
       url: '/trade__list',
-      data: {book_id, user_id: vm.user_id},
+      data: {book_id, user_id: vm.user._id},
       cookies: true,
       json: true
     }).then(function(res){
@@ -17,11 +17,11 @@ module.exports = function({data, methods, computed, watch}) {
 
   methods.trade__unlist = function(book_id) {
     let vm = this
-    if (vm.user_id === undefined) {return}
+    if (!vm.is_user) {return}
     w.req({
       method: 'post',
       url: '/trade__unlist',
-      data: {book_id, user_id: vm.user_id},
+      data: {book_id, user_id: vm.user._id},
       cookies: true,
       json: true
     }).then(function(res){
@@ -32,13 +32,14 @@ module.exports = function({data, methods, computed, watch}) {
 
   data.books_for_trade = []
 
-  methods.trade__request = function(book_id, book_owner, user_id) {
-    if (user_id === undefined) {return}
-    console.log(book_id, book_owner, user_id)
+  methods.trade__request = function(book_id, owner_id) {
+    let vm = this
+    if (!vm.is_user) {return}
+    console.log(book_id, owner_id)
     w.req({
       method: 'post',
       url: '/trade__request',
-      data: {book_id, book_owner, user_id},
+      data: {book_id, owner_id, user_id: vm.user._id},
       cookies: true,
       json: true
     }).then(function(res){
@@ -60,7 +61,6 @@ module.exports = function({data, methods, computed, watch}) {
 
   methods.trade__get_reqs_sent = function() {
     let vm = this
-    // vm.user_id
   }
 
   methods.trade__update = function(book_id, user_id) {
@@ -83,8 +83,9 @@ module.exports = function({data, methods, computed, watch}) {
     let vm = this
     var i = vm.bookshelf__findId(book_id)
     if (i === -1) {return false}
+    if (vm.is_user === false) {return false}
     var i2 = vm.bookshelf[i].users.findIndex(function(o){
-      return o.user_id === vm.user_id
+      return o.user_id === vm.user._id
     })
     if (i2 === -1) {return false}
     return vm.bookshelf[i].users[i2].trade !== undefined

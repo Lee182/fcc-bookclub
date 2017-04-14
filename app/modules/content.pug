@@ -1,0 +1,29 @@
+#app(v-cloak)
+  include 0-head.pug
+  .content
+    .stage(v-show=`user__got_login === false`)
+      .layout-fullscreen.flex-center
+        include loaders.pug
+    .stage(v-show=`router.path === '/'`)
+      include home.pug
+    transition(
+      name='show',
+      @before-enter='account__get',
+      @before-leave='account__clear'
+    )
+      .stage(v-show=`router.path === '/me' || router.path === '/user/:user_id'`)
+        include account.pug
+    .stage(v-show=`router.path === '/me_books'`)
+      include my_bookshelf.pug
+    .stage(v-show=`router.path === '/me_books/add'`)
+      include book_search.pug
+    .stage(v-show=`router.path === '/notifcations'` v-if='is_user')
+      include notifcations.pug
+    transition(
+      name='show',
+      @before-enter='sb__enter',
+      @before-leave='sb__leave'
+    ): .stage(v-show=`router.path === '/book/:book_id'`)
+        include book.pug
+    .stage(v-show=`router.path === '/loading...'`).flex-center
+      include loaders.pug

@@ -1,0 +1,27 @@
+include 0-head_element.pug
+.head.md1
+  +head('/', true, true) #booktrade
+  +head('/me', true) {{ account_title }}
+  +head('/user/:user_id', true) {{ account_title }}
+  +head('/me_books', true) Me Books
+  +head('/me_books/add', false) Add Book
+  +head('/book/:book_id', true) {{ sb_title }}
+  +head('/notifcations', true) Me Notifcations
+.ellipsis-fullscreen(
+  :class='{show: head.menu.open, darkroom: head.menu.open}'
+  @mousedown='ellipsis_clickaway($event, head.menu)'
+  @touchstart='ellipsis_clickaway($event, head.menu)'
+  )
+nav.ellipsis-menu.md2(:class='{show: head.menu.open}')
+  li
+    i.fa.fa-refresh
+    span.bit-horizontal
+    | refresh
+  li(@click='user__btn__settings()')
+    i.fa.fa-cog
+    span.bit-horizontal
+    | me account
+  li(@click='user__btn__logout()')
+    i.fa.fa-sign-out
+    span.bit-horizontal
+    | logout

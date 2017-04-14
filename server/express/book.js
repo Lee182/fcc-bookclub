@@ -29,6 +29,11 @@ module.exports = function({app, dao}) {
       res.json(result)
     })
   })
+  app.get('/tradeshelf/:user_id', function(req,res,next){
+    dao.tradeshelf({user_id: req.params.user_id}).then(function(result){
+      res.json(result)
+    })
+  })
 
   app.get('/bookowners/:book_id', function(req, res, next){
     dao.bookowners({book_id: req.params.book_id})
@@ -37,13 +42,25 @@ module.exports = function({app, dao}) {
     })
   })
 
+  app.get('/market/:page_n', function(req, res, next){
+    dao.market({page_n: req.params.page_n}).then(function(result){
+      res.json(result)
+    })
+  })
+
+
+
   var endpoints = [
     'bookshelf__add',
     'bookshelf__remove',
     'trade__list',
     'trade__unlist',
     'trade__request',
-    'trade__request_remove'
+    'trade__request_remove',
+    'note__mark__read',
+    'note__mark__opened',
+    'trade_requests__get',
+    'trade_respond'
   ]
 
   endpoints.forEach(function(name){
@@ -53,6 +70,7 @@ module.exports = function({app, dao}) {
         res.json(result)
       })
       .catch(function(err){
+        console.log(err)
         res.json({err, err_req: req.body})
       })
     })

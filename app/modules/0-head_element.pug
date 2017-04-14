@@ -1,0 +1,36 @@
+mixin head(path, showAccount, isTitle)
+
+  .head-row.flex-row(v-show=`head.show === '`+path+`'`)
+    if !isTitle
+      .head-icon.flex-center(@click=`route__back()`)
+        .circle.flex-center
+          i.fa.fa-chevron-left(style='font-size: 1rem')
+    .head-title.flex-center: h2.ellipsis
+      block
+    if showAccount
+      .flex-gap
+      //- notifcations
+      .head-icon.head-bell.flex-center(
+        v-if='user__got_login && is_user'
+        @click=`route__go('/notifcations', 'pushState')`
+        ): .circle.flex-center
+          i.fa.fa-bell-o
+          .bell-count(v-show='unread_count !== 0') {{ unread_count }}
+
+      .head-icon.ellipsis-tog.flex-center(
+        :class='{active: head.menu.open}'
+        @click='head__elipsis_tog(head.menu)'
+        v-if='user__got_login && is_user'
+        ).flex-center
+          .head-avatar.flex-center(
+            v-if='false'
+            )
+            i.fake-avatar.fa.fa-user-circle-o
+          img.head-avatar(
+            v-if='is_user',
+            :src=`'https://twitter.com/'+user._id+'/profile_image'`)
+
+      .head-button-text.flex-center(
+        v-if='user__got_login && !is_user'
+        )
+        a(href='/tw.login') login

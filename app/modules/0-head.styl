@@ -1,10 +1,12 @@
 $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
-.header
+.head
   min-height 3rem
-  background-image url('/bookshelf.jpg')
-  // http://ebookfriendly.com/wp-content/uploads/2013/11/Library-a-book-wallpaper-540x405.jpg)
   color #fff
-  &-titlerow
+  background-image url('/bookshelf.jpg')
+  position relative
+  z-index 200
+  // http://ebookfriendly.com/wp-content/uploads/2013/11/Library-a-book-wallpaper-540x405.jpg)
+  &-row
     min-height 3rem
     align-items stretch
     background-color $main_color
@@ -20,8 +22,6 @@ $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
     transition background-color .4s ease
     &:hover
       background-color #bdb2b24d
-  h1
-    font-size 1.3rem
   &-icon
     padding 0 .25rem
     i
@@ -40,7 +40,7 @@ $main_color = rgba(#6e3124, 0.73)// rgb(110, 36, 90)
   &:hover
     background-color #bdb2b24d
 
-.header-icon.active
+.head-icon.active
   .circle
     background-color #bdb2b24d
 

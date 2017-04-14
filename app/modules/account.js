@@ -1,12 +1,79 @@
-module.exports = function({methods, data}){
+module.exports = function({methods, data, computed}){
   w.map = undefined
   w.marker = undefined
   w.layer = undefined
 
-  data.user_loci = {}
-  data.user_loci_ui = {
+  data.loci_ui = {
     search: false,
     input: ''
+  }
+
+  computed.me_account = function(){
+    let vm = this
+    if (!vm.is_user) {return false}
+    var c1 = vm.router.path === '/user/:user_id'
+    var c2 = vm.user._id === vm.router.params.user_id
+    return !c1 || c2
+  }
+  data.account = undefined
+  data.account_loaded = false
+  data.account_books = []
+  data.account_title = 'loading user...'
+
+  methods.account__get = function(){
+    let vm = this
+    var c1 = vm.router.path === '/me'
+    var c2 = vm.router.path === '/user/:user_id'
+    var c3 = vm.is_user && vm.router.params.user_id === vm.user._id
+    if (c1 || c3) {
+      vm.bookshelf__get(vm.user._id).then(function(res){
+        vm.bookshelf = res
+        vm.account_books = vm.bookshelf
+      })
+      return vm.account__swap_user(vm.user)
+    }
+    var a = vm.router.params.user_id
+    if (c2) {
+      req({
+        url: '/tradeshelf/'+a,
+        json_res: true
+      }).then(function(res){
+        console.log(res)
+        if(vm.router.path === '/user/:user_id' && a === vm.router.params.user_id) {
+          vm.account_books = res
+        }
+      })
+      req({url: '/user/'+a, method: 'post', json_res: true}).then(function(user){
+        console.log('account', user)
+        if (user.err === 'notfound') {
+          console.log("here...")
+          return vm.route__go('/', 'replaceState')
+        }
+        if (user && vm.router.params.user_id === a && vm.router.path === '/user/:user_id') {
+          vm.account__swap_user(user)
+        }
+      })
+    }
+  }
+  methods.account__clear = function(){
+    let vm = this
+    vm.account = undefined
+    vm.account_loaded = false
+    vm.account_title = 'loadding user...'
+    vm.account_books = []
+  }
+  methods.account__swap_user = function(user) {
+    let vm = this
+    if (vm.is_user && vm.user._id === user._id) {
+      vm.account_title = 'Me Account'
+    } else {
+      vm.account_title = '@'+user._id + ' Account'
+    }
+    vm.account = user
+    vm.account_loaded = true
+    w.wait(200).then(function(){
+      vm.user_loci__map_refresh(true)
+    })
   }
 
   methods.user_loci__map_render = function() {
@@ -15,6 +82,7 @@ module.exports = function({methods, data}){
     }
     let vm = this
     var el = d.qs('.account-map')
+    console.log(el)
     el.textContent = ''
     el.className = 'account-map'
 
@@ -34,7 +102,7 @@ module.exports = function({methods, data}){
     })
     layer.addTo(map)
 
-    marker = L.marker(vm.user_loci.coords, {icon}).addTo(map)
+    marker = L.marker(vm.account.loci.coords, {icon}).addTo(map)
     vm.user_loci__map_refresh()
   }
 
@@ -44,14 +112,14 @@ module.exports = function({methods, data}){
       return vm.user_loci__map_render()
     }
     map.setView([
-      vm.user_loci.coords.lat,
-      vm.user_loci.coords.lon
+      vm.account.loci.coords.lat,
+      vm.account.loci.coords.lon
     ], 12)
     marker.setLatLng([
-      vm.user_loci.coords.lat,
-      vm.user_loci.coords.lon
+      vm.account.loci.coords.lat,
+      vm.account.loci.coords.lon
     ]).update()
-    marker.bindPopup(vm.user_loci.name)
+    marker.bindPopup(vm.account.loci.name)
     // .openPopup()
   }
 
@@ -73,13 +141,13 @@ module.exports = function({methods, data}){
 
   methods.user_loci__ui_edit = function(){
     let vm = this
-    vm.user_loci_ui.search = true
-    vm.user_loci_ui.input = vm.user_loci.name
+    vm.loci_ui.search = true
+    vm.loci_ui.input = vm.account.loci.name
   }
 
   methods.user_loci__ui_clear = function(){
     let vm = this
-    vm.user_loci_ui.input = ''
+    vm.loci_ui.input = ''
   }
 
   methods.user_loci__change_ui = function(e){
@@ -91,17 +159,17 @@ module.exports = function({methods, data}){
     let vm = this
     vm.map_search(place).then(function(res){
       if (res[0] === undefined) {return}
-      vm.user_loci_ui.search = false
-      vm.user_loci.name = res[0].display_name
-      vm.user_loci.address = res[0].address
-      vm.user_loci.coords.lat = Number(res[0].lat)
-      vm.user_loci.coords.lon = Number(res[0].lon)
+      vm.loci_ui.search = false
+      vm.user.loci.name = res[0].display_name
+      vm.user.loci.address = res[0].address
+      vm.user.loci.coords.lat = Number(res[0].lat)
+      vm.user.loci.coords.lon = Number(res[0].lon)
 
       vm.user_loci__map_refresh()
       return req({
         method: 'POST',
         url: '/user_loci__change',
-        data: {loci:vm.user_loci, user_id: vm.user_id},
+        data: {loci:vm.user_loci, user_id: vm.user._id},
         json: true
       }).then(function(res){
         vm.user = res

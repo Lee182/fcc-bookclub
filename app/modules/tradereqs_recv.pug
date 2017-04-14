@@ -1,0 +1,18 @@
+h2 Requests Recieved
+table
+  thead
+    tr
+      th date
+      th from
+      th for book
+      th status
+  tbody
+    tr(v-for='req in home__reqs_recv', :class='req_class(req._id.request)')
+      td {{ fulltime(req._id.request.creation_date) }}
+      td.blue-link(@click=`route__go('/user/'+req._id.request.user_id, 'pushState')`) @{{ req._id.request.user_id }}
+      td "{{ req.book.title }}"
+      td(v-if='req__trade_status(req._id.request) === "AWAITING"')
+        button.req-accept(@click='req__accept(req, true)') ACCEPT
+        button.req-decline(@click='req__accept(req, false)') DECLINE
+      td(v-if='req__trade_status(req._id.request) !== "AWAITING"')
+        | {{ req__trade_status(req._id.request) }}

@@ -1,22 +1,20 @@
-module.exports = function({data, methods}) {
-  data.user_id = undefined
+module.exports = function({data, methods, computed}) {
+  data.user = undefined
   data.user__got_login = false
 
-  methods.user_id__get = function() {
+  computed.is_user = function() {
     let vm = this
-    if (vm.user_id !== undefined) {
-      return Promise.resolve(vm.user_id)
-    }
-    return req({url:'/user_id', json: true}).then(function(res){
-      console.log('user_id__get', res)
-      vm.user_id = res.user_id
-      vm.user_loci = res.loci
+    return vm.user !== undefined && vm.user !== null && typeof vm.user._id === 'string'
+  }
+
+  methods.user__get = function() {
+    let vm = this
+    return req({url:'/user', json: true}).then(function(res){
+      console.log("user", res)
+      vm.user = res
       vm.user_loci__map_refresh(true)
       vm.user__got_login = true
-      return res.user_id
     }).catch(function(err){
-      // TODO fix request error libary
-      // console.log(err)
       vm.user__got_login = true
     })
   }
@@ -29,21 +27,23 @@ module.exports = function({data, methods}) {
       json: true
     }).then(function(res){
       if (res.logout === true) {
-        vm.user_id = undefined
-        vm.route__go('/', 'pushState')
+        vm.route__go('/', 'pushState').then(function(){
+          vm.user = undefined
+          vm.bookshelf = []
+        })
       }
     })
   }
 
 
-  methods.user__settings_click = function(){
+  methods.user__btn__settings = function(){
     let vm = this
-    vm.header.menu.open = false
-    vm.route__go('/my-account', 'pushState')
+    vm.head.menu.open = false
+    vm.route__go('/me', 'pushState')
   }
-  methods.user__logout_btn = function() {
+  methods.user__btn__logout = function() {
     let vm = this
-    vm.header.menu.open = false
+    vm.head.menu.open = false
     vm.user__logout()
   }
 }

@@ -19,15 +19,17 @@ w.comms.on('close', function(){
 
 // module loading
 w.modules = {
-  header: require('./modules/header.js'),
-  android_tabs: require('./modules/android_tabs.js'),
+  head: require('./modules/0-head.js'),
+  router: require('./modules/0.1-router.js'),
   book_search: require('./modules/book_search.js'),
   bookshelf: require('./modules/bookshelf.js'),
-  singe_book: require('./modules/single_book.js'),
+  singe_book: require('./modules/book.js'),
   trade: require('./modules/trade.js'),
   user: require('./modules/user.js'),
-  router: require('./modules/router.js'),
-  account: require('./modules/account.js')
+  account: require('./modules/account.js'),
+  market: require('./modules/market.js'),
+  notifcations: require('./modules/notifcations'),
+  home: require('./modules/home.js')
 }
 
 vueobj = {
@@ -42,11 +44,18 @@ vueobj = {
   beforeCreate: function(){},
   created: function(){
     let vm = this
-    vm.router__init()
-    vm.user_id__get().then(function(){
-      vm.bookshelf__get(vm.user_id)
-    })
+    vm.request_notification_permission()
+    vm.user__get().then(function(){
+      vm.router__init()
+      if (vm.is_user){
+        vm.bookshelf__get(vm.user._id).then(function(res){
+          console.log('booshelf', res)
+          vm.bookshelf = res
+        })
+      }
+      // load the front market view
 
+    })
   },
   beforeMount: function(){},
   mounted: function(){

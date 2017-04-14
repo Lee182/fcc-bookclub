@@ -8,8 +8,6 @@ module.exports = function({data, methods, computed}) {
       url: '/bookshelf/'+user_id,
       cookies: true,
       json: true
-    }).then(function(res){
-      vm.bookshelf = res
     })
   }
 
@@ -22,11 +20,11 @@ module.exports = function({data, methods, computed}) {
 
   methods.bookshelf__add = function(book_id) {
     let vm = this
-    if (vm.user_id === undefined) {return}
+    if (!vm.is_user) {return}
     w.req({
       method: 'post',
       url: '/bookshelf__add',
-      data: {book_id, user_id: vm.user_id},
+      data: {book_id, user_id: vm.user._id},
       cookies: true,
       json: true
     }).then(function(res){
@@ -36,11 +34,11 @@ module.exports = function({data, methods, computed}) {
 
   methods.bookshelf__remove = function(book_id) {
     let vm = this
-    if (vm.user_id === undefined) {return}
+    if (!vm.is_user) {return}
     w.req({
       method: 'post',
       url: '/bookshelf__remove',
-      data: {book_id, user_id: vm.user_id},
+      data: {book_id, user_id: vm.user._id},
       cookies: true,
       json: true
     }).then(function(res){

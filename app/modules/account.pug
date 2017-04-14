@@ -1,25 +1,25 @@
-include bookshelf_horizontal.pug
+include bookshelf_element.pug
 
-.account-layout.flex-row
+.account-layout.flex-row(v-if='account_loaded')
   .account-box.md0
     .flex-center
       img.account-headshot(
-        :src=`'https://twitter.com/'+user_id+'/profile_image?size=original'`)
+        :src=`'https://twitter.com/'+account._id+'/profile_image?size=original'`)
     .flex-center
-      h2.padv1(v-if='user_id !== undefined') @{{user_id}}
+      h2.padv1(v-if='is_user') @{{account._id}}
 
   .account-box.md0
-    h2.account-myloc My Location:
+    h2.account-myloc Location
     .flex-center.padHalf
-      .pl.flex-row(v-if='user_loci_ui.search === false')
-        .pl-place {{user_loci.name}}
-        .pl-edit.flex-row(@click='user_loci__ui_edit()')
+      .pl.flex-row(v-if='loci_ui.search === false')
+        .pl-place {{account.loci.name}}
+        .pl-edit.flex-row(@click='user_loci__ui_edit()' v-if='me_account')
           .flex-center.pl-edit-icon: i.fa.fa-pencil
           .pl-edit-text edit
-      .searchbox.flex-row(v-if='user_loci_ui.search === true')
+      .searchbox.flex-row(v-if='me_account && loci_ui.search === true')
         .flex-center.searchbox-search: i.fa.fa-search
         input(
-          v-model='user_loci_ui.input'
+          v-model='loci_ui.input'
           @blur='user_loci__change_ui($event)', @keyup.enter='user_loci__change_ui($event)')
         .flex-center.searchbox-clear(@click='user_loci__ui_clear()'): i.fa.fa-close
 
@@ -52,10 +52,12 @@ include bookshelf_horizontal.pug
       .sub limited to 400 characters
       
   +bookshelf({
-    title: 'Me Books',
+    title: 'Books',
     path: '/me_books',
-    bookshelf: 'bookshelf',
+    bookshelf: 'account_books',
     layout: 'horizontal'
   })
-    .android_addbtn.flex-row(@click=`route__go('/me_books/add', 'pushState')`)
-      .circle.flex-center.md0: i +
+    include book__add_element.pug
+
+.layout-fullscreen.flex-center(v-show='account_loaded === false')
+  include loaders.pug

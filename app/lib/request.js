@@ -2,13 +2,20 @@ module.exports = function({
   method,  // get, post, put, delete
   url,     // relative url or full path
   data,    // if post req sets body as data
+  formData,    // if file setRequestHeader('X-FileName', file.name)
   cookies,
   timeout,
   json,
+  json_req,
+  json_res,
   cb_progress,
   cb_readystate
 }) {
   if (method === undefined) {method = 'get'}
+  if (json === true) {
+    json_req = true
+    json_res = true
+  }
   var req = new XMLHttpRequest()
   var p = new Promise(function(resolve, reject){
     var timer
@@ -18,7 +25,7 @@ module.exports = function({
       }
       if (req.readyState === 4) {
         clearTimeout(timer)
-        if (json) {
+        if (json_res) {
           try {
             var res = JSON.parse(req.response)
           } catch(e) {
@@ -38,7 +45,7 @@ module.exports = function({
     })
     req.open(method, url, true)
     req.withCredentials = Boolean(cookies)
-    if (json === true) {
+    if (json_req === true) {
       req.setRequestHeader('Content-Type', 'application/json')
     }
 
@@ -47,6 +54,9 @@ module.exports = function({
         req.abort()
         reject(timeout+'ms timeout')
       },timeout)
+    }
+    if (formData) {
+      return req.send(formData)
     }
     if (data === undefined || data === null) {
       return req.send()

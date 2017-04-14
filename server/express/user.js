@@ -34,8 +34,16 @@ module.exports = function({app, dao, port, k, sessiondb_name}){
   })
   app.post('/tw.logout', tw.logout)
 
-  app.get('/user_id', tw.is_logged_in, function(req,res,next){
+  app.get('/user', tw.is_logged_in, function(req,res,next){
     dao.user__findOne({user_id: req.twuser}).then(function(user){
+      return res.json(user)
+    })
+  })
+  app.post('/user/:user_id', function(req,res){
+    dao.user__findOne({user_id: req.params.user_id}).then(function(user){
+      if (user === undefined) {
+        res.json({err: 'notfound'})
+      }
       return res.json(user)
     })
   })

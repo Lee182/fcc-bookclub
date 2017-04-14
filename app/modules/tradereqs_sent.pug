@@ -1,0 +1,15 @@
+h2 Requests Sent
+table
+  thead
+    tr
+      th date
+      th to
+      th for book
+      th status
+  tbody
+    tr(v-for='req in home__reqs_sent',
+      :class='req_class(req._id.request)')
+      td {{ fulltime(req._id.request.creation_date) }}
+      td.blue-link(@click=`route__go('/user/'+req._id.owner_id, 'pushState')`) @{{ req._id.owner_id }}
+      td "{{ req.book.title }}"
+      td {{ req__trade_status(req._id.request) }}

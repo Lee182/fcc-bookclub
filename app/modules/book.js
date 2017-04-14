@@ -1,5 +1,3 @@
-w.books =  require('../../example_json/book.js')
-
 module.exports = function({methods, data, watch}) {
   // sb stands for single_book
   data.sb = {}
@@ -55,7 +53,6 @@ module.exports = function({methods, data, watch}) {
   methods.sb__enter = function() {
     let vm = this
     var book_id = vm.router.params.book_id
-    vm.sb_owners__init(book_id)
     let book = vm.sb__load_a(book_id) || vm.sb__load_b(book_id)
     if (book !== undefined) {
       return vm.sb__set(book)
@@ -75,58 +72,52 @@ module.exports = function({methods, data, watch}) {
 
 
 
-  data.sb_owner_loaded = false
-  data.sb_owners = []
-  methods.sb_owners__init = function(book_id) {
-    let vm = this
-    return req({
-      url: '/bookowners/'+book_id,
-      json: true
-    }).then(function(res){
-      console.log(res)
-      if (vm.router.path === '/book/:book_id'
-      && vm.router.params.book_id === book_id) {
 
-        vm.sb_owners = res
-        vm.sb_owner_loaded = true
-      }
-    })
-  }
   methods.iso_date = function(d){
     d = new Date(d)
     return d.toISOString().substr(0,10)
   }
-  methods.owner_loci = function() {
-
+  methods.is_trader = function(user) {
+    // user within book.users
+    return user.trade !== undefined
+  }
+  methods.traders = function(users){
+    let vm = this
+    return users.filter(vm.is_trader)
+  }
+  methods.owner__trade_status = function(owner) {
+    let vm = this
+    if (!vm.is_user) {return 'NOT_SENT'}
+    if (owner.user_id === vm.user._id) {
+      return 'ME'
+    }
+    var request = owner.trade.requests.find(function(a){
+      return a.user_id === vm.user._id
+    })
+    return vm.req__trade_status(request)
   }
 
-  methods.owner__trade_status = function(owner) {
-    console.log('owner', owner)
-    let vm = this
-    var request = owner.trade.requests.find(function(a){
-      return a.user_id === vm.user_id
-    })
+  methods.req__trade_status = function(request){
     if (request === undefined){
-      return '' // req not sent
+      return 'NOT_SENT' // req not sent
     }
-    if (request.accepted === undefined && request.declined === undefined) {
+    if (request.accept === undefined && request.decline === undefined) {
       return 'AWAITING'
     }
-    if (request.accepted === true) {
+    if (request.accept === true) {
       return 'ACCEPTED'
     }
-    if (request.declined === true){
+    if (request.decline === true){
       return 'DECLINED'
     }
   }
+
+
   methods.owner_class = function(owner) {
     let vm = this
     var o = {}
     var a = vm.owner__trade_status(owner).toLowerCase()
-    if (a === ''){
-      a = 'plain'
-    }
-    o['tr-'+a] = true
+    o[a] = true
     return o
   }
 }

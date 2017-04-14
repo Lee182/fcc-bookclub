@@ -1,8 +1,8 @@
 module.exports = function({data, methods}) {
-  data.header = {menu: {open: false}}
-  data.header.show = undefined // '/'
+  data.head = {menu: {open: false}}
+  data.head.show = undefined // '/'
 
-  methods.header__elipsis_tog = function(menu){
+  methods.head__elipsis_tog = function(menu){
     menu.open = !menu.open
   }
   methods.ellipsis_clickaway = function(e, menu){

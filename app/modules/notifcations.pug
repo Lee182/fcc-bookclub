@@ -1,0 +1,11 @@
+.layout-notifcations(v-if='is_user === true && user.notifcations !== undefined')
+  h2(v-if='unread_count === 0') All notifcations read
+  h2(v-if='unread_count !== 0') {{ unread_count }} notifcations unread
+  .note.flex-row(
+    v-for='n in notifcations',
+    v-if='is_user',
+    :class='{unopened: n.opened === false, unread: n.read === false}',
+    @mouseover='note__mark__read(n)'
+    @click='note__mark__opened(n)')
+    .note-date {{ fulltime(n.creation_date) }}
+    .note-message.blue-link {{ n.message }}

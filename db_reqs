@@ -1,0 +1,81 @@
+db.bookshelf.aggregate([
+  {$match: {'users.trade': {$exists: 1}}},
+  {$unwind: '$users'},
+  {$project: {
+    _id: {owner_id: '$users.user_id', book_id: '$_id'},
+    requests: '$trade.request'
+  }},
+  {$unwind: '$requests'}
+]).pretty()
+
+
+
+db.bookshelf.find({
+    _id: '_uTRAwAAQBAJ',
+    users: {$elemMatch: {
+      user_id: 'twettee123',
+      'trade.fullfilled': false,
+      'trade.requests.user_id': {$ne: 'JonoLee1'}
+    }},
+  }) // query ensures only 1 request for book from owner
+  {$push: {
+    'users.$.trade.requests': {
+      user_id: 'JonoLee1',
+      creation_date: new Date()
+    }
+  }})
+
+
+
+db.bookshelf.createIndex({'users.user_id': 1})
+
+// all trade requests
+db.bookshelf.aggregate([
+  {$match: {'users.trade.requests': {$exists: 1}}},
+  {$project: {_id: '$_id', user: '$users'}},
+  {$unwind: '$user'},
+  {$unwind: '$user.trade.requests'},
+  {$project: {
+    _id: {
+      owner_id: '$user.user_id',
+      user_id: '$user.trade.requests.user_id',
+      request_date: '$user.trade.requests.creation_date'
+    },
+    book_id: '$_id'
+  }}
+]).pretty()
+
+
+// trade requests recived
+db.bookshelf.aggregate([
+  {$match: {'users.trade.requests': {$exists: 1}}},
+  {$project: {_id: '$_id', user: '$users'}},
+  {$unwind: '$user'},
+  {$unwind: '$user.trade.requests'},
+  {$project: {
+    _id: {
+      owner_id: '$user.user_id',
+      user_id: '$user.trade.requests.user_id',
+      request_date: '$user.trade.requests.creation_date'
+    },
+    book_id: '$_id'
+  }},
+  {$match: {'_id.owner_id': 'twettee123'} }
+]).pretty()
+
+
+// trade requests sent
+db.bookshelf.aggregate([
+  {$match: {'users.trade.requests': {$exists: 1}}},
+  {$project: {_id: {_id: '$_id', title: '$book.title'}, user: '$users'}},
+  {$unwind: '$user'},
+  {$unwind: '$user.trade.requests'}]).pretty()
+  {$project: {
+    _id: {
+      owner_id: '$user.user_id',
+      request: '$user.trade.requests'
+    },
+    book: '$_id'
+  }},
+  {$match: {'_id.user_id': 'twettee123'} }
+]).pretty()

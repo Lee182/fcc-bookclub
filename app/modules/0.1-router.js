@@ -1,27 +1,36 @@
 module.exports = function({data, methods}){
-  w.querystring = require('querystring')
+  // w.querystring = require('querystring')
   data.router = {}
-  data.router.path = '/'
+  data.router.path = undefined
   data.router.params = {}
   data.router.paths = [
-    { path: '/' },
-    {
-      path: '/my-account',
-      loginRequired: true,
-      afterCreated: function(){
-        let vm = this
-        vm.user_loci__map_refresh(true)
-      }
-    },
+    { path: '/', afterCreated: function(){
+      vm.home__reqs_get()
+      vm.home__market_front()
+    }},
     { path: '/me_books', loginRequired: true},
     { path: '/me_books/add', loginRequired: true},
-    { path: '/book/:book_id', dynamic: true}
+    { path: '/book/:book_id', dynamic: true},
+    { path: '/notifcations', loginRequired: true},
+    { path: '/me', loginRequired: true, afterCreated: function(){
+      let vm = this
+      vm.account__clear()
+      vm.account__get()
+    }},
+    { path: '/user/:user_id', dynamic: true, afterCreated: function(){
+      let vm = this
+      vm.account__clear()
+      vm.account__get()
+    }}
   ]
 
+  var router__inited = false
   methods.router__init = function(){
+    if (router__inited) {return}
     let vm = this
     w.on('popstate', vm.route__listener)
     vm.route__go(location.pathname, 'replaceState')
+    router__inited = true
   }
 
   function dynamicPath_getParams(pathpattern, path) {
@@ -65,24 +74,21 @@ module.exports = function({data, methods}){
       return pathname === item.path
     })
     if (path === undefined) {
-      // redirect to '/'
+      // path not found then redirect to '/'
       path = vm.router.paths[0]
     }
     if (path.loginRequired === true) {
-      // redirect root
-      return vm.user_id__get().then(function(user_id){
-        if (user_id === undefined) {
-          path = vm.router.paths[0]
-        }
-        return path_mark(path, pathname)
-      })
+      // user not logged and login required redirect root
+      if (!vm.is_user) {
+        path = vm.router.paths[0]
+      }
     }
     return Promise.resolve( path_mark(path, pathname) )
   }
 
   methods.route__set_path = function(item){
     let vm = this
-    vm.header.show = item.path
+    vm.head.show = item.path
     vm.router.path = item.path
     if (item.dynamic) {
       vm.router.params = dynamicPath_getParams(item.path, item.tmpPath).params
@@ -110,7 +116,7 @@ module.exports = function({data, methods}){
           item.tmpPath
         )
       }
-      console.log('route__go', item.tmpPath)
+      console.log('route', item.tmpPath)
       vm.route__set_path(item)
     })
   }
@@ -121,6 +127,7 @@ module.exports = function({data, methods}){
     wait(400).then(function(){
       if (history.state === null) {
         vm.route__go('/', 'pushState')
+        return
       }
       var b = history.state.path
       if (a === b) {

@@ -10,7 +10,7 @@ module.exports = function({app, server, cookie_parser, tw, dao}) {
       return a.ws === ws
     })
   }
-  function get_user__coms(user_id) {
+  function get_user__comms(user_id) {
     return users_online.filter(function(a){
       return a.user_id === user_id
     })
@@ -58,5 +58,19 @@ module.exports = function({app, server, cookie_parser, tw, dao}) {
     var valid_user = user_auth(user, data.user_id)
   })
 
+  dao.e.on('notify', function(data){
+    var channels = get_user__comms(data.user._id)
+
+    channels.forEach(function(channel){
+      comms.send({
+        ws: channel.ws,
+        data
+      })
+    })
+  })
+
+  dao.e.on('book.update', function(book){
+    comms.sendAll({book:book, cmd: 'book.update'})
+  })
   return {users_online, comms}
 }
