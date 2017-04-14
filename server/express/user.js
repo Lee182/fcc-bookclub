@@ -6,7 +6,7 @@ module.exports = function({app, dao, port, k, sessiondb_name}){
     coll_name: sessiondb_name,
     consumerKey: k.twitter.consumerKey,
     consumerSecret: k.twitter.consumerSecret,
-    callbackUrl: 'http://192.168.1.12:3000/tw.login_cb'
+    callbackUrl: 'https://booktrade.blogjon.com/tw.login_cb'
   })
   app.get('/tw.login', tw.login)
   app.get('/tw.login_cb', tw.login_cb, function(req,res,next){

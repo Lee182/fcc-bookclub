@@ -34,6 +34,6 @@ app.get('*', function(req,res,next){
 
 dao.connect().then(function(){
   server.listen(port, function(){
-    console.log('server listening at http://192.168.1.12:'+port)
+    console.log('server listening at http://localhost:'+port)
   })
 })
