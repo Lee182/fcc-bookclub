@@ -1,0 +1,39 @@
+{
+    // Use IntelliSense to learn about possible Node.js debug attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Jscodeshift",
+            "protocol": "inspector",
+            "address": "localhost",
+            "port": 9229,
+            "runtimeExecutable": "jscodeshift",
+            "runtimeArgs": [
+                "-t", "./modrequire.js",
+                "./app/index.js"
+            ],
+            "console": "internalConsole",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceRoot}/err"
+            ],
+        },
+        {
+            "name": "Attach to Process",
+            "type": "node",
+            "request": "attach",
+            "port": 5858
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceRoot}/server/index.js"
+        },
+        
+    ]
+}
