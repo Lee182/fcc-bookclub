@@ -1,14 +1,14 @@
 // tools loading
-require('/app/lib/jonoShortcuts.js')
-w.wait = require('/app/lib/wait.js')
-w.req = require('/app/lib/request.js')
-w.loadImg = require('/app/lib/loadImage.js')
+require('./lib/jonoShortcuts.js')
+w.wait = require('./lib/wait.js')
+w.req = require('./lib/request.js')
+w.loadImg = require('./lib/loadImage.js')
 
 Vue.config.ignoredElements = [
   'leaflet-map', 'another-web-component'
 ]
 
-w.comms = require('/app/lib/comms.client.js')()
+w.comms = require('./lib/comms.client.js')()
 w.comms.on('close', function(){
   w.wait(500).then(function(){
     if (comms.ws.readyState === comms.ws.CLOSED) {
@@ -19,17 +19,17 @@ w.comms.on('close', function(){
 
 // module loading
 w.modules = {
-  head: require('/app/modules/0-head.js'),
-  router: require('/app/modules/0.1-router.js'),
-  book_search: require('/app/modules/book_search.js'),
-  bookshelf: require('/app/modules/bookshelf.js'),
-  singe_book: require('/app/modules/book.js'),
-  trade: require('/app/modules/trade.js'),
-  user: require('/app/modules/user.js'),
-  account: require('/app/modules/account.js'),
-  market: require('/app/modules/market.js'),
-  notifcations: require('/app/modules/notifcations'),
-  home: require('/app/modules/home.js')
+  head: require('./modules/0-head.js'),
+  router: require('./modules/0.1-router.js'),
+  book_search: require('./modules/book_search.js'),
+  bookshelf: require('./modules/bookshelf.js'),
+  singe_book: require('./modules/book.js'),
+  trade: require('./modules/trade.js'),
+  user: require('./modules/user.js'),
+  account: require('./modules/account.js'),
+  market: require('./modules/market.js'),
+  notifcations: require('./modules/notifcations'),
+  home: require('./modules/home.js')
 }
 
 vueobj = {

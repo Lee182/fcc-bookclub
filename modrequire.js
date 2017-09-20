@@ -1,11 +1,18 @@
 const path = require('path')
-const pathToAbsolute = (sRoot, sFileDir, sRelPath)=>{
+const isPathRelative = (sRelPath)=>{
+    return (
+        path.isAbsolute(sRelPath) === false && 
+        (sRelPath.substr(0,2) === './' || sRelPath.substr(0,3) === '../')
+    )
+}
+const relativeToAbsolute = (sRoot, sFileDir, sRelPath)=>{
     console.log(sRoot, sFileDir, sRelPath)
-    if (path.isAbsolute(sRelPath) === false && (
-        sRelPath.substr(0,2) === './' || sRelPath.substr(0,3) === '../')){
-            return path.resolve(sFileDir, sRelPath).substr(sRoot.length)
-    }
-    return sRelPath
+    if (isPathRelative(sRelPath) === false) {return sRelPath}
+    return path.resolve(sFileDir, sRelPath).substr(sRoot.length)
+}
+const absoluteToRelative = (sRoot, sFileDir, sAbsolutePath)=>{
+    if (isPathRelative(sAbsolutePath) ){ return sAbsolutePath }
+    return './' + path.relative(sFileDir, path.join(sRoot,sAbsolutePath))
 }
 
 module.exports = function(file, api) {
@@ -24,14 +31,12 @@ module.exports = function(file, api) {
   root.find(j.CallExpression, {callee: {name: 'require'}})
    .filter(oneArgString)
    .forEach((node, i)=>{
-        const newPath = pathToAbsolute(sRoot, sFileDir, node.value.arguments[0].value)
+        const newPath = absoluteToRelative(sRoot, sFileDir, node.value.arguments[0].value)
         node.value.arguments[0].value = newPath
-        node.value.arguments[0].rawValue = newPath
-        node.value.arguments[0].raw = `'${newPath.split(`'`).join(`\\`)}'`
         if (i === 0) {
             console.log(node)
             console.log(j(node))
-        }    
+        }
    })
   // print
   return root.toSource({quote: 'single'});
