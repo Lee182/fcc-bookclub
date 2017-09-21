@@ -11,35 +11,32 @@ const relativeToAbsolute = (sRoot, sFileDir, sRelPath)=>{
     return path.resolve(sFileDir, sRelPath).substr(sRoot.length)
 }
 const absoluteToRelative = (sRoot, sFileDir, sAbsolutePath)=>{
-    if (isPathRelative(sAbsolutePath) ){ return sAbsolutePath }
+    if (!path.isAbsolute(sAbsolutePath) ){ return sAbsolutePath }
     return './' + path.relative(sFileDir, path.join(sRoot,sAbsolutePath))
 }
+const fnConvert = absoluteToRelative
 
 module.exports = function(file, api) {
   var j = api.jscodeshift; // alias the jscodeshift API
   var sRoot = path.resolve()
   var sFileDir = path.parse(file.path).dir
   var root = j(file.source); // parse JS code into an AST
-  debugger
-  // the main update method replaces merge with ObjectExpression
-  var i = 0
+
   const oneArgString = (node) => {
       return node.value.arguments.length === 1 && node.value.arguments[0].type === 'Literal'
-    // j(node)
   }
   // find and update all merge calls
   root.find(j.CallExpression, {callee: {name: 'require'}})
    .filter(oneArgString)
    .forEach((node, i)=>{
-        const newPath = absoluteToRelative(sRoot, sFileDir, node.value.arguments[0].value)
+        const newPath = fnConvert(sRoot, sFileDir, node.value.arguments[0].value)
         node.value.arguments[0].value = newPath
-        if (i === 0) {
-            console.log(node)
-            console.log(j(node))
-        }
    })
+   root.find(j.ImportDeclaration)
+    .forEach(node=>{
+        const newPath = fnConvert(sRoot, sFileDir, node.value.source.value)
+        node.value.source.value = newPath
+    })
   // print
   return root.toSource({quote: 'single'});
 };
-
-const flatten = a => Array.isArray(a) ? [].concat(...a.map(flatten)) : a;
