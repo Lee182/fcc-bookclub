@@ -1,9 +1,9 @@
 {
-  "presets": ["node8"],
-  "plugins": [
-    ["babel-plugin-root-import", {
-      "pathRootSuffix": "./"
+  'presets': ['node8'],
+  'plugins': [
+    ['babel-plugin-root-import', {
+      'rootPathPrefix': '~',
+      'rootPathSuffix': './'
     }]
-    // "transform-async-to-generator"
   ]
 }

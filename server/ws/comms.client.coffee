@@ -1,7 +1,7 @@
 # const BSON = require('bson')
 # const bson = new BSON()
 # note commented out BSON code
-eventSystem = require('../../app/browser+node/eventSystem.js')
+eventSystem = require('#/app/browser+node/eventSystem.js')
 # function BlobtoJSON(blob) {
 #   return new Promise(function(resolve, reject){
 #     var reader = new FileReader()

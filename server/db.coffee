@@ -1,8 +1,8 @@
 # data acess object
 import Mongo from 'mongodb'
-import bookapi from './api/book'
-import ip2loci from './api/ip2loci'
-import eventSysetem from '../app/browser+node/eventSystem'
+import bookapi from '~/server/api/book'
+import ip2loci from '~/server/api/ip2loci'
+import eventSysetem from '~/app/abrowser+node/eventSystem'
 MongoClient = Mongo.MongoClient
 booksdb_name = 'bookshelf'
 usersdb_name = 'bookshelf_users'
@@ -20,7 +20,7 @@ export default class DB
       'trade__list'
       'trade__unlist'
       'trade__request'
-      'trade__request_remove'
+      # 'trade__request_remove'
       'user__findOne'
       'user__add'
       'user__add_loci_fromip'
@@ -49,7 +49,9 @@ export default class DB
           message: '@' + d.request._id.owner_id + ' ' + d.words[0] + 'ed your trade request for "' + d.request.book.title + '"'
   
   ensureConnected: (fn) ->
-    if typeof fn != 'function' then throw Error 'ensureConnected passed fn'
+    if typeof fn != 'function'
+      debugger
+      throw Error 'ensureConnected passed fn'
     ->
       if @db == null then err: 'db disconnected'
       fn.apply @, arguments
