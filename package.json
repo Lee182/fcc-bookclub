@@ -4,6 +4,13 @@
   "description": "book trading backend app as part of https://www.freecodecamp.com/challenges/manage-a-book-trading-club",
   "main": "server/index.js",
   "scripts": {
+    "cloc": "cloc --by-file server-src",
+    "server": "npm-run-all -s server-clean server-coffee -p servermon server-coffee-watch",
+    "server-clean": "rm -rf server-dist/",
+    "server-coffee": "coffee --transpile --compile  --output server-dist/ server-src/",
+    "server-coffee-watch": "coffee --watch --transpile --compile --output server-dist/ server-src/",
+    "server-debug": "node --inspect-brk=9229 server-dist/index.js",
+    "servermon": "nodemon --inspect-brk=9229 server-dist/index.js --watch server-dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/index.js",
     "copy-libs": "cp ./app/to-copy/* ./dist/",
@@ -23,6 +30,7 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.16.0",
+    "bson-ext": "^1.0.5",
     "cookie-parser": "^1.4.3",
     "curl": "^0.1.4",
     "express": "^4.14.0",
@@ -32,8 +40,16 @@
     "uws": "^8.14.1"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-plugin-root-import": "^5.1.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-node8": "^1.2.0",
     "browserify": "^14.4.0",
+    "cloc": "^2.2.0",
+    "coffeescript": "^2.0.1",
     "jscodeshift": "^0.3.32",
+    "nodemon": "^1.12.1",
     "npm-run-all": "^4.0.0",
     "pug": "^2.0.0-beta6",
     "stylus": "^0.54.5",
