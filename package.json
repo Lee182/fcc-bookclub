@@ -4,6 +4,9 @@
   "description": "book trading backend app as part of https://www.freecodecamp.com/challenges/manage-a-book-trading-club",
   "main": "server/index.js",
   "scripts": {
+    "build-build-watch": "coffee -ctMw --output build.js build.coffee",
+    "build-build-nodemon": "nodemon --inspect-brk=10001 build.js --watch build.js",
+    "build-build": "npm-run-all -p build-build-watch build-build-nodemon",
     "cloc": "cloc --by-file server",
     "server": "npm-run-all -s server-clean server-coffee -p servermon server-coffee-watch",
     "server-clean": "rm -rf server-dist/",
