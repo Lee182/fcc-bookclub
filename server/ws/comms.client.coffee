@@ -1,7 +1,7 @@
+eventSystem = require('#/app/browser+node/eventSystem.js')
 # BSON code is commented
 # const BSON = require('bson')
 # const bson = new BSON()
-eventSystem = require('#/app/browser+node/eventSystem.js')
 
 # BlobtoJSON = (blob) ->
 #   new Promise (resolve, reject) ->
@@ -19,6 +19,7 @@ eventSystem = require('#/app/browser+node/eventSystem.js')
 #     buf[i] = view[i]
 #     ++i
 #   buf
+
 class ClientComms
   constructor: (url) ->
     # example url 'ws://localhost:3000'
