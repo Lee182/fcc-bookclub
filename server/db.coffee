@@ -1,8 +1,8 @@
 # data acess object
 import Mongo from 'mongodb'
-import bookapi from '~/server/api/book'
-import ip2loci from '~/server/api/ip2loci'
-import eventSysetem from '~/app/abrowser+node/eventSystem'
+import bookapi from 'server/api/book.coffee'
+import ip2loci from 'server/api/ip2loci.coffee'
+import eventSysetem from 'shared/eventSystem'
 MongoClient = Mongo.MongoClient
 booksdb_name = 'bookshelf'
 usersdb_name = 'bookshelf_users'
@@ -46,8 +46,8 @@ export default class DB
         info:
           type: 'trade.respond'
           path: '/book/' + d.book._id
-          message: '@' + d.request._id.owner_id + ' ' + d.words[0] + 'ed your trade request for "' + d.request.book.title + '"'
-  
+          message: '''@${d.request._id.owner_id} ${d.words[0]}ed your trade request for "${d.request.book.title}"'''
+
   ensureConnected: (fn) ->
     if typeof fn != 'function'
       debugger

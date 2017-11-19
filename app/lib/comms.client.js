@@ -1,7 +1,7 @@
 // const BSON = require('bson')
 // const bson = new BSON()
 // note commented out BSON code
-const eventSystem = require('./../browser+node/eventSystem.js')
+const eventSystem = require('../shared/eventSystem.js')
 
 
 // function BlobtoJSON(blob) {

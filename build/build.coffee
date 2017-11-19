@@ -12,7 +12,7 @@ String::startsWith = (startstr) ->
 serverBabelConfig =
   'presets': [ 'node8' ]
   'plugins': [
-    ['babel-plugin-root-import', { 'rootPathPrefix': '~' }]
+    ['babel-plugin-root-import', { 'rootPathPrefix': '#' }]
   ]
 
 allfiles = ->

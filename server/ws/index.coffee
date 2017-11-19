@@ -1,5 +1,5 @@
-handle_user_connects = require('./user_connect_disconnect_handle.js')
-Comms = require('./comms.server.js')
+handle_user_connects = require('server/ws/user_connect_disconnect_handle')
+Comms = require('server/ws/comms.server')
 
 module.exports = ({
   app,
@@ -20,7 +20,11 @@ module.exports = ({
       a.user_id == user_id
 
   user_auth = (o, user_id) ->
-    user_id != undefined and user_id != null and o.user_id != undefined and o.user_id != null and o.user_id == user_id
+    user_id != undefined and
+    user_id != null and
+    o.user_id != undefined and
+    o.user_id != null and
+    o.user_id == user_id
 
   handle_user_connects({ comms, cookie_parser, tw, users_online })
   comms.on 'request', ({ data, ws }) ->

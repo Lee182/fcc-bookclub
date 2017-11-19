@@ -1,4 +1,5 @@
-Twitter_session = require('./twitter_session.js')
+Twitter_session = require('server/express/twitter_session.coffee')
+
 module.exports = ({ app, dao, port, k, sessiondb_name }) ->
   
   tw = Twitter_session({

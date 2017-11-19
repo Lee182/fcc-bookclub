@@ -25,13 +25,14 @@
     "browserify": "browserify ./app/index.js -o ./dist/bundle.js",
     "watch-browserify": "watchify ./app/index.js -o ./dist/bundle.js",
     "build": "npm-run-all --parallel copy-libs pug css browserify",
-    "dev": "npm-run-all --parallel copy-libs watch-pug watch-css watch-browserify nstart",
+    "dev": "npm-run-all --parallel copy-libs watch-pug watch-css watch-browserify start",
     "deploy": "rsync -azP ./ --exclude='node_modules' root@blogjono.com:/root/projects/dynamic/fcc-b-bookclub"
   },
   "author": "Jonathan T L Lee",
   "repository": "https://github.com/Lee182/fcc-bookclub.git",
   "license": "MIT",
   "dependencies": {
+    "absolute-require-bono": "^1.0.1",
     "body-parser": "^1.16.0",
     "cookie-parser": "^1.4.3",
     "curl": "^0.1.4",
@@ -44,21 +45,19 @@
     "uws": "^8.14.1"
   },
   "devDependencies": {
+    "webpack-node-externals": "^1.6.0",    
     "babel-core": "^6.26.0",
-    "babel-plugin-root-import": "^5.1.0",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-env": "^1.6.0",
     "babel-preset-node8": "^1.2.0",
-    "babel-project-relative-import": "^2.0.1",
-    "browserify": "^14.4.0",
-    "chokidar": "^1.7.0",
     "cloc": "^2.2.0",
+    "coffee-loader": "^0.9.0",
     "coffeescript": "^2.0.1",
     "jscodeshift": "^0.3.32",
     "nodemon": "^1.12.1",
     "npm-run-all": "^4.0.0",
-    "pug": "^2.0.0-beta6",
+    "pug-cli": "^1.0.0-alpha6",
     "stylus": "^0.54.5",
-    "watchify": "^3.7.0"
+    "webpack": "^3.8.1"
   }
 }

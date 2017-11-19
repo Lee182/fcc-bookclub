@@ -1,7 +1,7 @@
 'use strict'
 # https://apps.twitter.com/app/new
 logtwit = require('login-with-twitter')
-es = require('../../app/browser+node/eventSystem.js')
+es = require('shared/eventSystem.js')
 
 module.exports = ({
   dao,

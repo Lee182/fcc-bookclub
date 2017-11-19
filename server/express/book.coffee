@@ -1,4 +1,4 @@
-bookapi = require('../api/book.js')
+bookapi = require('server/api/book')
 
 module.exports = ({ app, dao }) ->
 

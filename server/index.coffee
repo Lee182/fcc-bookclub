@@ -3,11 +3,11 @@ import path  from 'path'
 import express from 'express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
-import express_user from './express/user'
-import express_book from './express/book'
-import ws_handle from './ws/index'
-import k  from './keys'
-import db from './db'
+import express_user from 'server/express/user.coffee'
+import express_book from 'server/express/book.coffee'
+import ws_handle from 'server/ws/index.coffee'
+import k  from 'server/keys.coffee'
+import db from 'server/db.coffee'
 
 app = express()
 server = http.Server(app)
@@ -18,14 +18,14 @@ body_parser_json = bodyParser.json()
 dao = new db({ mongourl: k.mongourl })
 app.use cookie_parser
 app.use body_parser_json
-app.use '/', express.static(path.resolve(__dirname + '/../dist'))
+app.use '/', express.static(path.resolve(__dirname + '/dist'))
 
 tw = express_user({ app, port, dao, k, 'bookclub_sessions' })
 bookapi = express_book({ app, dao })
 ws = ws_handle({ app, server, cookie_parser, tw, dao })
 
 app.get '*', (req, res) ->
-  res.sendFile path.resolve(__dirname + '/../dist/index.html')
+  res.sendFile path.resolve(__dirname + '/dist/index.html')
 
 dao.connect().then ->
   server.listen port, ->

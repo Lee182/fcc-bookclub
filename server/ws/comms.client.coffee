@@ -1,4 +1,4 @@
-eventSystem = require('#/app/browser+node/eventSystem.js')
+eventSystem = require('shared/eventSystem.js')
 # BSON code is commented
 # const BSON = require('bson')
 # const bson = new BSON()
