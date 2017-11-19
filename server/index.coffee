@@ -25,8 +25,9 @@ bookapi = express_book({ app, dao })
 ws = ws_handle({ app, server, cookie_parser, tw, dao })
 
 app.get '*', (req, res) ->
+  console.log('here')
   res.sendFile path.resolve(__dirname + '/dist/index.html')
 
 dao.connect().then ->
   server.listen port, ->
-    console.log 'server listening at http://localhost:' + port
+    console.log 'server listening at http://localho.st:' + port

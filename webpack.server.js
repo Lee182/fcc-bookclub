@@ -14,7 +14,7 @@ module.exports = {
   entry: './server/index',
   output: {
     path: path.resolve('./'),
-    filename: 'bundle.js',
+    filename: 'server.js',
     libraryTarget: 'commonjs'
   },
   resolve: {
@@ -30,18 +30,7 @@ module.exports = {
     rules: [
       {
         test: /\.coffee$/,
-        use: [
-          {
-            loader: 'coffee-loader',
-            options: {
-              sourceMap: true,
-              transpile: {
-                'presets': ['node8'],
-                'plugins': []
-              }
-            }
-          }
-        ]
+        loader: 'coffeescript-loader'
       }
     ]
   }

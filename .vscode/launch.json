@@ -6,40 +6,36 @@
     "configurations": [
         {
             "type": "node",
-            "request": "attach",
-            "name": "Server",
-            "port": 9221
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Jscodeshift",
-            "protocol": "inspector",
-            "address": "localhost",
-            "port": 9229,
-            "runtimeExecutable": "jscodeshift",
-            "runtimeArgs": [
-                "-t", "./modrequire.js",
-                "./app/index.js"
-            ],
-            "console": "internalConsole",
-            "sourceMaps": true,
-            "outFiles": [
-                "${workspaceRoot}/err"
-            ],
-        },
-        {
-            "name": "Attach to Process",
-            "type": "node",
-            "request": "attach",
-            "port": 5858
-        },
-        {
-            "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/server/index.js"
+            "program": "${workspaceFolder}/server.js"
         },
-        
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "server:watch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "server:watch"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "server:dev",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "server:dev"
+            ],
+            "port": 9000
+        }
+    ],
+    "compounds": [
+        {
+            "name": "FullStack",
+            "configurations": ["server:watch", "server:dev"]
+        }
     ]
 }
