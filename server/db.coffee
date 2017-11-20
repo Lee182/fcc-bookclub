@@ -34,7 +34,7 @@ export default class DB
       @[name] = @ensureConnected(@[name])
 
     five_mins = 5 * 60 * 1000
-    setInterval @bookshelf__garbage_collection, five_mins
+    setInterval @bookshelf__garbage_collection.bind(this), five_mins
     @e.on 'trade.request', (info) ->
       @notification__add
         user_id: info.owner_id
@@ -139,6 +139,7 @@ export default class DB
       err
 
   bookshelf__garbage_collection: ->
+    debugger
     @db.collection(booksdb_name).remove users: $size: 0
 
   trade__list: ({ book_id, user_id }) ->

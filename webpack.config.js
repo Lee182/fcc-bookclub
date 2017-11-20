@@ -1,21 +1,11 @@
 const path = require('path')
-const nodeExternals = require('webpack-node-externals')
-console.log('hereo', __dirname, path.resolve(__dirname), path.resolve('./'))
 
 module.exports = {
   devtool: 'inline-source-map',
-  target: 'node',
-  node: {
-    __dirname: false,
-    __filename: false,
-    require: false
-  },
-  externals: [nodeExternals()],
-  entry: './server/index',
+  entry: './app/index.js',
   output: {
-    path: path.resolve('./'),
-    filename: 'server.js',
-    libraryTarget: 'commonjs'
+    path: path.resolve('./dist'),
+    filename: 'bundle.js'
   },
   resolve: {
     // add alias for application code directory
@@ -28,6 +18,17 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [require('babel-preset-env')],
+            plugins: [require('babel-plugin-transform-async-to-generator')]
+          }
+        }
+      },
       {
         test: /\.coffee$/,
         loader: 'coffeescript-loader'

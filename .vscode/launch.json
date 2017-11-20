@@ -6,36 +6,31 @@
     "configurations": [
         {
             "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}/server.js"
+            "request": "attach",
+            "name": "server",
+            "port": 8001,
+            "restart": true
         },
         {
-            "type": "node",
+            "name": "ff",
+            "type": "firefox",
             "request": "launch",
-            "name": "server:watch",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run-script",
-                "server:watch"
+            "reAttach": true,
+            "url": "http://localhost:3000/",
+            "webRoot": "${workspaceFolder}",
+            "reloadOnChange": {
+                "watch": [ "${workspaceFolder}/**/*.js" ],
+                "ignore": [ "${workspaceFolder}/node_modules/**" ]
+            },
+            "pathMappings": [
+                { "url": "webpack:///", "path": "" }
             ]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "server:dev",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run-script",
-                "server:dev"
-            ],
-            "port": 9000
         }
     ],
     "compounds": [
         {
-            "name": "FullStack",
-            "configurations": ["server:watch", "server:dev"]
+            "name": "fullstack",
+            "configurations": ["server", "ff"]
         }
     ]
 }

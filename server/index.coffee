@@ -9,6 +9,9 @@ import ws_handle from 'server/ws/index.coffee'
 import k  from 'server/keys.coffee'
 import db from 'server/db.coffee'
 
+sNow = new Date().toISOString()
+console.log("server started #{sNow}")
+
 app = express()
 server = http.Server(app)
 port = process.argv[2] or 3000
@@ -25,7 +28,6 @@ bookapi = express_book({ app, dao })
 ws = ws_handle({ app, server, cookie_parser, tw, dao })
 
 app.get '*', (req, res) ->
-  console.log('here')
   res.sendFile path.resolve(__dirname + '/dist/index.html')
 
 dao.connect().then ->

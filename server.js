@@ -100,13 +100,16 @@ module.exports = function () {
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
 var books, o;
 
 books = __webpack_require__(12);
 
 o = {};
 
-o.find = function(query, pagenum) {
+o.find = function (query, pagenum) {
   var limit, offset, options;
   if (isNaN(pagenum)) {
     pagenum = 0;
@@ -120,8 +123,8 @@ o.find = function(query, pagenum) {
     order: 'relevance',
     lang: 'en'
   };
-  return new Promise(function(resolve, reject) {
-    books.search(query, options, function(err, books, apires) {
+  return new Promise(function (resolve, reject) {
+    books.search(query, options, function (err, books, apires) {
       var count;
       if (err) {
         return reject({
@@ -142,9 +145,9 @@ o.find = function(query, pagenum) {
   });
 };
 
-o.findId = function(id) {
-  return new Promise(function(resolve, reject) {
-    books.lookup(id, function(err, book) {
+o.findId = function (id) {
+  return new Promise(function (resolve, reject) {
+    books.lookup(id, function (err, book) {
       if (err || book === void 0) {
         console.log('db.js bookshelf__add err:', err);
         return reject({
@@ -161,90 +164,96 @@ o._api = books;
 
 module.exports = o;
 
-
 /***/ }),
 /* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_http__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_http___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_http__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_path__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_path___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_path__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_express__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_express___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_express__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_body_parser__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_body_parser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_body_parser__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_cookie_parser__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_cookie_parser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_cookie_parser__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_server_express_user_coffee__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_server_express_user_coffee___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_server_express_user_coffee__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_server_express_book_coffee__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_server_express_book_coffee___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_server_express_book_coffee__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_server_ws_index_coffee__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_server_ws_index_coffee___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_server_ws_index_coffee__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_server_keys_coffee__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_server_db_coffee__ = __webpack_require__(18);
-var app, body_parser_json, bookapi, cookie_parser, dao, port, server, tw, ws;
 
 
+var _http = __webpack_require__(3);
 
+var _http2 = _interopRequireDefault(_http);
 
+var _path = __webpack_require__(4);
 
+var _path2 = _interopRequireDefault(_path);
 
+var _express = __webpack_require__(5);
 
+var _express2 = _interopRequireDefault(_express);
 
+var _bodyParser = __webpack_require__(6);
 
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
+var _cookieParser = __webpack_require__(7);
 
+var _cookieParser2 = _interopRequireDefault(_cookieParser);
 
+var _user = __webpack_require__(8);
 
+var _user2 = _interopRequireDefault(_user);
 
+var _book = __webpack_require__(11);
 
+var _book2 = _interopRequireDefault(_book);
 
+var _index = __webpack_require__(13);
 
+var _index2 = _interopRequireDefault(_index);
 
+var _keys = __webpack_require__(17);
 
+var _keys2 = _interopRequireDefault(_keys);
 
+var _db = __webpack_require__(18);
 
-app = __WEBPACK_IMPORTED_MODULE_2_express___default()();
+var _db2 = _interopRequireDefault(_db);
 
-server = __WEBPACK_IMPORTED_MODULE_0_http___default.a.Server(app);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var app, body_parser_json, bookapi, cookie_parser, dao, port, sNow, server, tw, ws;
+
+sNow = new Date().toISOString();
+
+console.log(`server started ${sNow}`);
+
+app = (0, _express2.default)();
+
+server = _http2.default.Server(app);
 
 port = process.argv[2] || 3000;
 
-cookie_parser = __WEBPACK_IMPORTED_MODULE_4_cookie_parser___default()();
+cookie_parser = (0, _cookieParser2.default)();
 
-body_parser_json = __WEBPACK_IMPORTED_MODULE_3_body_parser___default.a.json();
+body_parser_json = _bodyParser2.default.json();
 
-dao = new __WEBPACK_IMPORTED_MODULE_9_server_db_coffee__["a" /* default */]({
-  mongourl: __WEBPACK_IMPORTED_MODULE_8_server_keys_coffee__["a" /* default */].mongourl
+dao = new _db2.default({
+  mongourl: _keys2.default.mongourl
 });
 
 app.use(cookie_parser);
 
 app.use(body_parser_json);
 
-app.use('/', __WEBPACK_IMPORTED_MODULE_2_express___default.a.static(__WEBPACK_IMPORTED_MODULE_1_path___default.a.resolve(__dirname + '/dist')));
+app.use('/', _express2.default.static(_path2.default.resolve(__dirname + '/dist')));
 
-tw = __WEBPACK_IMPORTED_MODULE_5_server_express_user_coffee___default()({app, port, dao, k: __WEBPACK_IMPORTED_MODULE_8_server_keys_coffee__["a" /* default */], 'bookclub_sessions': 'bookclub_sessions'});
+tw = (0, _user2.default)({ app, port, dao, k: _keys2.default, 'bookclub_sessions': 'bookclub_sessions' });
 
-bookapi = __WEBPACK_IMPORTED_MODULE_6_server_express_book_coffee___default()({app, dao});
+bookapi = (0, _book2.default)({ app, dao });
 
-ws = __WEBPACK_IMPORTED_MODULE_7_server_ws_index_coffee___default()({app, server, cookie_parser, tw, dao});
+ws = (0, _index2.default)({ app, server, cookie_parser, tw, dao });
 
-app.get('*', function(req, res) {
-  console.log('here');
-  return res.sendFile(__WEBPACK_IMPORTED_MODULE_1_path___default.a.resolve(__dirname + '/dist/index.html'));
+app.get('*', function (req, res) {
+  return res.sendFile(_path2.default.resolve(__dirname + '/dist/index.html'));
 });
 
-dao.connect().then(function() {
-  return server.listen(port, function() {
+dao.connect().then(function () {
+  return server.listen(port, function () {
     return console.log('server listening at http://localho.st:' + port);
   });
 });
-
 
 /***/ }),
 /* 3 */
@@ -280,11 +289,14 @@ module.exports = require("cookie-parser");
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
 var Twitter_session;
 
 Twitter_session = __webpack_require__(9);
 
-module.exports = function({app, dao, port, k, sessiondb_name}) {
+module.exports = function ({ app, dao, port, k, sessiondb_name }) {
   var tw;
   tw = Twitter_session({
     dao,
@@ -296,40 +308,40 @@ module.exports = function({app, dao, port, k, sessiondb_name}) {
   });
   app.get('/tw.login', tw.login);
   app.post('/tw.logout', tw.logout);
-  app.get('/tw.login_cb', tw.login_cb, async function(req, res, next) {
+  app.get('/tw.login_cb', tw.login_cb, async function (req, res, next) {
     var user;
     console.log(req.twuser);
     if (!req.twuser) {
       return res.redirect('/');
     }
-    user = (await dao.user__findOne({
+    user = await dao.user__findOne({
       user_id: req.twuser
-    }));
+    });
     if (!user) {
-      user = (await dao.user__add({
+      user = await dao.user__add({
         user_id: req.twuser
-      }));
+      });
     }
     if (!user.loci) {
-      user = (await dao.user__add_loci_fromip({
+      user = await dao.user__add_loci_fromip({
         user_id: user._id,
         ip: req.ip
-      }));
+      });
     }
     return res.redirect('/?user_id=' + req.twuser);
   });
-  app.get('/user', tw.is_logged_in, async function(req, res, next) {
+  app.get('/user', tw.is_logged_in, async function (req, res, next) {
     var user;
-    user = (await dao.user__findOne({
+    user = await dao.user__findOne({
       user_id: req.twuser
-    }));
+    });
     return res.json(user);
   });
-  app.post('/user/:user_id', async function(req, res) {
+  app.post('/user/:user_id', async function (req, res) {
     var user;
-    user = (await dao.user__findOne({
+    user = await dao.user__findOne({
       user_id: req.params.user_id
-    }));
+    });
     if (!user) {
       return res.json({
         err: 'notfound'
@@ -338,23 +350,23 @@ module.exports = function({app, dao, port, k, sessiondb_name}) {
       return res.json(user);
     }
   });
-  app.post('/user_loci__change', tw.is_logged_in, async function(req, res, next) {
+  app.post('/user_loci__change', tw.is_logged_in, async function (req, res, next) {
     var result;
-    result = (await dao.user__change_loci({
+    result = await dao.user__change_loci({
       user_id: req.twuser,
       loci: req.body.loci
-    }));
+    });
     return res.json(result);
   });
   return tw;
 };
-
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
 
 var es, logtwit;
 
@@ -363,15 +375,15 @@ logtwit = __webpack_require__(10);
 
 es = __webpack_require__(0);
 
-module.exports = function({dao, port, coll_name, consumerKey, consumerSecret, callbackUrl}) {
+module.exports = function ({ dao, port, coll_name, consumerKey, consumerSecret, callbackUrl }) {
   var _tw_tokens, events, out, tw;
   events = es();
-  tw = new logtwit({consumerKey, consumerSecret, callbackUrl});
+  tw = new logtwit({ consumerKey, consumerSecret, callbackUrl });
   _tw_tokens = {};
   return out = {
     events: events,
-    login: function(req, res, next) {
-      return tw.login(function(err, tokenSecret, url) {
+    login: function (req, res, next) {
+      return tw.login(function (err, tokenSecret, url) {
         var oauth_token;
         // console.log('tw.login', err, tokenSecret, url)
         if (err) {
@@ -382,7 +394,7 @@ module.exports = function({dao, port, coll_name, consumerKey, consumerSecret, ca
         return res.redirect(url);
       });
     },
-    login_cb: function(req, res, next) {
+    login_cb: function (req, res, next) {
       var oauth_token, oauth_token_secret;
       oauth_token = req.query.oauth_token;
       oauth_token_secret = _tw_tokens[oauth_token];
@@ -393,7 +405,7 @@ module.exports = function({dao, port, coll_name, consumerKey, consumerSecret, ca
       return tw.callback({
         oauth_token: oauth_token,
         oauth_verifier: req.query.oauth_verifier
-      }, oauth_token_secret, async function(err, user) {
+      }, oauth_token_secret, async function (err, user) {
         var options, query, result, update;
         // console.log('tw.callback', err, user)
         if (err) {
@@ -409,7 +421,7 @@ module.exports = function({dao, port, coll_name, consumerKey, consumerSecret, ca
         };
         update = {
           $set: {
-            creation_date: new Date,
+            creation_date: new Date(),
             user_id: user.userName
           }
         };
@@ -417,13 +429,13 @@ module.exports = function({dao, port, coll_name, consumerKey, consumerSecret, ca
           upsert: true,
           returnOriginal: false
         };
-        result = (await dao.db.collection(coll_name).findOneAndUpdate(queyr, update, options));
+        result = await dao.db.collection(coll_name).findOneAndUpdate(queyr, update, options);
         console.log('tw', result);
         req.twuser = user.userName;
         return next();
       });
     },
-    logout: async function(req, res, next) {
+    logout: async function (req, res, next) {
       // console.log('tw.logout',req.cookies)
       events.emit('logout', {
         user_id: req.twuser,
@@ -439,13 +451,13 @@ module.exports = function({dao, port, coll_name, consumerKey, consumerSecret, ca
         logout: true
       });
     },
-    is_logged_in: async function(req, res, next) {
+    is_logged_in: async function (req, res, next) {
       var result;
       if (!req.cookies || !req.cookies.twitter) {
         return res.status(400).send('jog on');
       }
       try {
-        result = (await is_logged_in_prom(req.cookies.twitter));
+        result = await is_logged_in_prom(req.cookies.twitter);
         if (result === void 0) {
           return res.clearCookie('twitter', {
             path: '/'
@@ -457,11 +469,11 @@ module.exports = function({dao, port, coll_name, consumerKey, consumerSecret, ca
         return next();
       }
     },
-    is_logged_in_prom: async function(cookie) {
+    is_logged_in_prom: async function (cookie) {
       var result;
-      result = (await dao.db.collection(coll_name).findOne({
+      result = await dao.db.collection(coll_name).findOne({
         _id: cookie
-      }));
+      });
       if (result === null) {
         return void 0;
       } else {
@@ -482,7 +494,6 @@ app.post('/twitter-logout')
   // clears the twitter cookie
 */
 
-
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
@@ -493,20 +504,23 @@ module.exports = require("login-with-twitter");
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
 var bookapi;
 
 bookapi = __webpack_require__(1);
 
-module.exports = function({app, dao}) {
+module.exports = function ({ app, dao }) {
   var endpoints;
-  app.get('/book_search/:query/:pagenum', async function(req, res) {
+  app.get('/book_search/:query/:pagenum', async function (req, res) {
     var data, err, pagenum;
     if (typeof req.params.query !== 'string') {
       return res.status(400);
     }
     pagenum = Number(req.params.pagenum) - 1;
     try {
-      data = (await bookapi.find(req.params.query, pagenum));
+      data = await bookapi.find(req.params.query, pagenum);
       return res.json(data);
     } catch (error) {
       err = error;
@@ -514,39 +528,39 @@ module.exports = function({app, dao}) {
       return res.status(400);
     }
   });
-  app.get('/book_id/:book_id', async function(req, res, next) {
+  app.get('/book_id/:book_id', async function (req, res, next) {
     var data;
-    data = (await dao.book__get({
+    data = await dao.book__get({
       book_id: req.params.book_id
-    }));
+    });
     if (data) {
       return res.json(data);
     }
-    data = (await bookapi.findId(req.params.book_id));
+    data = await bookapi.findId(req.params.book_id);
     return res.json(data);
   });
-  app.get('/bookshelf/:user_id', async function(req, res, next) {
+  app.get('/bookshelf/:user_id', async function (req, res, next) {
     var result;
-    result = (await dao.bookshelf({
+    result = await dao.bookshelf({
       user_id: req.params.user_id
-    }));
+    });
     return res.json(result);
   });
-  app.get('/tradeshelf/:user_id', async function(req, res, next) {
+  app.get('/tradeshelf/:user_id', async function (req, res, next) {
     var result;
-    result = (await dao.tradeshelf({
+    result = await dao.tradeshelf({
       user_id: req.params.user_id
-    }));
+    });
     return res.json(result);
   });
-  app.get('/bookowners/:book_id', async function(req, res, next) {
+  app.get('/bookowners/:book_id', async function (req, res, next) {
     var result;
-    result = (await dao.bookowners({
+    result = await dao.bookowners({
       book_id: req.params.book_id
-    }));
+    });
     return res.json(result);
   });
-  app.get('/market/:page_n', function(req, res, next) {
+  app.get('/market/:page_n', function (req, res, next) {
     var result;
     result = dao.market({
       page_n: req.params.page_n
@@ -554,11 +568,11 @@ module.exports = function({app, dao}) {
     return res.json(result);
   });
   endpoints = ['bookshelf__add', 'bookshelf__remove', 'trade__list', 'trade__unlist', 'trade__request', 'trade__request_remove', 'note__mark__read', 'note__mark__opened', 'trade_requests__get', 'trade_respond'];
-  endpoints.forEach(function(name) {
-    return app.post('/' + name, async function(req, res, next) {
+  endpoints.forEach(function (name) {
+    return app.post('/' + name, async function (req, res, next) {
       var err, result;
       try {
-        result = (await dao[name](req.body));
+        result = await dao[name](req.body);
         return res.json(result);
       } catch (error) {
         err = error;
@@ -573,7 +587,6 @@ module.exports = function({app, dao}) {
   return bookapi;
 };
 
-
 /***/ }),
 /* 12 */
 /***/ (function(module, exports) {
@@ -584,31 +597,34 @@ module.exports = require("google-books-search");
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
 var Comms, handle_user_connects;
 
 handle_user_connects = __webpack_require__(14);
 
 Comms = __webpack_require__(15);
 
-module.exports = function({app, server, cookie_parser, tw, dao}) {
+module.exports = function ({ app, server, cookie_parser, tw, dao }) {
   var comms, get_user, get_user__comms, user_auth, users_online;
   comms = Comms(server);
   users_online = [];
-  get_user = function(ws, user_id) {
-    return users_online.find(function(a) {
+  get_user = function (ws, user_id) {
+    return users_online.find(function (a) {
       return a.ws === ws;
     });
   };
-  get_user__comms = function(user_id) {
-    return users_online.filter(function(a) {
+  get_user__comms = function (user_id) {
+    return users_online.filter(function (a) {
       return a.user_id === user_id;
     });
   };
-  user_auth = function(o, user_id) {
+  user_auth = function (o, user_id) {
     return user_id !== void 0 && user_id !== null && o.user_id !== void 0 && o.user_id !== null && o.user_id === user_id;
   };
-  handle_user_connects({comms, cookie_parser, tw, users_online});
-  comms.on('request', function({data, ws}) {
+  handle_user_connects({ comms, cookie_parser, tw, users_online });
+  comms.on('request', function ({ data, ws }) {
     var a, b, message;
     // for handling req response
     // console.log('comms.request', data)
@@ -635,47 +651,49 @@ module.exports = function({app, server, cookie_parser, tw, dao}) {
       });
     }
   });
-  comms.on('message', function({data, ws}) {
+  comms.on('message', function ({ data, ws }) {
     var user, valid_user;
     console.log('data', data);
     user = get_user(ws);
     return valid_user = user_auth(user, data.user_id);
   });
-  dao.e.on('notify', function(data) {
+  dao.e.on('notify', function (data) {
     var channels;
     channels = get_user__comms(data.user._id);
-    return channels.forEach(function(channel) {
+    return channels.forEach(function (channel) {
       return comms.send({
         ws: channel.ws,
         data: data
       });
     });
   });
-  dao.e.on('book.update', function(book) {
+  dao.e.on('book.update', function (book) {
     return comms.sendAll({
       book: book,
       cmd: 'book.update'
     });
   });
-  return {users_online, comms};
+  return { users_online, comms };
 };
-
 
 /***/ }),
 /* 14 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = function({comms, tw, cookie_parser, users_online}) {
+"use strict";
+
+
+module.exports = function ({ comms, tw, cookie_parser, users_online }) {
   var cook_p;
-  cook_p = function(req) {
-    return new Promise(function(resolve) {
+  cook_p = function (req) {
+    return new Promise(function (resolve) {
       // req.headers.cookies
-      return cookie_parser(req, {}, function() {
+      return cookie_parser(req, {}, function () {
         return resolve(req.cookies);
       });
     });
   };
-  comms.on('connection', async function(ws) {
+  comms.on('connection', async function (ws) {
     var cookies, headers, i, user_id;
     console.log('comm.connection', ws._socket.remotePort);
     // ip === ws._socket.remoteAddress
@@ -685,7 +703,7 @@ module.exports = function({comms, tw, cookie_parser, users_online}) {
       user_id: void 0
     });
     headers = ws.upgradeReq.headers;
-    cookies = (await cook_p(ws.upgradeReq));
+    cookies = await cook_p(ws.upgradeReq);
     if (cookies.twitter === void 0) {
       comms.send({
         ws,
@@ -695,7 +713,7 @@ module.exports = function({comms, tw, cookie_parser, users_online}) {
       });
       return;
     }
-    ({user_id} = (await tw.is_logged_in_prom(cookies.twitter)));
+    ({ user_id } = await tw.is_logged_in_prom(cookies.twitter));
     if (user_id === void 0) {
       comms.send({
         ws: ws,
@@ -705,7 +723,7 @@ module.exports = function({comms, tw, cookie_parser, users_online}) {
       });
       return;
     }
-    i = users_online.findIndex(function(o) {
+    i = users_online.findIndex(function (o) {
       return ws === o.ws;
     });
     if (i > -1) {
@@ -718,36 +736,38 @@ module.exports = function({comms, tw, cookie_parser, users_online}) {
       }
     });
   });
-  comms.on('close', function(ws) {
+  comms.on('close', function (ws) {
     var i;
     // remove from list
-    i = users_online.findIndex(function(o) {
+    i = users_online.findIndex(function (o) {
       return ws === o.ws;
     });
     console.log('comm.closed', users_online[i].user_id);
     return users_online.splice(i, 1);
   });
   // used for live updating browser tabs when login or login
-  tw.events.on('logout', function(user) {
+  tw.events.on('logout', function (user) {
     console.log('tw.logut', user);
     return comms.sendAll({
       reconnect: true
     });
   });
-  return tw.events.on('login', function() {
+  return tw.events.on('login', function () {
     // give, 1s for twitter, 1s for browsers to set cookies
-    return setTimeout((function() {
+    return setTimeout(function () {
       return comms.sendAll({
         reconnect: true
       });
-    }), 2000);
+    }, 2000);
   });
 };
-
 
 /***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 var WebSocket, eve, sendBSON;
 
@@ -767,23 +787,23 @@ eve = __webpack_require__(0);
 //   return buf
 // }
 // ws code
-sendBSON = function({ws, data}) {
+sendBSON = function ({ ws, data }) {
   if (ws.readyState === WebSocket.OPEN) {
     return ws.send(JSON.stringify(data));
   }
 };
 
 // ws.send( bson.serialize(data, {ignoreUndefined: false}))
-module.exports = function(server) {
+module.exports = function (server) {
   var e, o, wss;
   e = eve();
   o = {};
   wss = new WebSocket.Server({
     server: server
   });
-  wss.on('connection', function(ws) {
+  wss.on('connection', function (ws) {
     e.emit('connection', ws);
-    ws.on('message', function(data, flags) {
+    ws.on('message', function (data, flags) {
       var conn, err;
       conn = this;
       try {
@@ -803,23 +823,23 @@ module.exports = function(server) {
         err = error;
       }
     });
-    return ws.on('close', function() {
+    return ws.on('close', function () {
       return e.emit('close', ws);
     });
   });
   o.send = sendBSON;
-  o.sendAll = function(data) {
-    return wss.clients.forEach(function(ws) {
+  o.sendAll = function (data) {
+    return wss.clients.forEach(function (ws) {
       return sendBSON({
         ws: ws,
         data: data
       });
     });
   };
-  o.sendAllExcept = function({ws, data}) {
-    return wss.clients.filter(function(client) {
+  o.sendAllExcept = function ({ ws, data }) {
+    return wss.clients.filter(function (client) {
       return client === ws;
-    }).map(function(client) {
+    }).map(function (client) {
       return sendBSON({
         ws: client,
         data: data
@@ -842,7 +862,6 @@ comms.sendAll(data)
 comms.sendAllBut({ws, data})
 */
 
-
 /***/ }),
 /* 16 */
 /***/ (function(module, exports) {
@@ -851,86 +870,86 @@ module.exports = require("uws");
 
 /***/ }),
 /* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
 var keys;
 
-/* harmony default export */ __webpack_exports__["a"] = (keys = {
+keys = {
   mongourl: 'mongodb://lee182:Mlab+jonomakesAgreatteam1@ds135577.mlab.com:35577/picput',
   twitter: {
     consumerKey: 'FDa4QaYtWHKN6nbEAJnbuVkk2',
     consumerSecret: 'zrB2M41vnghzqBOsvkUZbB93kaaPHnBkwCnlpimAx5uw7xQjQf'
   }
-});
+};
 
+if (process.env.ENVIRONMENT !== 'production') {
+  keys.mongourl = 'mongodb://127.0.0.1:27017';
+}
+
+module.exports = keys;
 
 /***/ }),
 /* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongodb__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mongodb___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mongodb__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_server_api_book_coffee__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_server_api_book_coffee___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_server_api_book_coffee__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_server_api_ip2loci_coffee__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_server_api_ip2loci_coffee___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_server_api_ip2loci_coffee__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_shared_eventSystem__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_shared_eventSystem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_shared_eventSystem__);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _mongodb = __webpack_require__(19);
+
+var _mongodb2 = _interopRequireDefault(_mongodb);
+
+var _book = __webpack_require__(1);
+
+var _book2 = _interopRequireDefault(_book);
+
+var _ip2loci = __webpack_require__(20);
+
+var _ip2loci2 = _interopRequireDefault(_ip2loci);
+
+var _eventSystem = __webpack_require__(0);
+
+var _eventSystem2 = _interopRequireDefault(_eventSystem);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // data acess object
 var DB, MongoClient, booksdb_name, usersdb_name;
 
-
-
-
-
-
-
-
-
-MongoClient = __WEBPACK_IMPORTED_MODULE_0_mongodb___default.a.MongoClient;
+MongoClient = _mongodb2.default.MongoClient;
 
 booksdb_name = 'bookshelf';
 
 usersdb_name = 'bookshelf_users';
 
-/* harmony default export */ __webpack_exports__["a"] = (DB = class DB {
-  constructor({mongourl}) {
+exports.default = DB = class DB {
+  constructor({ mongourl }) {
     var five_mins;
-    this.e = __WEBPACK_IMPORTED_MODULE_3_shared_eventSystem___default()();
+    this.e = (0, _eventSystem2.default)();
     this.db = null;
     this.mongourl = mongourl;
-    this.ObjectId = __WEBPACK_IMPORTED_MODULE_0_mongodb___default.a.ObjectId;
-    [
-      'bookshelf__add',
-      'bookshelf__remove',
-      'bookshelf__garbage_collection',
-      'trade__list',
-      'trade__unlist',
-      'trade__request',
-      // 'trade__request_remove'
-      'user__findOne',
-      'user__add',
-      'user__add_loci_fromip',
-      'user__change_loci',
-      'book__get',
-      'note__mark__read',
-      'note__mark__opened',
-      'trade_requests__get',
-      'trade_respond'
-    ].forEach((name) => {
+    this.ObjectId = _mongodb2.default.ObjectId;
+    ['bookshelf__add', 'bookshelf__remove', 'bookshelf__garbage_collection', 'trade__list', 'trade__unlist', 'trade__request',
+    // 'trade__request_remove'
+    'user__findOne', 'user__add', 'user__add_loci_fromip', 'user__change_loci', 'book__get', 'note__mark__read', 'note__mark__opened', 'trade_requests__get', 'trade_respond'].forEach(name => {
       return this[name] = this.ensureConnected(this[name]);
     });
     five_mins = 5 * 60 * 1000;
-    setInterval(this.bookshelf__garbage_collection, five_mins);
-    this.e.on('trade.request', function(info) {
+    setInterval(this.bookshelf__garbage_collection.bind(this), five_mins);
+    this.e.on('trade.request', function (info) {
       return this.notification__add({
         user_id: info.owner_id,
         info: info
       });
     });
-    this.e.on('trade.respond', function(d) {
+    this.e.on('trade.respond', function (d) {
       console.log(d);
       return this.notification__add({
         user_id: d.request._id.request.user_id,
@@ -948,7 +967,7 @@ usersdb_name = 'bookshelf_users';
       debugger;
       throw Error('ensureConnected passed fn');
     }
-    return function() {
+    return function () {
       if (this.db === null) {
         ({
           err: 'db disconnected'
@@ -958,7 +977,7 @@ usersdb_name = 'bookshelf_users';
     };
   }
 
-  async db_paging({db, coll, query, project, limit, page_n, sort}) {
+  async db_paging({ db, coll, query, project, limit, page_n, sort }) {
     var docs, skip;
     if (limit === void 0) {
       limit = 30;
@@ -975,15 +994,15 @@ usersdb_name = 'bookshelf_users';
       project = {};
     }
     skip = (page_n - 1) * limit;
-    docs = (await db.collection(coll).find(query, project).sort(sort).limit(limit).skip(skip).toArray());
-    return {docs, limit, page_n, query};
+    docs = await db.collection(coll).find(query, project).sort(sort).limit(limit).skip(skip).toArray();
+    return { docs, limit, page_n, query };
   }
 
   async connect() {
     var err;
     console.log('mongo connnecting...');
     try {
-      this.db = (await MongoClient.connect(this.mongourl));
+      this.db = await MongoClient.connect(this.mongourl);
       return console.log('mongo connected');
     } catch (error) {
       err = error;
@@ -992,11 +1011,11 @@ usersdb_name = 'bookshelf_users';
     }
   }
 
-  async user__findOne({user_id}) {
+  async user__findOne({ user_id }) {
     var user;
-    user = (await this.db.collection(usersdb_name).findOne({
+    user = await this.db.collection(usersdb_name).findOne({
       _id: user_id
-    }));
+    });
     if (user === null) {
       return void 0;
     } else {
@@ -1004,7 +1023,7 @@ usersdb_name = 'bookshelf_users';
     }
   }
 
-  user__add({user_id}) {
+  user__add({ user_id }) {
     var result;
     // TODO make sure user_id valid
     result = this.db.collection(usersdb_name).insert({
@@ -1016,19 +1035,19 @@ usersdb_name = 'bookshelf_users';
     return result.ops[0];
   }
 
-  async user__add_loci_fromip({user_id, ip}) {
+  async user__add_loci_fromip({ user_id, ip }) {
     var loci;
-    loci = (await __WEBPACK_IMPORTED_MODULE_2_server_api_ip2loci_coffee___default()(ip));
-    return (await this.user__change_loci({
+    loci = await (0, _ip2loci2.default)(ip);
+    return await this.user__change_loci({
       user_id: user_id,
       loci: loci
-    }));
+    });
   }
 
-  async user__change_loci({user_id, loci}) {
+  async user__change_loci({ user_id, loci }) {
     var res;
     // TODO make sure loci valid, then
-    res = (await this.db.collection(usersdb_name).findOneAndUpdate({
+    res = await this.db.collection(usersdb_name).findOneAndUpdate({
       _id: user_id
     }, {
       $set: {
@@ -1037,11 +1056,11 @@ usersdb_name = 'bookshelf_users';
     }, {
       returnOriginal: false,
       upsert: false
-    }));
+    });
     return res.value;
   }
 
-  bookshelf({user_id}) {
+  bookshelf({ user_id }) {
     return this.db.collection(booksdb_name).find({
       'users.user_id': user_id
     }).sort({
@@ -1049,9 +1068,9 @@ usersdb_name = 'bookshelf_users';
     }).toArray();
   }
 
-  bookshelf__add({book_id, user_id}) {
+  bookshelf__add({ book_id, user_id }) {
     var book, err, result;
-    book = __WEBPACK_IMPORTED_MODULE_1_server_api_book_coffee___default.a.findId(book_id);
+    book = _book2.default.findId(book_id);
     try {
       result = this.db.collection(booksdb_name).findOneAndUpdate({
         _id: book_id,
@@ -1061,12 +1080,12 @@ usersdb_name = 'bookshelf_users';
       }, {
         $set: {
           book: book,
-          updated: new Date
+          updated: new Date()
         },
         $push: {
           users: {
             user_id: user_id,
-            creation_date: new Date
+            creation_date: new Date()
           }
         }
       }, {
@@ -1082,10 +1101,10 @@ usersdb_name = 'bookshelf_users';
     }
   }
 
-  async bookshelf__remove({book_id, user_id}) {
+  async bookshelf__remove({ book_id, user_id }) {
     var result;
     try {
-      result = (await this.db.collection(booksdb_name).findOneAndUpdate({
+      result = await this.db.collection(booksdb_name).findOneAndUpdate({
         _id: book_id
       }, {
         $pull: {
@@ -1095,7 +1114,7 @@ usersdb_name = 'bookshelf_users';
         }
       }, {
         returnOriginal: false
-      }));
+      });
       return result.value;
     } catch (error) {
       console.log('db.js bookshelf__remove err:', err);
@@ -1104,6 +1123,7 @@ usersdb_name = 'bookshelf_users';
   }
 
   bookshelf__garbage_collection() {
+    debugger;
     return this.db.collection(booksdb_name).remove({
       users: {
         $size: 0
@@ -1111,7 +1131,7 @@ usersdb_name = 'bookshelf_users';
     });
   }
 
-  trade__list({book_id, user_id}) {
+  trade__list({ book_id, user_id }) {
     var result;
     result = this.db.collection(booksdb_name).findOneAndUpdate({
       _id: book_id,
@@ -1119,7 +1139,7 @@ usersdb_name = 'bookshelf_users';
     }, {
       $set: {
         'users.$.trade': {
-          creation_date: new Date,
+          creation_date: new Date(),
           fullfilled: false,
           requests: []
         }
@@ -1132,9 +1152,9 @@ usersdb_name = 'bookshelf_users';
     return result.value;
   }
 
-  async trade__unlist({book_id, user_id}) {
+  async trade__unlist({ book_id, user_id }) {
     var result;
-    result = (await this.db.collection(booksdb_name).findOneAndUpdate({
+    result = await this.db.collection(booksdb_name).findOneAndUpdate({
       _id: book_id,
       'users.user_id': user_id
     }, {
@@ -1144,12 +1164,12 @@ usersdb_name = 'bookshelf_users';
     }, {
       returnOriginal: false,
       upsert: false
-    }));
+    });
     e.emit('book.update', result.value);
     return result.value;
   }
 
-  tradeshelf({user_id}) {
+  tradeshelf({ user_id }) {
     return this.db.collection(booksdb_name).find({
       'users.user_id': user_id,
       'users.trade': {
@@ -1164,9 +1184,9 @@ usersdb_name = 'bookshelf_users';
     });
   }
 
-  async trade__request({book_id, owner_id, user_id}) {
+  async trade__request({ book_id, owner_id, user_id }) {
     var result;
-    result = (await this.db.collection(booksdb_name).findOneAndUpdate({
+    result = await this.db.collection(booksdb_name).findOneAndUpdate({
       _id: book_id,
       users: {
         $elemMatch: {
@@ -1181,13 +1201,13 @@ usersdb_name = 'bookshelf_users';
       $push: {
         'users.$.trade.requests': {
           user_id: user_id,
-          creation_date: new Date
+          creation_date: new Date()
         }
       }
     }, {
       returnOriginal: false,
       upsert: false
-    }));
+    });
     // new notifycation
     this.e.emit('trade.request', {
       book_id: book_id,
@@ -1199,14 +1219,14 @@ usersdb_name = 'bookshelf_users';
     return result.value;
   }
 
-  async trade_respond({request, accept_or_decline}) {
+  async trade_respond({ request, accept_or_decline }) {
     var doc, i, j, result, words;
     request._id.request.creation_date = new Date(request._id.request.creation_date);
     words = ['accept', 'decline'];
     if (accept_or_decline === false) {
       words = words.reverse();
     }
-    doc = (await this.db.collection(booksdb_name).findOne({
+    doc = await this.db.collection(booksdb_name).findOne({
       _id: request.book._id,
       users: {
         $elemMatch: {
@@ -1216,31 +1236,31 @@ usersdb_name = 'bookshelf_users';
           }
         }
       }
-    }));
+    });
     if (doc === null) {
       return Promise.reject();
     }
-    i = doc.users.findIndex(function(user) {
+    i = doc.users.findIndex(function (user) {
       return request._id.owner_id === user.user_id;
     });
     if (i === -1) {
       return Promise.reject();
     }
-    j = doc.users[i].trade.requests.findIndex(function(user) {
+    j = doc.users[i].trade.requests.findIndex(function (user) {
       return request._id.request.user_id === user.user_id;
     });
     if (j === -1) {
       return Promise.reject();
     }
     doc.users[i].trade.requests[j][words[0]] = true;
-    doc.users[i].trade.requests[j][words[0] + '_date'] = new Date;
+    doc.users[i].trade.requests[j][words[0] + '_date'] = new Date();
     delete doc.users[i].trade.requests[j][words[1]];
     delete doc.users[i].trade.requests[j][words[1] + '_date'];
-    result = (await this.db.collection(booksdb_name).findOneAndReplace({
+    result = await this.db.collection(booksdb_name).findOneAndReplace({
       _id: doc._id
     }, doc, {
       returnOriginal: false
-    }));
+    });
     this.e.emit('book.update', result.value);
     this.e.emit('trade.respond', {
       book: result.value,
@@ -1250,7 +1270,7 @@ usersdb_name = 'bookshelf_users';
     return result.value;
   }
 
-  trade_requests__get({user_id, owner_id}) {
+  trade_requests__get({ user_id, owner_id }) {
     var firstPipe, lastPipe;
     firstPipe = {
       $match: {
@@ -1269,41 +1289,34 @@ usersdb_name = 'bookshelf_users';
     if (user_id) {
       lastPipe.$match['_id.request.user_id'] = user_id;
     }
-    return this.db.collection(booksdb_name).aggregate([
-      firstPipe,
-      {
-        $project: {
-          _id: {
-            _id: '$_id',
-            title: '$book.title'
-          },
-          user: '$users'
-        }
-      },
-      {
-        $unwind: '$user'
-      },
-      {
-        $unwind: '$user.trade.requests'
-      },
-      {
-        $project: {
-          _id: {
-            owner_id: '$user.user_id',
-            request: '$user.trade.requests'
-          },
-          book: '$_id'
-        }
-      },
-      lastPipe
-    ]).toArray();
+    return this.db.collection(booksdb_name).aggregate([firstPipe, {
+      $project: {
+        _id: {
+          _id: '$_id',
+          title: '$book.title'
+        },
+        user: '$users'
+      }
+    }, {
+      $unwind: '$user'
+    }, {
+      $unwind: '$user.trade.requests'
+    }, {
+      $project: {
+        _id: {
+          owner_id: '$user.user_id',
+          request: '$user.trade.requests'
+        },
+        book: '$_id'
+      }
+    }, lastPipe]).toArray();
   }
 
-  async book__get({book_id}) {
+  async book__get({ book_id }) {
     var res;
-    res = (await this.db.collection(booksdb_name).findOne({
+    res = await this.db.collection(booksdb_name).findOne({
       _id: book_id
-    }));
+    });
     if (res === null) {
       return void 0;
     } else {
@@ -1311,56 +1324,48 @@ usersdb_name = 'bookshelf_users';
     }
   }
 
-  bookowners({book_id}) {
-    return this.db.collection('bookshelf').aggregate([
-      {
-        $match: {
-          _id: book_id
-        }
-      },
-      {
-        $unwind: '$users'
-      },
-      {
-        $project: {
-          _id: {
-            user_id: '$users.user_id',
-            book_id: '$_id'
-          },
-          trade: '$users.trade'
-        }
-      },
-      {
-        $match: {
-          trade: {
-            $exists: 1
-          }
-        }
-      },
-      {
-        $lookup: {
-          from: 'bookshelf_users',
-          localField: '_id.user_id',
-          foreignField: '_id',
-          as: 'loci'
-        }
-      },
-      {
-        $unwind: '$loci'
-      },
-      {
-        $project: {
-          _id: 0,
-          user_id: '$_id.user_id',
-          book_id: '$_id.book_id',
-          trade: '$trade',
-          loci: '$loci.loci'
+  bookowners({ book_id }) {
+    return this.db.collection('bookshelf').aggregate([{
+      $match: {
+        _id: book_id
+      }
+    }, {
+      $unwind: '$users'
+    }, {
+      $project: {
+        _id: {
+          user_id: '$users.user_id',
+          book_id: '$_id'
+        },
+        trade: '$users.trade'
+      }
+    }, {
+      $match: {
+        trade: {
+          $exists: 1
         }
       }
-    ]).toArray();
+    }, {
+      $lookup: {
+        from: 'bookshelf_users',
+        localField: '_id.user_id',
+        foreignField: '_id',
+        as: 'loci'
+      }
+    }, {
+      $unwind: '$loci'
+    }, {
+      $project: {
+        _id: 0,
+        user_id: '$_id.user_id',
+        book_id: '$_id.book_id',
+        trade: '$trade',
+        loci: '$loci.loci'
+      }
+    }]).toArray();
   }
 
-  market({page_n}) {
+  market({ page_n }) {
     return this.db_paging({
       db: this.db,
       coll: 'bookshelf',
@@ -1377,10 +1382,10 @@ usersdb_name = 'bookshelf_users';
     });
   }
 
-  async notification__add({user_id, info}) {
+  async notification__add({ user_id, info }) {
     var note, result;
     note = {
-      creation_date: new Date,
+      creation_date: new Date(),
       read: false,
       opened: false
     };
@@ -1392,7 +1397,7 @@ usersdb_name = 'bookshelf_users';
       note.path = info.path;
       note.message = info.message;
     }
-    result = (await this.db.collection(usersdb_name).findOneAndUpdate({
+    result = await this.db.collection(usersdb_name).findOneAndUpdate({
       _id: user_id
     }, {
       $push: {
@@ -1400,7 +1405,7 @@ usersdb_name = 'bookshelf_users';
       }
     }, {
       returnOriginal: false
-    }));
+    });
     this.e.emit('notify', {
       user: result.value,
       note: note
@@ -1408,10 +1413,10 @@ usersdb_name = 'bookshelf_users';
     return result.value;
   }
 
-  async note__mark__read({note, user_id}) {
+  async note__mark__read({ note, user_id }) {
     var result;
     console.log(user_id);
-    result = (await this.db.collection(usersdb_name).findOneAndUpdate({
+    result = await this.db.collection(usersdb_name).findOneAndUpdate({
       _id: user_id,
       notifcations: {
         $elemMatch: {
@@ -1425,7 +1430,7 @@ usersdb_name = 'bookshelf_users';
       }
     }, {
       returnOriginal: false
-    }));
+    });
     if (result.value === null) {
       return;
     }
@@ -1436,9 +1441,9 @@ usersdb_name = 'bookshelf_users';
     return result.value;
   }
 
-  async note__mark__opened({note, user_id}) {
+  async note__mark__opened({ note, user_id }) {
     var result;
-    result = (await this.db.collection(usersdb_name).findOneAndUpdate({
+    result = await this.db.collection(usersdb_name).findOneAndUpdate({
       _id: user_id,
       notifcations: {
         $elemMatch: {
@@ -1453,7 +1458,7 @@ usersdb_name = 'bookshelf_users';
       }
     }, {
       returnOriginal: false
-    }));
+    });
     if (result.value === null) {
       return;
     }
@@ -1465,8 +1470,7 @@ usersdb_name = 'bookshelf_users';
     return result.value;
   }
 
-});
-
+};
 
 /***/ }),
 /* 19 */
@@ -1478,19 +1482,22 @@ module.exports = require("mongodb");
 /* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
 var curl;
 
 curl = __webpack_require__(21);
 
-module.exports = function(ip) {
+module.exports = function (ip) {
   var url;
   url = 'http://ipinfo.io/' + ip + '/json';
   console.log('ip', ip);
   if (ip === '::1' || ip === '127.0.0.1' || ip === void 0 || ip.match(/^\:\:/) !== null) {
     url = 'http://ipinfo.io/json';
   }
-  return new Promise(function(resolve, reject) {
-    return curl.getJSON(url, {}, function(err, response, data) {
+  return new Promise(function (resolve, reject) {
+    return curl.getJSON(url, {}, function (err, response, data) {
       var lat, loci, lon;
       //console.log(data)
       if (err) {
@@ -1499,7 +1506,7 @@ module.exports = function(ip) {
       [lat, lon] = data.loc.split(',');
       loci = {
         name: `${data.city}, ${data.region}, ${data.country}\``,
-        coords: {lat, lon},
+        coords: { lat, lon },
         address: {
           city: data.city,
           region: data.region,
@@ -1510,7 +1517,6 @@ module.exports = function(ip) {
     });
   });
 };
-
 
 /***/ }),
 /* 21 */
