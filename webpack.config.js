@@ -1,8 +1,9 @@
 const path = require('path')
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 
-module.exports = {
+const commonConfig = {
   devtool: 'inline-source-map',
-  entry: './app/index.js',
+  entry: ['regenerator-runtime/runtime', './app/index.js'],
   output: {
     path: path.resolve('./dist'),
     filename: 'bundle.js'
@@ -24,8 +25,14 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [require('babel-preset-env')],
-            plugins: [require('babel-plugin-transform-async-to-generator')]
+            presets: [
+              ['env', {
+                target: {
+                  browsers: ['last 2 versions, chrome']
+                }
+              }]
+            ],
+            plugins: ['transform-async-to-generator', 'transform-regenerator']
           }
         }
       },
@@ -34,5 +41,39 @@ module.exports = {
         loader: 'coffeescript-loader'
       }
     ]
+  },
+  plugins: [
+    new FriendlyErrorsWebpackPlugin()
+  ]
+}
+
+const productionConfig = () => commonConfig
+
+const developmentConfig = () => {
+  const config = {
+    devServer: {
+      watchContentBase: true,
+      contentBase: './dist',
+      proxy: {
+        '/': {
+          target: 'http://localhost:3000',
+          ws: true
+        }
+      },
+      overlay: {
+        warnings: true,
+        errors: true
+      },
+      quiet: true
+    }
   }
+  return Object.assign({}, commonConfig, config)
+}
+
+module.exports = env => {
+  if (env === 'production') {
+    return productionConfig()
+  }
+
+  return developmentConfig()
 }

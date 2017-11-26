@@ -5,11 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "type": "chrome",
+            "request": "launch",
+            "runtimeExecutable": "/bin/chromium",
+            "runtimeArgs": [
+                "--remote-debugging=9222",
+            ],
+            "url": "http://localhost:3000",
+            "sourceMaps": true,            
+            "name": "chrome",
+            "port": 9222,
+            "webRoot": "${workspaceRoot}/dist",
+            "skipFiles": [
+                "node_modules"
+            ]
+        },
+        {
+            "type": "node2",
             "request": "attach",
-            "name": "server",
+            "name": "node2",
             "port": 8001,
-            "restart": true
+            "restart": true,
+            // "skipFiles": [
+            //     "${workspaceFolder}/node_modules/**/*.js"
+            // ]
         },
         {
             "name": "ff",
@@ -18,19 +37,20 @@
             "reAttach": true,
             "url": "http://localhost:3000/",
             "webRoot": "${workspaceFolder}",
+            "reloadOnAttach": true,
             "reloadOnChange": {
                 "watch": [ "${workspaceFolder}/**/*.js" ],
                 "ignore": [ "${workspaceFolder}/node_modules/**" ]
             },
             "pathMappings": [
-                { "url": "webpack:///", "path": "" }
+                { "url": "webpack://app", "path": "${workspaceFolder}/app" }
             ]
         }
     ],
     "compounds": [
         {
-            "name": "fullstack",
-            "configurations": ["server", "ff"]
+            "name": "node+chrome",
+            "configurations": ["node", "chrome"]
         }
     ]
 }

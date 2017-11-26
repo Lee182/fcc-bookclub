@@ -1,12 +1,14 @@
 // tools loading
 require('./lib/jonoShortcuts.js')
-w.Vue = require('vue').default
+
+w.Vue = require('vue/dist/vue.js')
+// w.Vue = require('vue/dist/vue.min.js')
 w.wait = require('./lib/wait.js')
 w.req = require('./lib/request.js')
 w.loadImg = require('./lib/loadImage.js')
-Vue.config.ignoredElements = [
-  'leaflet-map', 'another-web-component'
-]
+// Vue.config.ignoredElements = [
+//   'leaflet-map', 'another-web-component'
+// ]
 
 w.comms = require('./lib/comms.client.js')()
 w.comms.on('close', function () {
@@ -19,6 +21,7 @@ w.comms.on('close', function () {
 
 // module loading
 w.modules = {
+  market: require('./modules/market.js'),
   head: require('./modules/0-head.js'),
   router: require('./modules/0.1-router.js'),
   book_search: require('./modules/book_search.js'),
@@ -27,7 +30,6 @@ w.modules = {
   trade: require('./modules/trade.js'),
   user: require('./modules/user.js'),
   account: require('./modules/account.js'),
-  market: require('./modules/market.js'),
   notifcations: require('./modules/notifcations'),
   home: require('./modules/home.js')
 }
