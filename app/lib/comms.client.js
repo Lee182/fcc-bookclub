@@ -1,8 +1,7 @@
 // const BSON = require('bson')
 // const bson = new BSON()
 // note commented out BSON code
-const eventSystem = require('./../browser+node/eventSystem.js')
-
+const eventSystem = require('shared/eventSystem.js')
 
 // function BlobtoJSON(blob) {
 //   return new Promise(function(resolve, reject){
@@ -23,25 +22,25 @@ const eventSystem = require('./../browser+node/eventSystem.js')
 //   return buf
 // }
 
-module.exports = function(path) {
+module.exports = function (path) {
   var e = eventSystem()
   var o = {}
   if (path === undefined) {
     var protocol = location.protocol === 'http:' ? 'ws:' : 'wss:'
     path = protocol + '//' + location.host + '/'
   }
-  function connect() {
+  function connect () {
     o.ws = new WebSocket(path) // 'ws://localhost:3000'
-    o.ws.on('open', function() {
+    o.ws.on('open', function () {
       e.emit('connection')
     })
-    o.ws.on('close', function(){
+    o.ws.on('close', function () {
       e.emit('close')
     })
-    o.ws.on('message', function(ws_event) {
+    o.ws.on('message', function (ws_event) {
       var data = JSON.parse(ws_event.data)
       console.log('comms', data)
-      if (typeof data.req_res === 'number'){
+      if (typeof data.req_res === 'number') {
         reqs_made[data.req_res].resolve(data.data)
         delete reqs_made[ws_event.data.req_res_rand]
         return
@@ -52,14 +51,13 @@ module.exports = function(path) {
       //   e.emit('message', data)
       // })
     })
-
   }
-  o.reconnect = function() {
-    if (o.ws) {o.ws.close()}
+  o.reconnect = function () {
+    if (o.ws) { o.ws.close() }
     connect()
   }
-  o.send = function(data) {
-    o.ws.send( JSON.stringify(data) )
+  o.send = function (data) {
+    o.ws.send(JSON.stringify(data))
     // o.ws.send( bson.serialize(data, {ignoreUndefined: false}) )
   }
   o.on = e.on
@@ -67,8 +65,8 @@ module.exports = function(path) {
 
   // req res http pattern
   var reqs_made = {}
-  o.req = function(data) {
-    return new Promise(function(resolve, reject){
+  o.req = function (data) {
+    return new Promise(function (resolve, reject) {
       var rand = Date.now() + Math.random()
       reqs_made[rand] = {
         req_data: data,
@@ -85,7 +83,6 @@ module.exports = function(path) {
   connect()
   return o
 }
-
 
 // comms.send
 // comms.on('connection')

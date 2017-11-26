@@ -1,4 +1,4 @@
-bookapi = require('../api/book.js')
+bookapi = require('server/api/book')
 
 module.exports = ({ app, dao }) ->
 
@@ -33,7 +33,7 @@ module.exports = ({ app, dao }) ->
     res.json result
 
   app.get '/market/:page_n', (req, res, next) ->
-    result = dao.market(page_n: req.params.page_n)
+    result = await dao.market(page_n: req.params.page_n)
     res.json result
 
   endpoints = [

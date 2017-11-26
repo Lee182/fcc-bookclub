@@ -1,41 +1,46 @@
-module.exports = function({data, methods}){
+module.exports = function ({data, methods}) {
   // w.querystring = require('querystring')
   data.router = {}
   data.router.path = undefined
   data.router.params = {}
   data.router.paths = [
-    { path: '/', afterCreated: function(){
-      vm.home__reqs_get()
-      vm.home__market_front()
-    }},
-    { path: '/me_books', loginRequired: true},
-    { path: '/me_books/add', loginRequired: true},
-    { path: '/book/:book_id', dynamic: true},
-    { path: '/notifcations', loginRequired: true},
-    { path: '/me', loginRequired: true, afterCreated: function(){
-      let vm = this
-      vm.account__clear()
-      vm.account__get()
-    }},
-    { path: '/user/:user_id', dynamic: true, afterCreated: function(){
-      let vm = this
-      vm.account__clear()
-      vm.account__get()
-    }}
+    { path: '/',
+      afterCreated: function () {
+        vm.home__reqs_get()
+        vm.home__market_front()
+      }},
+    { path: '/me_books', loginRequired: true },
+    { path: '/me_books/add', loginRequired: true },
+    { path: '/book/:book_id', dynamic: true },
+    { path: '/notifcations', loginRequired: true },
+    { path: '/me',
+      loginRequired: true,
+      afterCreated: function () {
+        let vm = this
+        vm.account__clear()
+        vm.account__get()
+      }},
+    { path: '/user/:user_id',
+      dynamic: true,
+      afterCreated: function () {
+        let vm = this
+        vm.account__clear()
+        vm.account__get()
+      }}
   ]
 
   var router__inited = false
-  methods.router__init = function(){
-    if (router__inited) {return}
+  methods.router__init = function () {
+    if (router__inited) { return }
     let vm = this
     w.on('popstate', vm.route__listener)
     vm.route__go(location.pathname, 'replaceState')
     router__inited = true
   }
 
-  function dynamicPath_getParams(pathpattern, path) {
+  function dynamicPath_getParams (pathpattern, path) {
     var obj = {match: true, params: {}}
-    function strNotEmpty(str){
+    function strNotEmpty (str) {
       return str !== ''
     }
     var pathArr = path.split('/').filter(strNotEmpty)
@@ -45,19 +50,18 @@ module.exports = function({data, methods}){
       obj.match = false
       return obj
     }
-    return patternArr.reduce(function(obj, str, i){
-      if (obj.match === false) {return obj}
+    return patternArr.reduce(function (obj, str, i) {
+      if (obj.match === false) { return obj }
       if (patternArr[i][0] === ':') {
         obj.params[ patternArr[i].substring(1) ] = pathArr[i]
-      }
-      else if (patternArr[i] !== pathArr[i]) {
+      } else if (patternArr[i] !== pathArr[i]) {
         obj.match = false
       }
       return obj
     }, obj)
   }
 
-  function path_mark(path, pathname) {
+  function path_mark (path, pathname) {
     path.tmpPath = path.path
     if (path.dynamic === true) {
       path.tmpPath = pathname
@@ -65,9 +69,9 @@ module.exports = function({data, methods}){
     return path
   }
 
-  methods.router_direct_path = function(pathname) {
+  methods.router_direct_path = function (pathname) {
     let vm = this
-    let path = vm.router.paths.find(function(item){
+    let path = vm.router.paths.find(function (item) {
       if (item.dynamic === true) {
         return dynamicPath_getParams(item.path, pathname).match === true
       }
@@ -83,10 +87,10 @@ module.exports = function({data, methods}){
         path = vm.router.paths[0]
       }
     }
-    return Promise.resolve( path_mark(path, pathname) )
+    return Promise.resolve(path_mark(path, pathname))
   }
 
-  methods.route__set_path = function(item){
+  methods.route__set_path = function (item) {
     let vm = this
     vm.head.show = item.path
     vm.router.path = item.path
@@ -96,23 +100,23 @@ module.exports = function({data, methods}){
       vm.router.params = {}
     }
     if (typeof item.afterCreated === 'function') {
-      vm.$nextTick(function(){
+      vm.$nextTick(function () {
         let vm = this
         item.afterCreated.call(vm)
       })
     }
   }
 
-  methods.route__go = function(path, hist) {
+  methods.route__go = function (path, hist) {
     let vm = this
-    return vm.router_direct_path(path).then(function(item){
+    return vm.router_direct_path(path).then(function (item) {
       if (hist === 'pushState' && item.tmpPath === location.pathname) {
         hist = 'replaceState'
       }
-      if (hist === 'pushState' || hist === 'replaceState'){
+      if (hist === 'pushState' || hist === 'replaceState') {
         history[hist](
           {path: item.tmpPath},
-          '#booktrade '+item.tmpPath,
+          '#booktrade ' + item.tmpPath,
           item.tmpPath
         )
       }
@@ -121,10 +125,10 @@ module.exports = function({data, methods}){
     })
   }
 
-  methods.route__back = function() {
+  methods.route__back = function () {
     var a = history.state.path
     history.go(-1)
-    wait(400).then(function(){
+    wait(400).then(function () {
       if (history.state === null) {
         vm.route__go('/', 'pushState')
         return
@@ -137,10 +141,9 @@ module.exports = function({data, methods}){
     })
   }
 
-  methods.route__listener = function(popstate){
+  methods.route__listener = function (popstate) {
     let vm = this
-    if (popstate.state === null) {return}
+    if (popstate.state === null) { return }
     vm.route__go(popstate.state.path)
   }
-
 }

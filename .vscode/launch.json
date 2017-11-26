@@ -5,35 +5,52 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "type": "chrome",
             "request": "launch",
-            "name": "Jscodeshift",
-            "protocol": "inspector",
-            "address": "localhost",
-            "port": 9229,
-            "runtimeExecutable": "jscodeshift",
+            "runtimeExecutable": "/bin/chromium",
             "runtimeArgs": [
-                "-t", "./modrequire.js",
-                "./app/index.js"
+                "--remote-debugging=9222",
             ],
-            "console": "internalConsole",
-            "sourceMaps": true,
-            "outFiles": [
-                "${workspaceRoot}/err"
-            ],
+            "url": "http://localhost:3000",
+            "sourceMaps": true,            
+            "name": "chrome",
+            "port": 9222,
+            "webRoot": "${workspaceRoot}/dist",
+            "skipFiles": [
+                "node_modules"
+            ]
         },
         {
-            "name": "Attach to Process",
-            "type": "node",
+            "type": "node2",
             "request": "attach",
-            "port": 5858
+            "name": "node2",
+            "port": 8001,
+            "restart": true,
+            // "skipFiles": [
+            //     "${workspaceFolder}/node_modules/**/*.js"
+            // ]
         },
         {
-            "type": "node",
+            "name": "ff",
+            "type": "firefox",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceRoot}/server/index.js"
-        },
-        
+            "reAttach": true,
+            "url": "http://localhost:3000/",
+            "webRoot": "${workspaceFolder}",
+            "reloadOnAttach": true,
+            "reloadOnChange": {
+                "watch": [ "${workspaceFolder}/**/*.js" ],
+                "ignore": [ "${workspaceFolder}/node_modules/**" ]
+            },
+            "pathMappings": [
+                { "url": "webpack://app", "path": "${workspaceFolder}/app" }
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "node+chrome",
+            "configurations": ["node", "chrome"]
+        }
     ]
 }

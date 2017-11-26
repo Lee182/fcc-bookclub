@@ -11,7 +11,7 @@ include bookshelf_element.pug
   .account-box.md0
     h2.account-myloc Location
     .flex-center.padHalf
-      .pl.flex-row(v-if='loci_ui.search === false')
+      .pl.flex-row(v-if='loci_ui.search === false && account.loci')
         .pl-place {{account.loci.name}}
         .pl-edit.flex-row(@click='user_loci__ui_edit()' v-if='me_account')
           .flex-center.pl-edit-icon: i.fa.fa-pencil

@@ -1,13 +1,13 @@
-module.exports = function(){
+module.exports = function () {
   var events = {}
   var eventsystem = {
     on: function (id, fn) {
       events[id] = events[id] || []
       events[id].push(fn)
     },
-    off: function(id, fn) {
-      if (events[id] === undefined) {return}
-      var i = events[id].findIndex(function(g){
+    off: function (id, fn) {
+      if (events[id] === undefined) { return }
+      var i = events[id].findIndex(function (g) {
         return g = fn
       })
       if (i !== -1) {
@@ -16,7 +16,7 @@ module.exports = function(){
     },
     emit: function (id, data) {
       if (events[id]) {
-        events[id].forEach(function(fn) {
+        events[id].forEach(function (fn) {
           fn(data)
         })
       }

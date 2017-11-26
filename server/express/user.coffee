@@ -1,13 +1,13 @@
-Twitter_session = require('./twitter_session.js')
+Twitter_session = require('server/express/twitter_session.coffee')
+
 module.exports = ({ app, dao, port, k, sessiondb_name }) ->
-  
   tw = Twitter_session({
     dao,
     port,
     coll_name: sessiondb_name
     consumerKey: k.twitter.consumerKey
     consumerSecret: k.twitter.consumerSecret
-    callbackUrl: 'https://booktrade.blogjono.com/tw.login_cb' })
+    callbackUrl: k.twitter.callbackUrl })
 
   app.get '/tw.login', tw.login
   
@@ -25,8 +25,12 @@ module.exports = ({ app, dao, port, k, sessiondb_name }) ->
 
 
   app.get '/user', tw.is_logged_in, (req, res, next) ->
-    user = await dao.user__findOne(user_id: req.twuser)
-    res.json user
+    try
+      user = await dao.user__findOne(user_id: req.twuser)
+      res.json user
+    catch err
+      res.status(500).send()
+      debugger
 
   app.post '/user/:user_id', (req, res) ->
     user = await dao.user__findOne(user_id: req.params.user_id)

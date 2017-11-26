@@ -1,7 +1,7 @@
 WebSocket = require('uws')
 # const BSON = require('bson')
 # const bson = new BSON()
-eve = require('../../app/browser+node/eventSystem.js')
+eve = require('shared/eventSystem.js')
 # http://stackoverflow.com/questions/8609289/convert-a-binary-nodejs-buffer-to-javascript-arraybuffer
 # function ArrayBuffertoBuffer(ab) {
 #   var buf = new Buffer(ab.byteLength)

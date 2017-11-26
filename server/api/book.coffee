@@ -7,12 +7,13 @@ o.find = (query, pagenum) ->
   limit = 20
   offset = limit * pagenum
   options =
+    key: 'AIzaSyCbv-II5YI9rpxNNsUSSGmRfr_p7GlXmGE'
     offset: offset
     limit: limit
     type: 'books'
     order: 'relevance'
     lang: 'en'
-  new Promise((resolve, reject) ->
+  new Promise (resolve, reject) ->
     books.search query, options, (err, books, apires) ->
       if err
         return reject(err: err)
@@ -24,8 +25,6 @@ o.find = (query, pagenum) ->
         query: query
         pagenum: pagenum + 1
         pages: Math.ceil(count / limit)
-    return
-)
 
 o.findId = (id) ->
   new Promise((resolve, reject) ->
