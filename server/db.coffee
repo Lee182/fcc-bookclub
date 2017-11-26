@@ -31,10 +31,10 @@ export default class DB
       'trade_requests__get'
       'trade_respond'
     ].forEach (name) =>
-      @[name] = @ensureConnected(@[name])
+      @[name] = @ensureConnected(@[name].bind(@))
 
     five_mins = 5 * 60 * 1000
-    setInterval @bookshelf__garbage_collection.bind(this), five_mins
+    setInterval @bookshelf__garbage_collection, five_mins
     @e.on 'trade.request', (info) ->
       @notification__add
         user_id: info.owner_id
@@ -46,7 +46,7 @@ export default class DB
         info:
           type: 'trade.respond'
           path: '/book/' + d.book._id
-          message: '''@${d.request._id.owner_id} ${d.words[0]}ed your trade request for "${d.request.book.title}"'''
+          message: "#{d.request._id.owner_id} #{d.words[0]}ed your trade request for \"#{d.request.book.title}\""
 
   ensureConnected: (fn) ->
     if typeof fn != 'function'
@@ -85,7 +85,7 @@ export default class DB
 
   user__add: ({ user_id }) ->
     # TODO make sure user_id valid
-    result = @db.collection(usersdb_name).insert({
+    result = await @db.collection(usersdb_name).insert({
       _id: user_id
       user_id: user_id
     }, returnOriginal: false)
@@ -107,21 +107,23 @@ export default class DB
     @db.collection(booksdb_name).find('users.user_id': user_id).sort('users.creation_date': -1).toArray()
 
   bookshelf__add: ({ book_id, user_id }) ->
-    book = bookapi.findId(book_id)
     try
-      result = @db.collection(booksdb_name)
+      book = await bookapi.findId(book_id)
+      if Object.keys(book).length == 0
+        return
+      result = await @db.collection(booksdb_name)
       .findOneAndUpdate(
         { _id: book_id, 'users.user_id': $ne: user_id },
         {
           $set:
             book: book
-            updated: new Date
+            updated: new Date()
           $push: users:
             user_id: user_id
-            creation_date: new Date
+            creation_date: new Date()
         },
         { returnOriginal: false, upsert: true })
-      e.emit 'book.update', result.value
+      @e.emit 'book.update', result.value
       return result.value
     catch err
       console.log 'db.js bookshelf__add err:', err
@@ -139,11 +141,10 @@ export default class DB
       err
 
   bookshelf__garbage_collection: ->
-    debugger
     @db.collection(booksdb_name).remove users: $size: 0
 
   trade__list: ({ book_id, user_id }) ->
-    result = @db.collection(booksdb_name).findOneAndUpdate(
+    result = await @db.collection(booksdb_name).findOneAndUpdate(
       { _id: book_id, 'users.user_id': user_id },
       {
         $set: 'users.$.trade':
@@ -152,7 +153,7 @@ export default class DB
           requests: []
       },
       { returnOriginal: false, upsert: false })
-    e.emit 'book.update', result.value
+    @e.emit 'book.update', result.value
     result.value
 
   trade__unlist: ({ book_id, user_id }) ->
@@ -160,7 +161,7 @@ export default class DB
       { _id: book_id, 'users.user_id': user_id },
       { $unset: 'users.$.trade': '' },
       { returnOriginal: false, upsert: false })
-    e.emit 'book.update', result.value
+    @e.emit 'book.update', result.value
     result.value
 
   tradeshelf: ({ user_id }) ->
@@ -321,7 +322,7 @@ export default class DB
       { $set: 'notifcations.$.read': true },
       { returnOriginal: false })
     if result.value == null then return
-    e.emit 'notify',
+    @e.emit 'notify',
       user: result.value
       note: note
     result.value
@@ -342,7 +343,7 @@ export default class DB
       { returnOriginal: false })
     if result.value == null then return
     console.log 'opend', result.value
-    e.emit 'notify',
+    @e.emit 'notify',
       user: result.value
       note: note
     result.value

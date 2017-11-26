@@ -9,27 +9,27 @@ import ws_handle from 'server/ws/index.coffee'
 import k  from 'server/keys.coffee'
 import db from 'server/db.coffee'
 
-sNow = new Date().toISOString()
-console.log("server started #{sNow}")
+main = () ->
+  app = express()
+  server = http.Server(app)
+  port = process.argv[2] or 3000
+  cookie_parser = cookieParser()
+  body_parser_json = bodyParser.json()
 
-app = express()
-server = http.Server(app)
-port = process.argv[2] or 3000
-cookie_parser = cookieParser()
-body_parser_json = bodyParser.json()
+  dao = new db({ mongourl: k.mongourl })
+  app.use cookie_parser
+  app.use body_parser_json
+  app.use '/', express.static(path.resolve(__dirname + '/dist'))
 
-dao = new db({ mongourl: k.mongourl })
-app.use cookie_parser
-app.use body_parser_json
-app.use '/', express.static(path.resolve(__dirname + '/dist'))
+  tw = express_user({ app, port, dao, k, sessiondb_name: 'bookclub_sessions' })
+  bookapi = express_book({ app, dao })
+  ws = ws_handle({ app, server, cookie_parser, tw, dao })
 
-tw = express_user({ app, port, dao, k, 'bookclub_sessions' })
-bookapi = express_book({ app, dao })
-ws = ws_handle({ app, server, cookie_parser, tw, dao })
+  app.get '*', (req, res) ->
+    res.sendFile path.resolve(__dirname + '/dist/index.html')
 
-app.get '*', (req, res) ->
-  res.sendFile path.resolve(__dirname + '/dist/index.html')
-
-dao.connect().then ->
+  await dao.connect()
   server.listen port, ->
-    console.log 'server listening at http://localho.st:' + port
+    console.log "server listening at http://localhost:#{port} #{new Date().toISOString()}"
+
+main()

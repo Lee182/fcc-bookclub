@@ -11,13 +11,16 @@ module.exports = ({
   consumerSecret,
   callbackUrl
 }) ->
+  if typeof coll_name != 'string'
+    return throw new Error()
   events = es()
   tw = new logtwit({ consumerKey, consumerSecret, callbackUrl })
   _tw_tokens = {}
 
-  return out =
+  out =
     events: events
     login: (req, res, next) ->
+      console.log('login')
       tw.login (err, tokenSecret, url) ->
         # console.log('tw.login', err, tokenSecret, url)
         if err
@@ -52,8 +55,9 @@ module.exports = ({
             user_id: user.userName
         options = upsert: true, returnOriginal: false
         
-        result = await dao.db.collection(coll_name)
-        .findOneAndUpdate(queyr, update, options)
+        result = await dao.db
+          .collection(coll_name)
+          .findOneAndUpdate(query, update, options)
         console.log 'tw', result
         req.twuser = user.userName
         next()
@@ -71,7 +75,7 @@ module.exports = ({
       if not req.cookies or not req.cookies.twitter
         return res.status(400).send('jog on')
       try
-        result = await is_logged_in_prom(req.cookies.twitter)
+        result = await out.is_logged_in_prom(req.cookies.twitter)
         if result == undefined
           return res.clearCookie('twitter', path: '/')
         req.twuser = result.user_id
@@ -81,8 +85,8 @@ module.exports = ({
 
     is_logged_in_prom: (cookie) ->
       result = await dao.db.collection(coll_name).findOne(_id: cookie)
-      if result == null then undefined else result
-
+      if result == null then {} else result
+  out
 
 ### Usage
 app.get('/twitter', tw.login)

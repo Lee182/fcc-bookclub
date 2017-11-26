@@ -9,3 +9,4 @@ shrinkwrap.yaml
 server-dist/
 db/*
 server.js
+app.json
