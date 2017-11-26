@@ -1,0 +1,11 @@
+server/keys.js
+server/keys.coffee
+node_modules
+.DS_Store
+dist
+doing
+tmp
+shrinkwrap.yaml
+server-dist/
+db/*
+server.js
